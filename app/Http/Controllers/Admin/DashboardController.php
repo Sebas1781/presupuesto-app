@@ -15,12 +15,12 @@ class DashboardController extends Controller
         $totalEncuestas = Encuesta::count();
         $totalPropuestas = Propuesta::count();
         $totalReportes = Reporte::count();
-        
+
         $encuestasPorColonia = Encuesta::with('colonia')
             ->selectRaw('colonia_id, count(*) as total')
             ->groupBy('colonia_id')
             ->get();
-        
+
         $encuestasRecientes = Encuesta::with(['colonia', 'propuestas', 'reportes'])
             ->latest()
             ->take(10)
@@ -28,7 +28,7 @@ class DashboardController extends Controller
 
         return view('admin.dashboard', compact(
             'totalEncuestas',
-            'totalPropuestas', 
+            'totalPropuestas',
             'totalReportes',
             'encuestasPorColonia',
             'encuestasRecientes'
@@ -38,27 +38,27 @@ class DashboardController extends Controller
     public function encuestas(Request $request)
     {
         $query = Encuesta::with(['colonia', 'propuestas', 'reportes']);
-        
+
         // Filtros
         if ($request->has('colonia_id') && $request->colonia_id) {
             $query->where('colonia_id', $request->colonia_id);
         }
-        
+
         if ($request->has('genero') && $request->genero) {
             $query->where('genero', $request->genero);
         }
-        
+
         if ($request->has('fecha_desde') && $request->fecha_desde) {
             $query->whereDate('created_at', '>=', $request->fecha_desde);
         }
-        
+
         if ($request->has('fecha_hasta') && $request->fecha_hasta) {
             $query->whereDate('created_at', '<=', $request->fecha_hasta);
         }
-        
+
         $encuestas = $query->latest()->paginate(20);
         $colonias = \App\Models\Colonia::all();
-        
+
         return view('admin.encuestas.index', compact('encuestas', 'colonias'));
     }
 

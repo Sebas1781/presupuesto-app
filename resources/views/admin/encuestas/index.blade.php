@@ -25,7 +25,7 @@
                             <select name="colonia_id" id="colonia_id" class="form-control">
                                 <option value="">Todas las colonias</option>
                                 @foreach($colonias as $colonia)
-                                    <option value="{{ $colonia->id }}" 
+                                    <option value="{{ $colonia->id }}"
                                             {{ request('colonia_id') == $colonia->id ? 'selected' : '' }}>
                                         {{ $colonia->nombre }}
                                     </option>
@@ -47,14 +47,14 @@
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="fecha_desde">Fecha Desde</label>
-                            <input type="date" name="fecha_desde" id="fecha_desde" class="form-control" 
+                            <input type="date" name="fecha_desde" id="fecha_desde" class="form-control"
                                    value="{{ request('fecha_desde') }}">
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="fecha_hasta">Fecha Hasta</label>
-                            <input type="date" name="fecha_hasta" id="fecha_hasta" class="form-control" 
+                            <input type="date" name="fecha_hasta" id="fecha_hasta" class="form-control"
                                    value="{{ request('fecha_hasta') }}">
                         </div>
                     </div>

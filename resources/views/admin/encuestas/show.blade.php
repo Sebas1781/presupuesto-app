@@ -23,19 +23,19 @@
                     <dl class="row">
                         <dt class="col-sm-4">Colonia:</dt>
                         <dd class="col-sm-8">{{ $encuesta->colonia->nombre ?? 'N/A' }}</dd>
-                        
+
                         <dt class="col-sm-4">Género:</dt>
                         <dd class="col-sm-8">{{ $encuesta->genero }}</dd>
-                        
+
                         <dt class="col-sm-4">Edad:</dt>
                         <dd class="col-sm-8">{{ $encuesta->edad }} años</dd>
-                        
+
                         <dt class="col-sm-4">Nivel Educativo:</dt>
                         <dd class="col-sm-8">{{ $encuesta->nivel_educativo }}</dd>
-                        
+
                         <dt class="col-sm-4">Estado Civil:</dt>
                         <dd class="col-sm-8">{{ $encuesta->estado_civil }}</dd>
-                        
+
                         <dt class="col-sm-4">Fecha:</dt>
                         <dd class="col-sm-8">{{ $encuesta->created_at->format('d/m/Y H:i:s') }}</dd>
                     </dl>
@@ -65,7 +65,7 @@
                                             <td>{{ $obraId }}</td>
                                             <td>
                                                 <div class="progress" style="height: 20px;">
-                                                    <div class="progress-bar progress-bar-striped" 
+                                                    <div class="progress-bar progress-bar-striped"
                                                          style="width: {{ ($calificacion/5)*100 }}%">
                                                         {{ $calificacion }}/5
                                                     </div>
@@ -104,10 +104,10 @@
                                     <dl class="row">
                                         <dt class="col-sm-5">Tipo:</dt>
                                         <dd class="col-sm-7">{{ $propuesta->tipo_propuesta }}</dd>
-                                        
+
                                         <dt class="col-sm-5">Prioridad:</dt>
                                         <dd class="col-sm-7">
-                                            <span class="badge 
+                                            <span class="badge
                                                 @switch($propuesta->nivel_prioridad)
                                                     @case('Urgente') badge-danger @break
                                                     @case('Alta') badge-warning @break
@@ -117,25 +117,25 @@
                                                 @endswitch
                                             ">{{ $propuesta->nivel_prioridad }}</span>
                                         </dd>
-                                        
+
                                         <dt class="col-sm-5">Beneficiados:</dt>
                                         <dd class="col-sm-7">{{ $propuesta->personas_beneficiadas }}</dd>
-                                        
+
                                         <dt class="col-sm-5">Ubicación:</dt>
                                         <dd class="col-sm-7">{{ $propuesta->ubicacion ?: 'No especificada' }}</dd>
                                     </dl>
-                                    
+
                                     @if($propuesta->descripcion_breve)
                                     <div class="mt-3">
                                         <strong>Descripción:</strong>
                                         <p class="mt-1">{{ $propuesta->descripcion_breve }}</p>
                                     </div>
                                     @endif
-                                    
+
                                     @if($propuesta->fotografia)
                                     <div class="mt-3">
                                         <strong>Fotografía:</strong><br>
-                                        <img src="{{ asset('storage/' . $propuesta->fotografia) }}" 
+                                        <img src="{{ asset('storage/' . $propuesta->fotografia) }}"
                                              alt="Fotografía de propuesta" class="img-thumbnail" style="max-width: 200px;">
                                     </div>
                                     @endif
@@ -168,26 +168,26 @@
                             <dl class="row">
                                 <dt class="col-sm-3">Tipo:</dt>
                                 <dd class="col-sm-9">{{ $reporte->tipo_reporte }}</dd>
-                                
+
                                 <dt class="col-sm-3">Descripción:</dt>
                                 <dd class="col-sm-9">{{ $reporte->descripcion }}</dd>
-                                
+
                                 @if($reporte->ubicacion)
                                 <dt class="col-sm-3">Ubicación:</dt>
                                 <dd class="col-sm-9">{{ $reporte->ubicacion }}</dd>
                                 @endif
                             </dl>
-                            
+
                             @if($reporte->evidencia)
                             <div class="mt-3">
                                 <strong>Evidencia:</strong><br>
                                 @if(str_contains($reporte->evidencia, '.pdf'))
-                                    <a href="{{ asset('storage/' . $reporte->evidencia) }}" 
+                                    <a href="{{ asset('storage/' . $reporte->evidencia) }}"
                                        target="_blank" class="btn btn-sm btn-outline-danger">
                                         <i class="fas fa-file-pdf"></i> Ver PDF
                                     </a>
                                 @else
-                                    <img src="{{ asset('storage/' . $reporte->evidencia) }}" 
+                                    <img src="{{ asset('storage/' . $reporte->evidencia) }}"
                                          alt="Evidencia" class="img-thumbnail" style="max-width: 200px;">
                                 @endif
                             </div>

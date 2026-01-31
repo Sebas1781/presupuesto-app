@@ -7,17 +7,17 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        
+
         body {
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
         }
-        
+
         .hero-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             position: relative;
         }
-        
+
         .hero-bg::before {
             content: '';
             position: absolute;
@@ -25,28 +25,28 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: 
+            background:
                 radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%),
                 radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 0%, transparent 50%);
         }
-        
+
         .floating {
             animation: float 6s ease-in-out infinite;
         }
-        
+
         .floating-delayed {
             animation: float 6s ease-in-out infinite 2s;
         }
-        
+
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-20px); }
         }
-        
+
         .pulse-button {
             animation: pulse-glow 2s infinite;
         }
-        
+
         @keyframes pulse-glow {
             0%, 100% {
                 box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
@@ -55,15 +55,15 @@
                 box-shadow: 0 0 40px rgba(59, 130, 246, 0.8);
             }
         }
-        
+
         .slide-in-left {
             animation: slideInLeft 1s ease-out;
         }
-        
+
         .slide-in-right {
             animation: slideInRight 1s ease-out 0.3s both;
         }
-        
+
         @keyframes slideInLeft {
             from {
                 opacity: 0;
@@ -74,7 +74,7 @@
                 transform: translateX(0);
             }
         }
-        
+
         @keyframes slideInRight {
             from {
                 opacity: 0;
@@ -85,21 +85,21 @@
                 transform: translateX(0);
             }
         }
-        
+
         .card-hover {
             transition: all 0.3s ease;
         }
-        
+
         .card-hover:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
-        
+
         .progress-bar {
             width: 0%;
             animation: progressFill 3s ease-in-out;
         }
-        
+
         @keyframes progressFill {
             from { width: 0%; }
             to { width: 100%; }
@@ -114,12 +114,12 @@
                 <h1 class="text-2xl font-bold text-gray-900">Presupuesto Participativo 2026</h1>
                 <div class="flex space-x-4">
                     @auth
-                        <a href="{{ route('admin.dashboard') }}" 
+                        <a href="{{ route('admin.dashboard') }}"
                            class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
                             Panel de Admin
                         </a>
                     @else
-                        <a href="{{ route('login') }}" 
+                        <a href="{{ route('login') }}"
                            class="text-blue-600 hover:text-blue-800 transition-colors">
                             Iniciar Sesión
                         </a>
@@ -137,10 +137,10 @@
                     Tu Voz Cuenta
                 </h2>
                 <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-                    Participa en el Presupuesto Participativo 2026 y decide qué obras públicas 
+                    Participa en el Presupuesto Participativo 2026 y decide qué obras públicas
                     necesita tu colonia. Tu opinión es importante para construir un mejor futuro.
                 </p>
-                <a href="{{ route('encuesta.create') }}" 
+                <a href="{{ route('encuesta.create') }}"
                    class="inline-block bg-white text-blue-600 font-semibold px-8 py-4 rounded-lg text-lg hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-lg">
                     Responder Encuesta
                 </a>
@@ -164,7 +164,7 @@
                     <h4 class="text-xl font-semibold mb-2">1. Responde la Encuesta</h4>
                     <p class="text-gray-600">Comparte tu información básica y califica las obras públicas de tu colonia.</p>
                 </div>
-                
+
                 <div class="text-center">
                     <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                         <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -174,7 +174,7 @@
                     <h4 class="text-xl font-semibold mb-2">2. Propón Mejoras</h4>
                     <p class="text-gray-600">Envía hasta 2 propuestas de obras que consideres prioritarias para tu comunidad.</p>
                 </div>
-                
+
                 <div class="text-center">
                     <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                         <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -195,10 +195,10 @@
                 ¡Participa Ahora!
             </h3>
             <p class="text-xl text-gray-600 mb-8">
-                Tu participación es fundamental para decidir el destino de los recursos públicos. 
+                Tu participación es fundamental para decidir el destino de los recursos públicos.
                 Cada opinión cuenta para construir una comunidad mejor.
             </p>
-            <a href="{{ route('encuesta.create') }}" 
+            <a href="{{ route('encuesta.create') }}"
                class="inline-block bg-blue-600 text-white font-semibold px-8 py-4 rounded-lg text-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-300 shadow-lg">
                 Comenzar Encuesta
             </a>

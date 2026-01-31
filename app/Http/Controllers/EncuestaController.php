@@ -77,7 +77,7 @@ class EncuestaController extends Controller
                 if (empty($propuestaData['tipo_propuesta']) || empty($propuestaData['nivel_prioridad'])) {
                     continue;
                 }
-                
+
                 $fotografiaPath = null;
                 if (isset($propuestaData['fotografia']) && $propuestaData['fotografia']) {
                     $fotografiaPath = $propuestaData['fotografia']->store('propuestas', 'public');
@@ -102,7 +102,7 @@ class EncuestaController extends Controller
                 if (empty($reporteData['tipo_reporte']) || empty($reporteData['descripcion'])) {
                     continue;
                 }
-                
+
                 $evidenciaPath = null;
                 if (isset($reporteData['evidencia']) && $reporteData['evidencia']) {
                     $evidenciaPath = $reporteData['evidencia']->store('reportes', 'public');

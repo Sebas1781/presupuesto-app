@@ -9,39 +9,39 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-g_SwMSxKdoeYDhbXPdgC6VFBSnf3yJo&libraries=places&callback=initMap" defer></script>
-    
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #fce4e6 100%);
             min-height: 100vh;
         }
-        
+
         /* Animaciones de entrada */
         .slide-in-up {
             transform: translateY(30px);
             opacity: 0;
             animation: slideInUp 0.6s ease-out forwards;
         }
-        
+
         .slide-in-up-delay-1 { animation-delay: 0.1s; }
         .slide-in-up-delay-2 { animation-delay: 0.2s; }
         .slide-in-up-delay-3 { animation-delay: 0.3s; }
         .slide-in-up-delay-4 { animation-delay: 0.4s; }
-        
+
         @keyframes slideInUp {
             to {
                 transform: translateY(0);
                 opacity: 1;
             }
         }
-        
+
         /* Efectos de formulario */
         .form-group {
             position: relative;
             margin-bottom: 1.5rem;
         }
-        
+
         .form-input {
             width: 100%;
             padding: 16px 20px;
@@ -51,14 +51,14 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-size: 16px;
         }
-        
+
         .form-input:focus {
             border-color: #8B1538;
             box-shadow: 0 0 0 4px rgba(139, 21, 56, 0.1);
             outline: none;
             transform: translateY(-2px);
         }
-        
+
         .form-label {
             display: block;
             margin-bottom: 8px;
@@ -66,7 +66,7 @@
             color: #374151;
             transition: color 0.3s ease;
         }
-        
+
         .form-section {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -76,12 +76,12 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
-        
+
         .form-section:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
         }
-        
+
         /* Progress bar */
         .progress-container {
             position: sticky;
@@ -92,14 +92,14 @@
             padding: 1rem 0;
             margin-bottom: 2rem;
         }
-        
+
         .progress-bar {
             height: 8px;
             background: #e2e8f0;
             border-radius: 4px;
             overflow: hidden;
         }
-        
+
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, #8B1538 0%, #C8102E 100%);
@@ -107,7 +107,7 @@
             transition: width 0.5s ease;
             position: relative;
         }
-        
+
         .progress-fill::after {
             content: '';
             position: absolute;
@@ -118,12 +118,12 @@
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
             animation: shimmer 2s infinite;
         }
-        
+
         @keyframes shimmer {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
         }
-        
+
         /* Botones mejorados con colores Pantone */
         .btn-primary {
             background: linear-gradient(135deg, #8B1538 0%, #C8102E 100%);
@@ -142,7 +142,7 @@
             justify-content: center;
             gap: 12px;
         }
-        
+
         .btn-primary::before {
             content: '';
             position: absolute;
@@ -153,16 +153,16 @@
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
             transition: left 0.6s;
         }
-        
+
         .btn-primary:hover::before {
             left: 100%;
         }
-        
+
         .btn-primary:hover {
             transform: translateY(-3px);
             box-shadow: 0 20px 40px rgba(139, 21, 56, 0.4);
         }
-        
+
         /* Cards para propuestas */
         .propuesta-card {
             background: rgba(255, 255, 255, 0.9);
@@ -172,7 +172,7 @@
             transition: all 0.3s ease;
             position: relative;
         }
-        
+
         .propuesta-card::before {
             content: '';
             position: absolute;
@@ -183,13 +183,13 @@
             background: linear-gradient(90deg, #8B1538 0%, #C8102E 100%);
             border-radius: 16px 16px 0 0;
         }
-        
+
         .propuesta-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
             border-color: #8B1538;
         }
-        
+
         /* Rating stars */
         /* Estilos para mapas de Google */
         .map-container {
@@ -200,19 +200,19 @@
             border: 2px solid #f87171;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        
+
         .map-container > div {
             width: 100% !important;
             height: 100% !important;
         }
-        
+
         /* Asegurar que los mapas de Google se muestren correctamente */
         [id*="map-"] {
             width: 100%;
             height: 256px;
             background-color: #f3f4f6;
         }
-        
+
         [id*="map-"]:empty::before {
             content: "Cargando mapa...";
             display: flex;
@@ -222,53 +222,53 @@
             color: #6b7280;
             font-size: 14px;
         }
-        
+
         /* Forzar visibilidad de botones rojos */
         .bg-red-600 {
             background-color: #dc2626 !important;
         }
-        
+
         .bg-red-700 {
             background-color: #b91c1c !important;
         }
-        
+
         .hover\:bg-red-700:hover {
             background-color: #b91c1c !important;
         }
-        
+
         .hover\:bg-red-800:hover {
             background-color: #991b1b !important;
         }
-        
+
         button[class*="bg-red"] {
             color: white !important;
             font-weight: bold !important;
         }
-        
+
         .rating-star {
             font-size: 2rem;
             color: #d1d5db;
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        
+
         .rating-star.active {
             color: #fbbf24;
             transform: scale(1.1);
         }
-        
+
         .rating-star:hover {
             color: #fbbf24;
             transform: scale(1.2);
         }
-        
+
         /* Header mejorado con colores Pantone */
         .header-gradient {
             background: linear-gradient(135deg, #8B1538 0%, #C8102E 100%);
             position: relative;
             overflow: hidden;
         }
-        
+
         .header-gradient::before {
             content: '';
             position: absolute;
@@ -276,16 +276,16 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: 
+            background:
                 radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%),
                 radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 0%, transparent 50%);
         }
-        
+
         /* Efectos de hover para inputs */
         .form-input:hover {
             border-color: #C8102E;
         }
-        
+
         /* Animación de carga */
         .loading-spinner {
             display: inline-block;
@@ -296,7 +296,7 @@
             border-top-color: transparent;
             animation: spin 1s ease-in-out infinite;
         }
-        
+
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
@@ -317,7 +317,7 @@
                         <p class="text-white/80 text-sm">Tu voz construye el futuro</p>
                     </div>
                 </div>
-                <a href="{{ route('home') }}" 
+                <a href="{{ route('home') }}"
                    class="flex items-center space-x-2 bg-white/10 px-4 py-2 rounded-full hover:bg-white/20 transition-all slide-in-up slide-in-up-delay-1">
                     <i class="fas fa-arrow-left"></i>
                     <span>Volver al Inicio</span>
@@ -361,7 +361,7 @@
 
         <form method="POST" action="{{ route('encuesta.store') }}" enctype="multipart/form-data">
             @csrf
-            
+
             <!-- Sección 1: Datos Sociodemográficos -->
             <div class="form-section slide-in-up" x-intersect="updateProgress(25)">
                 <div class="flex items-center mb-6">
@@ -370,7 +370,7 @@
                     </div>
                     <h3 class="text-2xl font-bold text-gray-800">Datos Sociodemográficos</h3>
                 </div>
-                
+
                 <div class="grid md:grid-cols-2 gap-6">
                     <!-- Colonia -->
                     <div class="form-group slide-in-up slide-in-up-delay-1">
@@ -408,7 +408,7 @@
                             <i class="fas fa-birthday-cake mr-2 text-red-800"></i>
                             Edad *
                         </label>
-                        <input type="number" name="edad" class="form-input" min="18" max="100" 
+                        <input type="number" name="edad" class="form-input" min="18" max="100"
                                value="{{ old('edad') }}" placeholder="Ej: 30" required>
                     </div>
 
@@ -455,7 +455,7 @@
                     </div>
                     <h3 class="text-2xl font-bold text-gray-800">Califica las Obras Públicas</h3>
                 </div>
-                
+
                 <p class="text-gray-600 mb-6 bg-red-50 p-4 rounded-lg border-l-4 border-red-400">
                     <i class="fas fa-info-circle mr-2 text-red-500"></i>
                     Califica del 1 al 5 el estado actual de estas obras en tu colonia (1 = Muy malo, 5 = Excelente)
@@ -468,10 +468,10 @@
                                 <span class="font-semibold text-gray-800" x-text="obra.nombre"></span>
                                 <i class="fas fa-hammer text-red-500"></i>
                             </div>
-                            
+
                             <div class="flex space-x-2">
                                 <template x-for="i in 5" :key="i">
-                                    <button type="button" 
+                                    <button type="button"
                                             class="rating-star"
                                             :class="{ 'active': getObrasCalificadas()[obra.id] >= i }"
                                             @click="setObraCalificacion(obra.id, i)">
@@ -493,7 +493,7 @@
                     </div>
                     <h3 class="text-xl font-semibold text-gray-800 mb-2">Tu colonia está en desarrollo</h3>
                     <p class="text-gray-600 max-w-md mx-auto">
-                        Actualmente no hay obras públicas disponibles para evaluar en <span x-text="selectedColonia ? selectedColonia.nombre : ''"></span>. 
+                        Actualmente no hay obras públicas disponibles para evaluar en <span x-text="selectedColonia ? selectedColonia.nombre : ''"></span>.
                         ¡Pero puedes seguir participando con tus propuestas!
                     </p>
                 </div>
@@ -507,7 +507,7 @@
                     </div>
                     <h3 class="text-2xl font-bold text-gray-800">Tus Propuestas de Mejora</h3>
                 </div>
-                
+
                 <p class="text-gray-600 mb-6 bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400">
                     <i class="fas fa-lightbulb mr-2 text-yellow-500"></i>
                     Comparte hasta 3 propuestas para mejorar tu comunidad. ¡Tus ideas pueden convertirse en realidad!
@@ -518,14 +518,14 @@
                         <div class="propuesta-card mb-6 slide-in-up" :style="`animation-delay: ${index * 0.1}s`">
                             <div class="flex items-center justify-between mb-4">
                                 <h4 class="text-lg font-semibold text-gray-800" x-text="`Propuesta ${index + 1}`"></h4>
-                                <button type="button" 
+                                <button type="button"
                                         x-show="propuestas.length > 1"
                                         @click="propuestas.splice(index, 1)"
                                         class="text-red-500 hover:text-red-700 transition-colors">
                                     <i class="fas fa-trash text-sm"></i>
                                 </button>
                             </div>
-                            
+
                             <div class="grid md:grid-cols-2 gap-4 mb-4">
                                 <div class="form-group">
                                     <label class="form-label">Tipo de Propuesta *</label>
@@ -541,7 +541,7 @@
                                         <option value="Otro">Otro</option>
                                     </select>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label class="form-label">Nivel de Prioridad *</label>
                                     <select :name="`propuestas[${index}][nivel_prioridad]`" class="form-input" required>
@@ -553,26 +553,26 @@
                                     </select>
                                 </div>
                             </div>
-                            
+
                             <div class="grid md:grid-cols-2 gap-4 mb-4">
                                 <div class="form-group">
                                     <label class="form-label">
                                         <i class="fas fa-map-marker-alt mr-2 text-red-800"></i>
                                         Ubicación Específica
                                     </label>
-                                    <input type="text" :name="`propuestas[${index}][ubicacion]`" 
-                                           class="form-input location-input" 
+                                    <input type="text" :name="`propuestas[${index}][ubicacion]`"
+                                           class="form-input location-input"
                                            :id="`location-input-${index}`"
                                            placeholder="Busca o selecciona la ubicación en el mapa"
                                            @click="showMap(index, 'propuesta')">
                                     <div class="flex gap-2 mt-2">
-                                        <button type="button" 
+                                        <button type="button"
                                                 @click="toggleMap(index, 'propuesta')"
                                                 class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl text-sm font-bold flex-1 border-2 border-red-700">
                                             <i class="fas fa-map mr-1"></i>
                                             <span x-text="mapVisible[`propuesta-${index}`] ? 'Ocultar Mapa' : 'Mostrar Mapa'"></span>
                                         </button>
-                                        <button type="button" 
+                                        <button type="button"
                                                 @click="getCurrentLocation(index, 'propuesta')"
                                                 class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl text-sm font-bold border-2 border-red-800">
                                             <i class="fas fa-location-arrow mr-1"></i>
@@ -581,35 +581,35 @@
                                     </div>
                                     <div :id="`map-propuesta-${index}`" class="mt-2 map-container" x-show="mapVisible[`propuesta-${index}`]" x-transition></div>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label class="form-label">Personas Beneficiadas *</label>
-                                    <input type="number" :name="`propuestas[${index}][personas_beneficiadas]`" 
+                                    <input type="number" :name="`propuestas[${index}][personas_beneficiadas]`"
                                            class="form-input" min="1" placeholder="Ej: 150" required>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group mb-4">
                                 <label class="form-label">Descripción Breve de la Propuesta *</label>
-                                <textarea :name="`propuestas[${index}][descripcion_breve]`" 
-                                          class="form-input" rows="3" 
+                                <textarea :name="`propuestas[${index}][descripcion_breve]`"
+                                          class="form-input" rows="3"
                                           placeholder="Describe tu propuesta en detalle..." required></textarea>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label class="form-label">
                                     <i class="fas fa-camera mr-2 text-red-800"></i>
                                     Fotografía de Apoyo (Opcional)
                                 </label>
-                                <input type="file" :name="`propuestas[${index}][fotografia]`" 
+                                <input type="file" :name="`propuestas[${index}][fotografia]`"
                                        class="form-input" accept="image/*">
                                 <p class="text-sm text-gray-500 mt-1">Sube una foto que ayude a explicar tu propuesta</p>
                             </div>
                         </div>
                     </template>
-                    
+
                     <div class="text-center" x-show="propuestas.length < maxPropuestas">
-                        <button type="button" 
+                        <button type="button"
                                 @click="propuestas.push({})"
                                 class="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl font-bold text-lg border-2 border-red-700 transform hover:scale-105">
                             <i class="fas fa-plus mr-2"></i>
@@ -627,10 +627,10 @@
                     </div>
                     <h3 class="text-2xl font-bold text-gray-800">Reportes Anónimos (Opcional)</h3>
                 </div>
-                
+
                 <div class="form-group mb-6">
                     <label class="flex items-center space-x-3 cursor-pointer">
-                        <input type="checkbox" name="desea_reporte" value="1" 
+                        <input type="checkbox" name="desea_reporte" value="1"
                                class="rounded border-gray-300 text-red-600 focus:ring-red-500"
                                x-model="deseaReporte">
                         <span class="text-gray-700 font-medium">Sí, deseo hacer un reporte anónimo</span>
@@ -647,14 +647,14 @@
                         <div class="propuesta-card mb-6 slide-in-up" :style="`animation-delay: ${index * 0.1}s`">
                             <div class="flex items-center justify-between mb-4">
                                 <h4 class="text-lg font-semibold text-gray-800" x-text="`Reporte ${index + 1}`"></h4>
-                                <button type="button" 
+                                <button type="button"
                                         x-show="reportes.length > 1"
                                         @click="reportes.splice(index, 1)"
                                         class="text-red-500 hover:text-red-700 transition-colors">
                                     <i class="fas fa-trash text-sm"></i>
                                 </button>
                             </div>
-                            
+
                             <div class="form-group mb-4">
                                 <label class="form-label">Tipo de Reporte *</label>
                                 <select :name="`reportes[${index}][tipo_reporte]`" class="form-input">
@@ -667,25 +667,25 @@
                                     <option value="Otro">Otro</option>
                                 </select>
                             </div>
-                            
+
                             <div class="form-group mb-4">
                                 <label class="form-label">
                                     <i class="fas fa-map-marker-alt mr-2 text-red-800"></i>
                                     Ubicación del Problema
                                 </label>
-                                <input type="text" :name="`reportes[${index}][ubicacion]`" 
+                                <input type="text" :name="`reportes[${index}][ubicacion]`"
                                        class="form-input location-input"
                                        :id="`report-location-input-${index}`"
                                        placeholder="Busca o selecciona la ubicación en el mapa"
                                        @click="showMap(index, 'reporte')">
                                 <div class="flex gap-2 mt-2">
-                                    <button type="button" 
+                                    <button type="button"
                                             @click="toggleMap(index, 'reporte')"
                                             class="bg-gradient-to-r from-red-600 to-red-500 text-white px-4 py-2 rounded-lg hover:from-red-700 hover:to-red-600 transition-all duration-300 shadow-md hover:shadow-lg text-sm font-semibold flex-1">
                                         <i class="fas fa-map mr-1"></i>
                                         <span x-text="mapVisible[`reporte-${index}`] ? 'Ocultar Mapa' : 'Mostrar Mapa'"></span>
                                     </button>
-                                    <button type="button" 
+                                    <button type="button"
                                             @click="getCurrentLocation(index, 'reporte')"
                                             class="bg-gradient-to-r from-red-700 to-red-600 text-white px-4 py-2 rounded-lg hover:from-red-800 hover:to-red-700 transition-all duration-300 shadow-md hover:shadow-lg text-sm font-semibold">
                                         <i class="fas fa-location-arrow mr-1"></i>
@@ -694,28 +694,28 @@
                                 </div>
                                 <div :id="`map-reporte-${index}`" class="mt-2 map-container" x-show="mapVisible[`reporte-${index}`]" x-transition></div>
                             </div>
-                            
+
                             <div class="form-group mb-4">
                                 <label class="form-label">Descripción del Reporte *</label>
-                                <textarea :name="`reportes[${index}][descripcion]`" 
-                                          class="form-input" rows="4" 
+                                <textarea :name="`reportes[${index}][descripcion]`"
+                                          class="form-input" rows="4"
                                           placeholder="Describe detalladamente la situación que deseas reportar..."></textarea>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label class="form-label">
                                     <i class="fas fa-file-upload mr-2 text-red-800"></i>
                                     Evidencia (Opcional)
                                 </label>
-                                <input type="file" :name="`reportes[${index}][evidencia]`" 
+                                <input type="file" :name="`reportes[${index}][evidencia]`"
                                        class="form-input" accept="image/*,application/pdf">
                                 <p class="text-sm text-gray-500 mt-1">Sube fotos, documentos o videos como evidencia</p>
                             </div>
                         </div>
                     </template>
-                    
+
                     <div class="text-center" x-show="reportes.length < 3">
-                        <button type="button" 
+                        <button type="button"
                                 @click="reportes.push({})"
                                 class="bg-orange-500 text-white px-6 py-3 rounded-full hover:bg-orange-600 transition-all duration-300 inline-flex items-center">
                             <i class="fas fa-plus mr-2"></i>
@@ -727,7 +727,7 @@
 
             <!-- Botón de Envío -->
             <div class="text-center slide-in-up" x-intersect="updateProgress(100)">
-                <button type="submit" 
+                <button type="submit"
                         class="btn-primary"
                         :disabled="isSubmitting"
                         @click="handleSubmit">
@@ -740,7 +740,7 @@
                         Procesando...
                     </span>
                 </button>
-                
+
                 <p class="text-sm text-gray-500 mt-4">
                     <i class="fas fa-lock mr-2"></i>
                     Tus datos están protegidos y serán tratados de forma confidencial
@@ -761,7 +761,7 @@
         function initLocationPicker(inputId, mapId) {
             const input = document.getElementById(inputId);
             const mapContainer = document.getElementById(mapId);
-            
+
             if (!input || !mapContainer) {
                 console.error('No se encontraron los elementos:', inputId, mapId);
                 return;
@@ -769,7 +769,7 @@
 
             // Mostrar el mapa
             mapContainer.style.display = 'block';
-            
+
             // Si ya existe una instancia, no crear otra
             if (mapInstances[mapId]) {
                 return;
@@ -777,39 +777,39 @@
 
             // Coordenadas por defecto (Tecámac, Estado de México)
             const defaultLocation = { lat: 19.7133, lng: -99.0036 };
-            
+
             // Crear el mapa
             const map = new google.maps.Map(mapContainer, {
                 zoom: 13,
                 center: defaultLocation,
                 mapTypeId: 'roadmap'
             });
-            
+
             // Crear el marcador
             const marker = new google.maps.Marker({
                 position: defaultLocation,
                 map: map,
                 draggable: true
             });
-            
+
             // Crear el autocomplete
             const autocomplete = new google.maps.places.Autocomplete(input);
             autocomplete.bindTo('bounds', map);
-            
+
             // Configurar el autocomplete para México
             autocomplete.setComponentRestrictions({
                 country: ['mx']
             });
-            
+
             // Cuando se selecciona un lugar del autocomplete
             autocomplete.addListener('place_changed', function() {
                 const place = autocomplete.getPlace();
-                
+
                 if (!place.geometry) {
                     console.log("No se encontraron detalles para: '" + place.name + "'");
                     return;
                 }
-                
+
                 // Si el lugar tiene viewport, usarlo, sino usar location
                 if (place.geometry.viewport) {
                     map.fitBounds(place.geometry.viewport);
@@ -817,18 +817,18 @@
                     map.setCenter(place.geometry.location);
                     map.setZoom(17);
                 }
-                
+
                 // Mover el marcador
                 marker.setPosition(place.geometry.location);
-                
+
                 // Actualizar el input con la dirección completa
                 input.value = place.formatted_address || place.name;
             });
-            
+
             // Cuando se arrastra el marcador
             marker.addListener('dragend', function() {
                 const position = marker.getPosition();
-                
+
                 // Geocoding inverso para obtener la dirección
                 const geocoder = new google.maps.Geocoder();
                 geocoder.geocode({ location: position }, function(results, status) {
@@ -837,11 +837,11 @@
                     }
                 });
             });
-            
+
             // Cuando se hace click en el mapa
             map.addListener('click', function(event) {
                 marker.setPosition(event.latLng);
-                
+
                 // Geocoding inverso
                 const geocoder = new google.maps.Geocoder();
                 geocoder.geocode({ location: event.latLng }, function(results, status) {
@@ -850,7 +850,7 @@
                     }
                 });
             });
-            
+
             // Guardar las instancias
             mapInstances[mapId] = map;
             autocompleteInstances[inputId] = autocomplete;
@@ -890,7 +890,7 @@
                 async loadObras() {
                     const coloniaSelect = document.querySelector('[name="colonia_id"]');
                     const coloniaId = coloniaSelect.value;
-                    
+
                     if (!coloniaId) {
                         this.selectedColonia = null;
                         this.obras = [];
@@ -900,12 +900,12 @@
                     // Encontrar la colonia seleccionada
                     const colonias = @json($colonias);
                     this.selectedColonia = colonias.find(c => c.id == coloniaId);
-                    
+
                     try {
                         const response = await fetch(`/encuesta/obras-por-colonia/${coloniaId}`);
                         this.obras = await response.json();
                         this.obrasCalificadas = {};
-                        
+
                         // Actualizar el progreso basado en si hay obras o no
                         this.updateProgress(this.obras.length > 0 ? 50 : 75);
                     } catch (error) {
@@ -925,7 +925,7 @@
                 toggleMap(index, type) {
                     const key = `${type}-${index}`;
                     this.mapVisible[key] = !this.mapVisible[key];
-                    
+
                     if (this.mapVisible[key]) {
                         this.$nextTick(() => {
                             this.initMap(index, type);
@@ -937,14 +937,14 @@
                     const key = `${type}-${index}`;
                     if (!this.mapVisible[key]) {
                         this.mapVisible[key] = true;
-                        
+
                         // Verificar si Google Maps está disponible
                         if (typeof google === 'undefined' || !google.maps) {
                             alert('Google Maps no está disponible. Por favor recarga la página e intenta de nuevo.');
                             this.mapVisible[key] = false;
                             return;
                         }
-                        
+
                         this.$nextTick(() => {
                             this.initMap(index, type);
                         });
@@ -954,9 +954,9 @@
                 initMap(index, type) {
                     const mapId = `map-${type}-${index}`;
                     const inputId = type === 'propuesta' ? `location-input-${index}` : `report-location-input-${index}`;
-                    
+
                     if (this.maps[mapId]) return; // Ya inicializado
-                    
+
                     // Esperar a que el elemento esté disponible
                     setTimeout(() => {
                         const mapElement = document.getElementById(mapId);
@@ -964,17 +964,17 @@
                             console.error(`No se encontró elemento del mapa: ${mapId}`);
                             return;
                         }
-                        
+
                         // Asegurarse de que Google Maps esté disponible
                         if (typeof google === 'undefined' || !google.maps) {
                             console.error('Google Maps API no está cargada');
                             alert('Error: Google Maps no está disponible. Por favor recarga la página.');
                             return;
                         }
-                        
+
                         // Coordenadas por defecto (Tecámac, Estado de México)
                         const defaultLocation = { lat: 19.7138, lng: -99.0095 };
-                        
+
                         try {
                             const map = new google.maps.Map(mapElement, {
                                 zoom: 13,
@@ -990,7 +990,7 @@
                                     }
                                 ]
                             });
-                            
+
                             const marker = new google.maps.Marker({
                                 position: defaultLocation,
                                 map: map,
@@ -998,13 +998,13 @@
                                 title: 'Arrastra para seleccionar ubicación',
                                 animation: google.maps.Animation.DROP
                             });
-                            
+
                             // Guardar referencia al marcador
                             this.maps[mapId + '_marker'] = marker;
-                            
+
                             // Guardar referencia al marcador
                             this.maps[mapId + '_marker'] = marker;
-                            
+
                             const input = document.getElementById(inputId);
                             if (input) {
                                 const autocomplete = new google.maps.places.Autocomplete(input, {
@@ -1015,7 +1015,7 @@
                                     strictBounds: false,
                                     types: ['address']
                                 });
-                                
+
                                 autocomplete.addListener('place_changed', () => {
                                     const place = autocomplete.getPlace();
                                     if (place.geometry) {
@@ -1025,7 +1025,7 @@
                                     }
                                 });
                             }
-                            
+
                             marker.addListener('dragend', () => {
                                 const position = marker.getPosition();
                                 const geocoder = new google.maps.Geocoder();
@@ -1035,7 +1035,7 @@
                                     }
                                 });
                             });
-                            
+
                             map.addListener('click', (event) => {
                                 marker.setPosition(event.latLng);
                                 const geocoder = new google.maps.Geocoder();
@@ -1045,15 +1045,15 @@
                                     }
                                 });
                             });
-                            
+
                             this.maps[mapId] = map;
                             console.log(`Mapa inicializado correctamente: ${mapId}`);
-                            
+
                             // Forzar un resize después de un momento para asegurar que se muestre
                             setTimeout(() => {
                                 google.maps.event.trigger(map, 'resize');
                             }, 100);
-                            
+
                         } catch (error) {
                             console.error('Error inicializando mapa:', error);
                             alert('Error al cargar el mapa. Por favor intenta de nuevo.');
@@ -1079,7 +1079,7 @@
                         (position) => {
                             const lat = position.coords.latitude;
                             const lng = position.coords.longitude;
-                            
+
                             // Restaurar input
                             if (input) {
                                 input.disabled = false;
@@ -1095,20 +1095,20 @@
                             // Obtener dirección usando geocodificación inversa
                             const geocoder = new google.maps.Geocoder();
                             const latlng = { lat: lat, lng: lng };
-                            
+
                             geocoder.geocode({ location: latlng }, (results, status) => {
                                 if (status === 'OK' && results[0]) {
                                     if (input) {
                                         input.value = results[0].formatted_address;
                                     }
-                                    
+
                                     // Si el mapa está visible, actualizar la posición
                                     const mapId = `map-${type}-${index}`;
                                     if (this.maps[mapId]) {
                                         const map = this.maps[mapId];
                                         const position = new google.maps.LatLng(lat, lng);
                                         map.setCenter(position);
-                                        
+
                                         // Encontrar y mover el marcador
                                         if (!this.maps[mapId + '_marker']) {
                                             this.maps[mapId + '_marker'] = new google.maps.Marker({
@@ -1123,14 +1123,14 @@
                                     } else {
                                         // Si el mapa no está visible, mostrarlo
                                         this.showMap(index, type);
-                                        
+
                                         // Esperar a que se inicialice y luego actualizar
                                         setTimeout(() => {
                                             if (this.maps[mapId]) {
                                                 const map = this.maps[mapId];
                                                 const position = new google.maps.LatLng(lat, lng);
                                                 map.setCenter(position);
-                                                
+
                                                 if (this.maps[mapId + '_marker']) {
                                                     this.maps[mapId + '_marker'].setPosition(position);
                                                 }
@@ -1150,7 +1150,7 @@
                                 input.disabled = false;
                                 input.value = '';
                             }
-                            
+
                             let mensaje = 'No se pudo obtener la ubicación. ';
                             switch(error.code) {
                                 case error.PERMISSION_DENIED:
@@ -1178,12 +1178,12 @@
 
                 handleSubmit(event) {
                     event.preventDefault();
-                    
+
                     if (!this.selectedColonia) {
                         alert('Por favor, selecciona una colonia antes de enviar.');
                         return;
                     }
-                    
+
                     // Solo validar obras si la colonia tiene obras disponibles
                     if (this.obras.length > 0) {
                         const calificaciones = Object.keys(this.obrasCalificadas);
@@ -1192,9 +1192,9 @@
                             return;
                         }
                     }
-                    
+
                     this.isSubmitting = true;
-                    
+
                     setTimeout(() => {
                         event.target.closest('form').submit();
                     }, 100);
@@ -1205,12 +1205,12 @@
         // Efectos adicionales
         document.addEventListener('DOMContentLoaded', function() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            
+
             document.querySelectorAll('.form-input').forEach(input => {
                 input.addEventListener('focus', function() {
                     this.closest('.form-group').style.transform = 'scale(1.02)';
                 });
-                
+
                 input.addEventListener('blur', function() {
                     this.closest('.form-group').style.transform = 'scale(1)';
                 });

@@ -21,21 +21,21 @@
         <h1 class="text-2xl font-bold text-gray-900 mb-4">
             ¡Encuesta Enviada Correctamente!
         </h1>
-        
+
         <p class="text-gray-600 mb-8">
-            Gracias por tu participación en el Presupuesto Participativo 2026. 
-            Tu opinión es muy importante para nosotros y será considerada en 
+            Gracias por tu participación en el Presupuesto Participativo 2026.
+            Tu opinión es muy importante para nosotros y será considerada en
             las decisiones sobre las obras públicas de tu comunidad.
         </p>
 
         <!-- Botones de acción -->
         <div class="space-y-4">
-            <a href="{{ route('home') }}" 
+            <a href="{{ route('home') }}"
                class="block w-full bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors">
                 Volver al Inicio
             </a>
-            
-            <a href="{{ route('encuesta.create') }}" 
+
+            <a href="{{ route('encuesta.create') }}"
                class="block w-full bg-gray-200 text-gray-800 font-semibold py-3 px-6 rounded-lg hover:bg-gray-300 transition-colors">
                 Responder Otra Encuesta
             </a>

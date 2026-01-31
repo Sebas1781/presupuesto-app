@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ObraPublica extends Model
 {
     protected $table = 'obras_publicas';
-    
+
     protected $fillable = [
         'colonia_id',
         'nombre',
