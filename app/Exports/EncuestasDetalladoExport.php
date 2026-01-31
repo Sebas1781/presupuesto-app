@@ -7,6 +7,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
 class EncuestasDetalladoExport implements WithMultipleSheets
 {
@@ -20,20 +21,25 @@ class EncuestasDetalladoExport implements WithMultipleSheets
     public function sheets(): array
     {
         return [
-            0 => new EncuestasSheet($this->encuestas),
-            1 => new PropuestasSheet($this->encuestas),
-            2 => new ReportesSheet($this->encuestas),
+            new EncuestasSheet($this->encuestas),
+            new PropuestasSheet($this->encuestas),
+            new ReportesSheet($this->encuestas),
         ];
     }
 }
 
-class EncuestasSheet implements FromCollection, WithHeadings, WithMapping
+class EncuestasSheet implements FromCollection, WithHeadings, WithMapping, WithTitle
 {
     protected $encuestas;
 
     public function __construct(Collection $encuestas)
     {
         $this->encuestas = $encuestas;
+    }
+
+    public function title(): string
+    {
+        return 'Encuestas';
     }
 
     public function collection()
@@ -62,27 +68,32 @@ class EncuestasSheet implements FromCollection, WithHeadings, WithMapping
     {
         return [
             $encuesta->id,
-            $encuesta->colonia->nombre ?? 'Sin colonia',
+            $encuesta->colonia ? $encuesta->colonia->nombre : 'Sin colonia',
             $encuesta->genero,
             $encuesta->edad,
             $encuesta->nivel_educativo,
             $encuesta->estado_civil,
             is_array($encuesta->obras_calificadas) ? json_encode($encuesta->obras_calificadas) : ($encuesta->obras_calificadas ?? 'N/A'),
             $encuesta->desea_reporte ? 'Sí' : 'No',
-            $encuesta->propuestas->count(),
-            $encuesta->reportes->count(),
-            $encuesta->created_at->format('Y-m-d H:i:s')
+            $encuesta->propuestas ? $encuesta->propuestas->count() : 0,
+            $encuesta->reportes ? $encuesta->reportes->count() : 0,
+            $encuesta->created_at ? $encuesta->created_at->format('Y-m-d H:i:s') : 'N/A'
         ];
     }
 }
 
-class PropuestasSheet implements FromCollection, WithHeadings, WithMapping
+class PropuestasSheet implements FromCollection, WithHeadings, WithMapping, WithTitle
 {
     protected $encuestas;
 
     public function __construct(Collection $encuestas)
     {
         $this->encuestas = $encuestas;
+    }
+
+    public function title(): string
+    {
+        return 'Propuestas';
     }
 
     public function collection()
@@ -116,25 +127,30 @@ class PropuestasSheet implements FromCollection, WithHeadings, WithMapping
         return [
             $propuesta->id,
             $propuesta->encuesta_id,
-            $propuesta->encuesta->colonia->nombre ?? 'Sin colonia',
+            $propuesta->encuesta && $propuesta->encuesta->colonia ? $propuesta->encuesta->colonia->nombre : 'Sin colonia',
             $propuesta->tipo_propuesta,
             $propuesta->nivel_prioridad,
             $propuesta->personas_beneficiadas,
             $propuesta->ubicacion,
             $propuesta->descripcion_breve,
             $propuesta->fotografia ? 'Sí' : 'No',
-            $propuesta->created_at->format('Y-m-d H:i:s')
+            $propuesta->created_at ? $propuesta->created_at->format('Y-m-d H:i:s') : 'N/A'
         ];
     }
 }
 
-class ReportesSheet implements FromCollection, WithHeadings, WithMapping
+class ReportesSheet implements FromCollection, WithHeadings, WithMapping, WithTitle
 {
     protected $encuestas;
 
     public function __construct(Collection $encuestas)
     {
         $this->encuestas = $encuestas;
+    }
+
+    public function title(): string
+    {
+        return 'Reportes';
     }
 
     public function collection()
@@ -166,12 +182,12 @@ class ReportesSheet implements FromCollection, WithHeadings, WithMapping
         return [
             $reporte->id,
             $reporte->encuesta_id,
-            $reporte->encuesta->colonia->nombre ?? 'Sin colonia',
+            $reporte->encuesta && $reporte->encuesta->colonia ? $reporte->encuesta->colonia->nombre : 'Sin colonia',
             $reporte->tipo_reporte,
             $reporte->descripcion,
             $reporte->ubicacion,
             $reporte->evidencia ? 'Sí' : 'No',
-            $reporte->created_at->format('Y-m-d H:i:s')
+            $reporte->created_at ? $reporte->created_at->format('Y-m-d H:i:s') : 'N/A'
         ];
     }
 }

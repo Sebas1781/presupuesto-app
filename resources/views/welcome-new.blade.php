@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Presupuesto Participativo 2026</title>
+    <title>Presupuesto Participativo 2026 - Tecámac</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -16,35 +16,220 @@
         }
         
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', sans-serif;
             overflow-x: hidden;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #8B1538 0%, #C8102E 50%, #E91E63 100%);
+            min-height: 100vh;
+        }
+
+        /* Colores oficiales Pantone */
+        :root {
+            --pantone-7420: #8B1538;
+            --pantone-1805: #C8102E;
+            --gradient-bg: linear-gradient(135deg, #8B1538 0%, #C8102E 50%, #E91E63 100%);
         }
         
         /* Animaciones de entrada */
         .fade-in {
             opacity: 0;
-            animation: fadeIn 1s ease-out forwards;
+            animation: fadeIn 1.2s ease-out forwards;
         }
         
-        .fade-in-delay-1 { animation-delay: 0.2s; }
-        .fade-in-delay-2 { animation-delay: 0.4s; }
-        .fade-in-delay-3 { animation-delay: 0.6s; }
+        .fade-in-delay-1 { animation-delay: 0.3s; }
+        .fade-in-delay-2 { animation-delay: 0.6s; }
+        .fade-in-delay-3 { animation-delay: 0.9s; }
+        .fade-in-delay-4 { animation-delay: 1.2s; }
         
         @keyframes fadeIn {
             to { opacity: 1; }
         }
         
         .slide-up {
-            transform: translateY(50px);
+            transform: translateY(30px);
             opacity: 0;
-            animation: slideUp 0.8s ease-out forwards;
+            animation: slideUp 1s ease-out forwards;
         }
         
         @keyframes slideUp {
             to {
                 transform: translateY(0);
                 opacity: 1;
+            }
+        }
+
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Estilo principal de hero */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--gradient-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,144C960,149,1056,139,1152,128C1248,117,1344,107,1392,101.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x bottom;
+            opacity: 0.1;
+        }
+
+        .logo-container {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            z-index: 10;
+        }
+
+        .logo-tecamac {
+            height: 80px;
+            filter: brightness(0) invert(1);
+            transition: all 0.3s ease;
+        }
+
+        .logo-tecamac:hover {
+            transform: scale(1.05);
+            filter: brightness(0) invert(1) drop-shadow(0 5px 15px rgba(255,255,255,0.3));
+        }
+
+        .main-content {
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            min-height: 80vh;
+        }
+
+        .content-text {
+            text-align: left;
+            color: white;
+        }
+
+        .president-intro {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .president-name {
+            font-weight: 700;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .main-slogan {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin: 2rem 0;
+            line-height: 1.2;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+        }
+
+        .slogan-highlight {
+            font-style: italic;
+            color: #FFD700;
+            position: relative;
+        }
+
+        .slogan-subtitle {
+            font-size: 2.2rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.95);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .president-image {
+            max-width: 100%;
+            height: auto;
+            max-height: 600px;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+            transition: transform 0.3s ease;
+        }
+
+        .president-image:hover {
+            transform: scale(1.02);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: rgba(255,255,255,0.95);
+            color: var(--pantone-7420);
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:hover {
+            background: white;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            color: var(--pantone-1805);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+            
+            .content-text {
+                text-align: center;
+                order: 2;
+            }
+            
+            .image-container {
+                order: 1;
+            }
+            
+            .main-slogan {
+                font-size: 2.5rem;
+            }
+            
+            .slogan-subtitle {
+                font-size: 1.8rem;
+            }
+            
+            .logo-container {
+                top: 1rem;
+                left: 1rem;
+            }
+            
+            .logo-tecamac {
+                height: 60px;
             }
         }
         
@@ -160,109 +345,156 @@
 </head>
 
 <body class="antialiased">
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 transition-all duration-300" id="navbar">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3 fade-in">
-                    <div class="w-10 h-10 bg-gradient-to-r from-red-800 to-red-600 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-vote-yea text-white text-lg"></i>
-                    </div>
-                    <h1 class="text-xl font-bold text-gray-800">Presupuesto Participativo 2026</h1>
+    <!-- Sección Hero Principal -->
+    <section class="hero-section">
+        <!-- Logo de Tecámac -->
+        <div class="logo-container fade-in">
+            <img src="{{ asset('images/AYUNTO 2026 H.png') }}" alt="Tecámac 2026" class="logo-tecamac">
+        </div>
+
+        <!-- Contenido Principal -->
+        <div class="main-content">
+            <!-- Texto Principal -->
+            <div class="content-text">
+                <div class="fade-in fade-in-delay-1">
+                    <p class="president-intro">
+                        La Presidenta Municipal, <span class="president-name">Rosi Wong</span>, te invita a definir juntos el presupuesto 2026. ¡Participa! Porque:
+                    </p>
                 </div>
-                
-                <div class="hidden md:flex items-center space-x-6 fade-in fade-in-delay-1">
-                    <a href="#inicio" class="text-gray-700 hover:text-red-800 transition-colors">Inicio</a>
-                    <a href="#como-funciona" class="text-gray-700 hover:text-red-800 transition-colors">¿Cómo funciona?</a>
-                    <a href="#participar" class="text-gray-700 hover:text-red-800 transition-colors">Participar</a>
-                </div>
-                
+
                 <div class="fade-in fade-in-delay-2">
+                    <h1 class="main-slogan">
+                        Aquí, la que <span class="slogan-highlight">manda</span>
+                    </h1>
+                    <p class="slogan-subtitle">es la gente</p>
+                </div>
+
+                <div class="fade-in fade-in-delay-3">
+                    <a href="{{ route('encuesta.create') }}" class="cta-button">
+                        <i class="fas fa-vote-yea mr-3"></i>
+                        ¡Participa Ahora!
+                    </a>
+                </div>
+
+                <!-- Botones adicionales -->
+                <div class="fade-in fade-in-delay-4" style="margin-top: 1rem;">
                     @auth
                         <a href="{{ route('admin.dashboard') }}" 
-                           class="bg-red-800 text-white px-6 py-2 rounded-full hover:bg-red-900 transition-all duration-300 transform hover:scale-105">
+                           class="cta-button" style="margin-left: 1rem; background: rgba(255,255,255,0.1); color: white; border: 2px solid rgba(255,255,255,0.3);">
                             <i class="fas fa-chart-pie mr-2"></i>Panel Admin
                         </a>
                     @else
                         <a href="{{ route('login') }}" 
-                           class="text-red-800 hover:text-red-900 transition-colors px-4 py-2">
+                           class="cta-button" style="margin-left: 1rem; background: rgba(255,255,255,0.1); color: white; border: 2px solid rgba(255,255,255,0.3);">
                             <i class="fas fa-sign-in-alt mr-2"></i>Iniciar Sesión
                         </a>
                     @endauth
                 </div>
             </div>
-        </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section id="inicio" class="gradient-bg min-h-screen flex items-center relative overflow-hidden">
-        <!-- Elementos decorativos flotantes -->
-        <div class="absolute inset-0">
-            <div class="absolute top-20 left-10 w-20 h-20 bg-white/10 rounded-full float"></div>
-            <div class="absolute top-40 right-20 w-32 h-32 bg-white/5 rounded-full float-delayed"></div>
-            <div class="absolute bottom-20 left-20 w-16 h-16 bg-white/10 rounded-full float"></div>
+            <!-- Imagen de la Presidenta -->
+            <div class="image-container fade-in fade-in-delay-2">
+                <img src="{{ asset('images/rosy.png') }}" alt="Presidenta Rosi Wong" class="president-image float-animation">
+            </div>
         </div>
-        
-        <div class="container mx-auto px-6 relative z-10">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <!-- Contenido principal -->
-                <div class="text-white">
-                    <div class="fade-in">
-                        <h1 class="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-                            Tu Voz
-                            <span class="block text-yellow-300">Construye</span>
-                            <span class="block">el Futuro</span>
-                        </h1>
+    </section>
+
+    <!-- Sección de Información -->
+    <section id="como-funciona" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">¿Cómo Funciona?</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Tu participación es fundamental para construir el Tecámac que todos queremos. Sigue estos sencillos pasos:
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Paso 1 -->
+                <div class="feature-card bg-white rounded-2xl p-8 text-center shadow-lg border border-gray-100">
+                    <div class="w-16 h-16 bg-gradient-to-r from-red-800 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-user-check text-white text-2xl"></i>
                     </div>
-                    
-                    <div class="fade-in fade-in-delay-1">
-                        <p class="text-xl lg:text-2xl mb-8 text-white/90 leading-relaxed">
-                            Únete al <strong>Presupuesto Participativo 2026</strong>. 
-                            Decide qué obras públicas son prioritarias para tu comunidad 
-                            y construyamos juntos un mejor mañana. 🏗️✨
-                        </p>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">1. Regístrate</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Completa el formulario con tus datos básicos y selecciona tu colonia para participar.
+                    </p>
+                </div>
+
+                <!-- Paso 2 -->
+                <div class="feature-card bg-white rounded-2xl p-8 text-center shadow-lg border border-gray-100">
+                    <div class="w-16 h-16 bg-gradient-to-r from-red-800 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-star text-white text-2xl"></i>
                     </div>
-                    
-                    <div class="fade-in fade-in-delay-2">
-                        <div class="flex flex-col sm:flex-row gap-4">
-                            <a href="{{ route('encuesta.create') }}" 
-                               class="btn-primary text-white px-8 py-4 rounded-full text-lg font-semibold inline-flex items-center justify-center group">
-                                <i class="fas fa-rocket mr-3 group-hover:animate-bounce"></i>
-                                ¡Participar Ahora!
-                                <i class="fas fa-arrow-right ml-3 group-hover:translate-x-2 transition-transform"></i>
-                            </a>
-                            
-                            <button onclick="document.getElementById('como-funciona').scrollIntoView({behavior: 'smooth'})"
-                                    class="border-2 border-white/50 text-white px-8 py-4 rounded-full text-lg hover:bg-white/10 transition-all duration-300">
-                                <i class="fas fa-info-circle mr-3"></i>
-                                Más Información
-                            </button>
-                        </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">2. Evalúa</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Califica las obras públicas existentes en tu colonia del 1 al 5 según su estado actual.
+                    </p>
+                </div>
+
+                <!-- Paso 3 -->
+                <div class="feature-card bg-white rounded-2xl p-8 text-center shadow-lg border border-gray-100">
+                    <div class="w-16 h-16 bg-gradient-to-r from-red-800 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-lightbulb text-white text-2xl"></i>
                     </div>
-                    
-                    <!-- Stats animados -->
-                    <div class="fade-in fade-in-delay-3 mt-12">
-                        <div class="grid grid-cols-3 gap-6">
-                            <div class="text-center">
-                                <div class="text-3xl font-bold mb-2 pulse">1,250+</div>
-                                <div class="text-white/80 text-sm">Propuestas</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-3xl font-bold mb-2 pulse" style="animation-delay: 0.5s">85%</div>
-                                <div class="text-white/80 text-sm">Participación</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-3xl font-bold mb-2 pulse" style="animation-delay: 1s">120</div>
-                                <div class="text-white/80 text-sm">Colonias</div>
-                            </div>
-                        </div>
-                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">3. Propón</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Comparte tus ideas para nuevas obras públicas que beneficien a tu comunidad.
+                    </p>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="{{ route('encuesta.create') }}" 
+                   class="inline-flex items-center bg-gradient-to-r from-red-800 to-red-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-red-900 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    <i class="fas fa-rocket mr-3"></i>
+                    ¡Empezar Mi Participación!
+                    <i class="fas fa-arrow-right ml-3"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="gradient-bg text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <img src="{{ asset('images/VOLAR SLOGAN 2026 N.png') }}" alt="Slogan Tecámac 2026" class="h-16 mb-4 filter brightness-0 invert">
+                    <p class="text-white/80">
+                        Construyendo juntos el futuro de Tecámac a través de la participación ciudadana.
+                    </p>
                 </div>
                 
-                <!-- Ilustración -->
-                <div class="fade-in fade-in-delay-2">
-                    <div class="relative">
-                        <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 glow">
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Enlaces Útiles</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#como-funciona" class="text-white/80 hover:text-white transition-colors">¿Cómo funciona?</a></li>
+                        <li><a href="{{ route('encuesta.create') }}" class="text-white/80 hover:text-white transition-colors">Participar</a></li>
+                        <li><a href="{{ route('login') }}" class="text-white/80 hover:text-white transition-colors">Iniciar Sesión</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contacto</h4>
+                    <p class="text-white/80 mb-2">
+                        <i class="fas fa-envelope mr-2"></i>
+                        presupuesto@tecamac.gob.mx
+                    </p>
+                    <p class="text-white/80">
+                        <i class="fas fa-phone mr-2"></i>
+                        (55) 1234-5678
+                    </p>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/20 mt-8 pt-8 text-center">
+                <p class="text-white/60">
+                    © 2026 H. Ayuntamiento de Tecámac. Todos los derechos reservados.
+                </p>
+            </div>
+        </div>
+    </footer>
                             <div class="space-y-4">
                                 <div class="flex items-center justify-between p-4 bg-white/10 rounded-xl">
                                     <span>🏥 Centros de Salud</span>
@@ -332,87 +564,11 @@
                         Envía hasta 3 propuestas de mejoras para tu comunidad. 
                         ¡Tu idea puede convertirse en realidad!
                     </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Call to Action -->
-    <section id="participar" class="py-20 gradient-bg">
-        <div class="container mx-auto px-6 text-center">
-            <div class="slide-up">
-                <h2 class="text-4xl lg:text-5xl font-bold text-white mb-6">
-                    ¡Es tu momento de brillar! ✨
-                </h2>
-                <p class="text-xl text-white/90 mb-12 max-w-3xl mx-auto">
-                    Cada voz importa, cada opinión cuenta. Únete a los miles de ciudadanos 
-                    que ya están construyendo el futuro de nuestra comunidad.
-                </p>
-                
-                <a href="{{ route('encuesta.create') }}" 
-                   class="btn-primary text-white px-12 py-6 rounded-full text-xl font-bold inline-flex items-center group">
-                    <i class="fas fa-rocket mr-4 group-hover:animate-bounce text-2xl"></i>
-                    Comenzar Mi Encuesta
-                    <i class="fas fa-arrow-right ml-4 group-hover:translate-x-2 transition-transform text-2xl"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="container mx-auto px-6">
-            <div class="grid md:grid-cols-3 gap-8">
-                <div>
-                    <h3 class="text-xl font-bold mb-4">Presupuesto Participativo 2026</h3>
-                    <p class="text-gray-400 leading-relaxed">
-                        Construyendo juntos un futuro mejor para nuestra comunidad 
-                        a través de la participación ciudadana activa.
-                    </p>
-                </div>
-                
-                <div>
-                    <h3 class="text-xl font-bold mb-4">Enlaces Rápidos</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#inicio" class="text-gray-400 hover:text-white transition-colors">Inicio</a></li>
-                        <li><a href="#como-funciona" class="text-gray-400 hover:text-white transition-colors">¿Cómo funciona?</a></li>
-                        <li><a href="{{ route('encuesta.create') }}" class="text-gray-400 hover:text-white transition-colors">Participar</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h3 class="text-xl font-bold mb-4">Contacto</h3>
-                    <div class="space-y-2">
-                        <div class="flex items-center">
-                            <i class="fas fa-envelope mr-3 text-purple-400"></i>
-                            <span class="text-gray-400">info@presupuesto2026.gob.mx</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-phone mr-3 text-purple-400"></i>
-                            <span class="text-gray-400">01 800 PARTICIPA</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-                <p>&copy; 2026 Presupuesto Participativo. Todos los derechos reservados.</p>
-            </div>
         </div>
     </footer>
 
     <script>
-        // Navbar scroll effect
-        window.addEventListener('scroll', function() {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('navbar-scrolled');
-            } else {
-                navbar.classList.remove('navbar-scrolled');
-            }
-        });
-
-        // Smooth scroll for anchor links
+        // Efectos de scroll suave
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -426,17 +582,18 @@
             });
         });
 
-        // Add some interactive particles
+        // Efectos de partículas flotantes
         document.addEventListener('DOMContentLoaded', function() {
-            // Create floating particles
-            const hero = document.querySelector('#inicio');
-            for (let i = 0; i < 20; i++) {
+            const hero = document.querySelector('.hero-section');
+            
+            // Crear partículas flotantes
+            for (let i = 0; i < 15; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'absolute w-2 h-2 bg-white/20 rounded-full';
                 particle.style.left = Math.random() * 100 + '%';
                 particle.style.top = Math.random() * 100 + '%';
                 particle.style.animationDelay = Math.random() * 3 + 's';
-                particle.style.animation = 'float 4s ease-in-out infinite';
+                particle.style.animation = 'float 6s ease-in-out infinite';
                 hero.appendChild(particle);
             }
         });

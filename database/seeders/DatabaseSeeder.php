@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Administrador',
             'email' => 'admin@presupuesto2026.com',
+            'password' => bcrypt('admin123')
         ]);
 
         // Crear colonias y obras públicas

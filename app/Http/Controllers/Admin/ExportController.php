@@ -48,7 +48,7 @@ class ExportController extends Controller
         }
 
         return Excel::download(
-            new \App\Exports\EncuestasExport($encuestas), 
+            new \App\Exports\EncuestasSimpleExport($encuestas), 
             'encuestas_simple_' . date('Y-m-d_H-i-s') . '.xlsx'
         );
     }
