@@ -110,7 +110,7 @@ class PropuestasSheet implements FromCollection, WithHeadings, WithMapping
             'Fecha Creación'
         ];
     }
-
+//aaaaaa
     public function map($propuesta): array
     {
         return [
