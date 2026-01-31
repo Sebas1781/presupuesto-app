@@ -35,7 +35,7 @@ class EncuestaController extends Controller
         $rules = [
             'colonia_id' => 'required|exists:colonias,id',
             'genero' => 'required|string',
-            'edad' => 'required|integer|min:1|max:120',
+            'edad' => 'required|string|max:255',
             'nivel_educativo' => 'required|string',
             'estado_civil' => 'required|string',
             'desea_reporte' => 'boolean',

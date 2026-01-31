@@ -43,31 +43,31 @@
             </div>
         </div>
 
-        <!-- Calificaciones de Obras -->
+        <!-- Prioridad de Obras -->
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Calificaciones de Obras Públicas</h3>
+                    <h3 class="card-title">Prioridad de Obras</h3>
                 </div>
                 <div class="card-body">
-                    @if($encuesta->obras_calificadas && count($encuesta->obras_calificadas) > 0)
+                    @if(isset($obrasCalificadasConNombres) && count($obrasCalificadasConNombres) > 0)
                         <div class="table-responsive">
                             <table class="table table-sm">
                                 <thead>
                                     <tr>
-                                        <th>Obra ID</th>
+                                        <th>Obra</th>
                                         <th>Calificación</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($encuesta->obras_calificadas as $obraId => $calificacion)
+                                    @foreach($obrasCalificadasConNombres as $obra)
                                         <tr>
-                                            <td>{{ $obraId }}</td>
+                                            <td>{{ $obra['nombre'] }}</td>
                                             <td>
                                                 <div class="progress" style="height: 20px;">
                                                     <div class="progress-bar progress-bar-striped"
-                                                         style="width: {{ ($calificacion/5)*100 }}%">
-                                                        {{ $calificacion }}/5
+                                                         style="width: {{ ($obra['calificacion']/5)*100 }}%">
+                                                        {{ $obra['calificacion'] }}/5
                                                     </div>
                                                 </div>
                                             </td>

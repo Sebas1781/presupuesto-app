@@ -18,15 +18,17 @@
         body {
             font-family: 'Poppins', 'Inter', sans-serif;
             overflow-x: hidden;
-            background: linear-gradient(135deg, #8B1538 0%, #C8102E 50%, #E91E63 100%);
+            background: linear-gradient(135deg, #530000 0%, #460000 25%, #380000 75%, #2a0000 100%);
             min-height: 100vh;
         }
 
-        /* Colores oficiales Pantone */
+        /* Nueva paleta de colores oscuros */
         :root {
-            --pantone-7420: #8B1538;
-            --pantone-1805: #C8102E;
-            --gradient-bg: linear-gradient(135deg, #8B1538 0%, #C8102E 50%, #E91E63 100%);
+            --color-primary: #530000;
+            --color-secondary: #460000;
+            --color-tertiary: #380000;
+            --color-dark: #2a0000;
+            --gradient-bg: linear-gradient(135deg, #530000 0%, #460000 25%, #380000 75%, #2a0000 100%);
         }
 
         /* Animaciones de entrada */
@@ -89,30 +91,32 @@
             opacity: 0.1;
         }
 
-        /* Barra superior discreta */
+        /* Barra superior muy discreta */
         .top-bar {
             position: absolute;
-            top: 0;
-            right: 0;
+            top: 10px;
+            right: 15px;
             z-index: 20;
-            padding: 1rem 2rem;
+            padding: 0.5rem;
         }
 
         .login-btn {
-            background: rgba(255,255,255,0.1);
-            color: rgba(255,255,255,0.8);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
+            background: rgba(255,255,255,0.03);
+            color: rgba(255,255,255,0.4);
+            padding: 0.3rem 0.7rem;
+            border-radius: 15px;
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.6;
         }
 
         .login-btn:hover {
-            background: rgba(255,255,255,0.2);
-            color: white;
+            background: rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.7);
+            opacity: 1;
             transform: translateY(-1px);
         }
 
@@ -222,7 +226,7 @@
         .cta-button {
             display: inline-block;
             background: rgba(255,255,255,0.95);
-            color: var(--pantone-7420);
+            color: var(--color-primary);
             padding: 1.2rem 3rem;
             border-radius: 50px;
             text-decoration: none;
@@ -237,7 +241,7 @@
             background: white;
             transform: translateY(-3px);
             box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-            color: var(--pantone-1805);
+            color: var(--color-secondary);
         }
 
         /* Responsive */
@@ -289,9 +293,9 @@
             50% { transform: translateY(-15px); }
         }
 
-        /* Botones animados con colores Pantone */
+        /* Botones animados con nueva paleta */
         .btn-primary {
-            background: linear-gradient(135deg, #8B1538 0%, #C8102E 100%);
+            background: linear-gradient(135deg, #530000 0%, #460000 100%);
             transform: translateY(0);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
@@ -391,11 +395,11 @@
     <div class="top-bar fade-in">
         @auth
             <a href="{{ route('admin.dashboard') }}" class="login-btn">
-                <i class="fas fa-chart-pie mr-2"></i>Panel Admin
+                <i class="fas fa-chart-pie mr-2"></i>
             </a>
         @else
             <a href="{{ route('login') }}" class="login-btn">
-                <i class="fas fa-sign-in-alt mr-2"></i>Iniciar Sesión
+                <i class="fas fa-sign-in-alt mr-2"></i>
             </a>
         @endauth
     </div>

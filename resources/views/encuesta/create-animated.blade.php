@@ -224,25 +224,36 @@
         }
 
         /* Forzar visibilidad de botones rojos */
-        .bg-red-600 {
+        .bg-red-600, .bg-gradient-to-r.from-red-600 {
             background-color: #dc2626 !important;
+            background-image: linear-gradient(to right, #dc2626, #b91c1c) !important;
         }
 
-        .bg-red-700 {
+        .bg-red-700, .bg-gradient-to-r.from-red-700 {
             background-color: #b91c1c !important;
+            background-image: linear-gradient(to right, #b91c1c, #991b1b) !important;
         }
 
-        .hover\:bg-red-700:hover {
+        .hover\:bg-red-700:hover, .hover\:from-red-700:hover {
             background-color: #b91c1c !important;
+            background-image: linear-gradient(to right, #b91c1c, #991b1b) !important;
         }
 
-        .hover\:bg-red-800:hover {
+        .hover\:bg-red-800:hover, .hover\:to-red-700:hover {
             background-color: #991b1b !important;
+            background-image: linear-gradient(to right, #b91c1c, #991b1b) !important;
         }
 
-        button[class*="bg-red"] {
+        button[class*="bg-red"], button[class*="from-red"] {
             color: white !important;
             font-weight: bold !important;
+            border: none !important;
+        }
+
+        button[class*="bg-red"]:hover, button[class*="from-red"]:hover {
+            color: white !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4) !important;
         }
 
         .rating-star {
@@ -300,6 +311,134 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        /* Estilos para secciones ocultas/mostradas */
+        .hidden {
+            display: none !important;
+        }
+
+        .show {
+            display: block !important;
+            animation: slideInUp 0.6s ease-out forwards;
+        }
+
+        /* Mejoras visuales para mensajes de error */
+        .error-message {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Estilos para el modal de emergencia */
+        .emergency-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .emergency-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.7) translateY(50px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: 0 auto;
+        }
+
+        .emergency-modal.show .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .modal-btn-primary {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+        }
+
+        .modal-btn-primary:hover {
+            background: linear-gradient(135deg, #b91c1c, #991b1b);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+        }
+
+        .modal-btn-secondary {
+            background: #f8fafc;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+        }
+
+        .modal-btn-secondary:hover {
+            background: #f1f5f9;
+            color: #475569;
+            border-color: #cbd5e1;
+        }
+
+        .warning-icon {
+            font-size: 4rem;
+            color: #fbbf24;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
     </style>
 </head>
 
@@ -314,7 +453,7 @@
                     </div>
                     <div>
                         <h1 class="text-2xl font-bold">Encuesta Participativa 2026</h1>
-                        <p class="text-white/80 text-sm">Tu voz construye el futuro</p>
+                        <p class="text-white/80 text-sm">Volamos alto para llegar mas lejos</p>
                     </div>
                 </div>
                 <a href="{{ route('home') }}"
@@ -335,6 +474,60 @@
             </div>
             <div class="progress-bar">
                 <div class="progress-fill" :style="`width: ${progress}%`"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Emergencia -->
+    <div id="emergencyModal" class="emergency-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fas fa-exclamation-triangle warning-icon"></i>
+                <h2 class="text-2xl font-bold mb-2">Confirmación Importante</h2>
+                <p class="text-lg opacity-90">Antes de continuar</p>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-heart-pulse text-red-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Estado de Emergencia</h3>
+                    <p class="text-gray-600 leading-relaxed mb-6">
+                        <strong>No me encuentro en una situación de emergencia médica o peligro de muerte en este momento.</strong>
+                    </p>
+                </div>
+
+                <div class="bg-orange-50 border-l-4 border-orange-400 p-4 rounded-r-lg mb-6">
+                    <div class="flex items-start">
+                        <i class="fas fa-info-circle text-orange-500 mt-1 mr-3"></i>
+                        <div>
+                            <p class="text-orange-800 font-medium mb-2">Aviso Importante:</p>
+                            <p class="text-orange-700 text-sm leading-relaxed">
+                                Este formulario <strong>NO es monitoreado 24/7</strong>. Si tienes una emergencia médica o te encuentras en peligro inmediato, <strong>NO uses este sitio</strong>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg">
+                    <div class="flex items-center">
+                        <i class="fas fa-phone text-red-500 mr-3 text-xl"></i>
+                        <div>
+                            <p class="text-red-800 font-bold text-lg">En caso de emergencia:</p>
+                            <p class="text-red-700 text-xl font-bold">Llama al 911 INMEDIATAMENTE</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="closeEmergencyModal(false)" class="modal-btn modal-btn-secondary">
+                    <i class="fas fa-times mr-2"></i>
+                    Cancelar
+                </button>
+                <button type="button" onclick="closeEmergencyModal(true)" class="modal-btn modal-btn-primary">
+                    <i class="fas fa-check mr-2"></i>
+                    Entiendo y Deseo Continuar
+                </button>
             </div>
         </div>
     </div>
@@ -398,7 +591,7 @@
                             <option value="">Selecciona...</option>
                             <option value="Masculino" {{ old('genero') == 'Masculino' ? 'selected' : '' }}>Masculino</option>
                             <option value="Femenino" {{ old('genero') == 'Femenino' ? 'selected' : '' }}>Femenino</option>
-                            <option value="Otro" {{ old('genero') == 'Otro' ? 'selected' : '' }}>Otro</option>
+                            <option value="LGBTIITTQ" {{ old('genero') == 'LGBTIITTQ' ? 'selected' : '' }}>LGBTTTIQ+</option>
                         </select>
                     </div>
 
@@ -408,8 +601,14 @@
                             <i class="fas fa-birthday-cake mr-2 text-red-800"></i>
                             Edad *
                         </label>
-                        <input type="number" name="edad" class="form-input" min="18" max="100"
-                               value="{{ old('edad') }}" placeholder="Ej: 30" required>
+                        <select name="edad" class="form-input" required>
+                            <option value="">Selecciona tu rango de edad...</option>
+                            <option value="De 18 a 24 años" {{ old('edad') == 'De 18 a 24 años' ? 'selected' : '' }}>De 18 a 24 años</option>
+                            <option value="De 25 a 34 años" {{ old('edad') == 'De 25 a 34 años' ? 'selected' : '' }}>De 25 a 34 años</option>
+                            <option value="De 35 a 49 años" {{ old('edad') == 'De 35 a 49 años' ? 'selected' : '' }}>De 35 a 49 años</option>
+                            <option value="De 50 a 59 años" {{ old('edad') == 'De 50 a 59 años' ? 'selected' : '' }}>De 50 a 59 años</option>
+                            <option value="Más de 60 años" {{ old('edad') == 'Más de 60 años' ? 'selected' : '' }}>Más de 60 años</option>
+                        </select>
                     </div>
 
                     <!-- Nivel Educativo -->
@@ -445,10 +644,28 @@
                         </select>
                     </div>
                 </div>
+
+                <!-- Botón para continuar -->
+                <div class="flex justify-end mt-6">
+                    <button type="button"
+                            @click="validateAndContinue()"
+                            class="btn-primary">
+                        <i class="fas fa-arrow-right mr-2"></i>
+                        Continuar a calificación de prioridad de obras
+                    </button>
+                </div>
+
+                <!-- Mensaje de error -->
+                <div id="sociodemographic-error" class="hidden mt-4 p-4 bg-red-100 border-l-4 border-red-500 rounded">
+                    <div class="flex items-center">
+                        <i class="fas fa-exclamation-triangle text-red-500 mr-2"></i>
+                        <span class="text-red-700 font-medium">Por favor completa todos los campos obligatorios de Datos Sociodemográficos antes de continuar.</span>
+                    </div>
+                </div>
             </div>
 
-            <!-- Sección 2: Calificación de Obras (Solo si hay obras disponibles) -->
-            <div class="form-section slide-in-up" x-intersect="updateProgress(50)" x-show="selectedColonia && obras.length > 0">
+            <!-- Sección 2: Calificación de Obras (inicialmente oculta) -->
+            <div id="obras-section" class="form-section slide-in-up hidden" x-show="selectedColonia && obras.length > 0">
                 <div class="flex items-center mb-6">
                     <div class="w-12 h-12 bg-gradient-to-r from-red-700 to-red-500 rounded-full flex items-center justify-center mr-4">
                         <i class="fas fa-star text-white text-xl"></i>
@@ -458,7 +675,7 @@
 
                 <p class="text-gray-600 mb-6 bg-red-50 p-4 rounded-lg border-l-4 border-red-400">
                     <i class="fas fa-info-circle mr-2 text-red-500"></i>
-                    Califica del 1 al 5 el estado actual de estas obras en tu colonia (1 = Muy malo, 5 = Excelente)
+                    Califique la prioridad de estas obras públicas del 1 al 5 (donde 1 poco urgente y 5 es muy urgente)
                 </p>
 
                 <div class="grid md:grid-cols-2 gap-4">
@@ -486,21 +703,20 @@
             </div>
 
             <!-- Mensaje para colonias sin obras disponibles -->
-            <div class="form-section slide-in-up" x-show="selectedColonia && obras.length === 0" x-intersect="updateProgress(50)">
+            <div class="form-section slide-in-up" x-show="selectedColonia && obras.length === 0">
                 <div class="text-center py-8">
                     <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-info-circle text-blue-500 text-2xl"></i>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Tu colonia está en desarrollo</h3>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">¡TU OPINIÓN ES MUY IMPORTANTE!</h3>
                     <p class="text-gray-600 max-w-md mx-auto">
-                        Actualmente no hay obras públicas disponibles para evaluar en <span x-text="selectedColonia ? selectedColonia.nombre : ''"></span>.
-                        ¡Pero puedes seguir participando con tus propuestas!
+                      A CONTINUACIÓN PODRÁS AGREGAR TUS PROPUESTAS
                     </p>
                 </div>
             </div>
 
-            <!-- Sección 3: Propuestas -->
-            <div class="form-section slide-in-up" x-intersect="updateProgress(75)">
+            <!-- Sección 3: Propuestas (inicialmente oculta) -->
+            <div id="propuestas-section" class="form-section slide-in-up hidden" x-intersect="updateProgress(75)">
                 <div class="flex items-center mb-6">
                     <div class="w-12 h-12 bg-gradient-to-r from-yellow-600 to-yellow-500 rounded-full flex items-center justify-center mr-4">
                         <i class="fas fa-lightbulb text-white text-xl"></i>
@@ -508,10 +724,7 @@
                     <h3 class="text-2xl font-bold text-gray-800">Tus Propuestas de Mejora</h3>
                 </div>
 
-                <p class="text-gray-600 mb-6 bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400">
-                    <i class="fas fa-lightbulb mr-2 text-yellow-500"></i>
-                    Comparte hasta 3 propuestas para mejorar tu comunidad. ¡Tus ideas pueden convertirse en realidad!
-                </p>
+
 
                 <div x-data="{ propuestas: [{}], maxPropuestas: 3 }">
                     <template x-for="(propuesta, index) in propuestas" :key="index">
@@ -538,7 +751,6 @@
                                         <option value="Cultura y Deporte">Cultura y Deporte</option>
                                         <option value="Educación">Educación</option>
                                         <option value="Salud">Salud</option>
-                                        <option value="Otro">Otro</option>
                                     </select>
                                 </div>
 
@@ -584,13 +796,17 @@
 
                                 <div class="form-group">
                                     <label class="form-label">Personas Beneficiadas *</label>
-                                    <input type="number" :name="`propuestas[${index}][personas_beneficiadas]`"
-                                           class="form-input" min="1" placeholder="Ej: 150" required>
+                                    <select :name="`propuestas[${index}][personas_beneficiadas]`" class="form-input" required>
+                                        <option value="">Selecciona...</option>
+                                        <option value="Toda la comunidad">Toda la comunidad</option>
+                                        <option value="Algunos vecinos">Algunos vecinos</option>
+                                        <option value="Yo u otra persona">Yo u otra persona</option>
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="form-group mb-4">
-                                <label class="form-label">Descripción Breve de la Propuesta *</label>
+                                <label class="form-label">Descripción breve de la propuesta *</label>
                                 <textarea :name="`propuestas[${index}][descripcion_breve]`"
                                           class="form-input" rows="3"
                                           placeholder="Describe tu propuesta en detalle..." required></textarea>
@@ -619,8 +835,8 @@
                 </div>
             </div>
 
-            <!-- Sección 4: Reportes Anónimos -->
-            <div class="form-section slide-in-up" x-intersect="updateProgress(90)">
+            <!-- Sección 4: Reportes Anónimos (inicialmente oculta) -->
+            <div id="reportes-section" class="form-section slide-in-up hidden" x-intersect="updateProgress(90)">
                 <div class="flex items-center mb-6">
                     <div class="w-12 h-12 bg-gradient-to-r from-orange-600 to-orange-500 rounded-full flex items-center justify-center mr-4">
                         <i class="fas fa-exclamation-triangle text-white text-xl"></i>
@@ -632,7 +848,7 @@
                     <label class="flex items-center space-x-3 cursor-pointer">
                         <input type="checkbox" name="desea_reporte" value="1"
                                class="rounded border-gray-300 text-red-600 focus:ring-red-500"
-                               x-model="deseaReporte">
+                               @click="showEmergencyConfirmation($event)">
                         <span class="text-gray-700 font-medium">Sí, deseo hacer un reporte anónimo</span>
                     </label>
                 </div>
@@ -659,13 +875,11 @@
                                 <label class="form-label">Tipo de Reporte *</label>
                                 <select :name="`reportes[${index}][tipo_reporte]`" class="form-input">
                                     <option value="">Selecciona el tipo...</option>
-                                    <option value="Corrupción">Corrupción</option>
-                                    <option value="Mal servicio">Mal servicio público</option>
-                                    <option value="Negligencia">Negligencia</option>
-                                    <option value="Abuso de autoridad">Abuso de autoridad</option>
-                                    <option value="Obras inconclusas">Obras inconclusas o deficientes</option>
-                                    <option value="Otro">Otro</option>
-                                </select>
+                                    <option value="Maltrato infantil">Maltrato infantil</option>
+                                    <option value="Violencia de genero">Violencia de genero</option>
+                                    <option value="Maltrato animal">Maltrato animal</option>
+                                    <option value="violencia a otra persona con discapacidad">Violencia a otra persona con discapacidad</option>
++                                </select>
                             </div>
 
                             <div class="form-group mb-4">
@@ -726,25 +940,41 @@
             </div>
 
             <!-- Botón de Envío -->
+            <!-- Botón de envío - Solo mostrar cuando todas las secciones estén completas -->
             <div class="text-center slide-in-up" x-intersect="updateProgress(100)">
-                <button type="submit"
-                        class="btn-primary"
-                        :disabled="isSubmitting"
-                        @click="handleSubmit">
-                    <span x-show="!isSubmitting">
-                        <i class="fas fa-paper-plane"></i>
-                        Enviar Encuesta
-                    </span>
-                    <span x-show="isSubmitting" class="flex items-center">
-                        <div class="loading-spinner mr-2"></div>
-                        Procesando...
-                    </span>
-                </button>
+                <div x-show="progress >= 50 && selectedColonia">
+                    <button type="submit"
+                            class="btn-primary"
+                            :disabled="isSubmitting"
+                            @click="handleSubmit">
+                        <span x-show="!isSubmitting">
+                            <i class="fas fa-paper-plane"></i>
+                            Enviar Encuesta
+                        </span>
+                        <span x-show="isSubmitting" class="flex items-center">
+                            <div class="loading-spinner mr-2"></div>
+                            Procesando...
+                        </span>
+                    </button>
 
-                <p class="text-sm text-gray-500 mt-4">
-                    <i class="fas fa-lock mr-2"></i>
-                    Tus datos están protegidos y serán tratados de forma confidencial
-                </p>
+                    <p class="text-sm text-gray-500 mt-4">
+                        <i class="fas fa-lock mr-2"></i>
+                        Tus datos están protegidos y serán tratados de forma confidencial
+                    </p>
+                </div>
+
+                <!-- Mensaje cuando no se puede enviar todavía -->
+                <div x-show="!(progress >= 50 && selectedColonia)"
+                     class="text-center p-4 bg-gray-50 rounded-lg border border-gray-200">
+                    <div class="text-gray-600 mb-2">
+                        <i class="fas fa-hourglass-half mr-2"></i>
+                        Complete los datos sociodemográficos para continuar
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        <span x-show="!selectedColonia">• Seleccione una colonia</span>
+                        <span x-show="progress < 50">• Complete todos los campos requeridos</span>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
@@ -874,6 +1104,81 @@
                     this.loadColoniaData();
                 },
 
+                // Validar datos sociodemográficos antes de continuar
+                validateAndContinue() {
+                    const requiredFields = [
+                        'colonia_id',
+                        'genero',
+                        'edad',
+                        'nivel_educativo',
+                        'estado_civil'
+                    ];
+
+                    let allFieldsValid = true;
+                    let errorMessage = 'Por favor completa los siguientes campos obligatorios: ';
+                    let missingFields = [];
+
+                    requiredFields.forEach(fieldName => {
+                        const field = document.querySelector(`[name="${fieldName}"]`);
+                        if (!field || !field.value.trim()) {
+                            allFieldsValid = false;
+                            switch(fieldName) {
+                                case 'colonia_id': missingFields.push('Colonia'); break;
+                                case 'genero': missingFields.push('Género'); break;
+                                case 'edad': missingFields.push('Edad'); break;
+                                case 'nivel_educativo': missingFields.push('Nivel Educativo'); break;
+                                case 'estado_civil': missingFields.push('Estado Civil'); break;
+                            }
+                        }
+                    });
+
+                    const errorDiv = document.getElementById('sociodemographic-error');
+
+                    if (allFieldsValid) {
+                        // Ocultar mensaje de error
+                        errorDiv.classList.add('hidden');
+
+                        // Mostrar sección de obras
+                        const obrasSection = document.getElementById('obras-section');
+                        obrasSection.classList.remove('hidden');
+
+                        // Mostrar sección de propuestas
+                        const propuestasSection = document.getElementById('propuestas-section');
+                        propuestasSection.classList.remove('hidden');
+
+                        // Mostrar sección de reportes
+                        const reportesSection = document.getElementById('reportes-section');
+                        reportesSection.classList.remove('hidden');
+
+                        // Scroll suave a la sección de obras
+                        obrasSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                        // Actualizar progreso
+                        this.progress = Math.max(this.progress, 50);
+                        this.updateProgress(50);
+                    } else {
+                        // Mostrar mensaje de error
+                        errorDiv.classList.remove('hidden');
+                        errorDiv.querySelector('span').textContent = errorMessage + missingFields.join(', ');
+
+                        // Scroll al error
+                        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                },
+
+                // Mostrar popup de confirmación para reportes anónimos
+                showEmergencyConfirmation(event) {
+                    event.preventDefault();
+
+                    // Guardar referencia al checkbox
+                    this.emergencyCheckbox = event.target;
+
+                    // Mostrar el modal personalizado
+                    const modal = document.getElementById('emergencyModal');
+                    modal.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                },
+
                 updateProgress(value) {
                     this.progress = Math.max(this.progress, value);
                 },
@@ -906,8 +1211,7 @@
                         this.obras = await response.json();
                         this.obrasCalificadas = {};
 
-                        // Actualizar el progreso basado en si hay obras o no
-                        this.updateProgress(this.obras.length > 0 ? 50 : 75);
+                        // No actualizar progreso automáticamente - solo cuando userían clic en 'Continuar'
                     } catch (error) {
                         console.error('Error cargando obras:', error);
                         alert('Error al cargar las obras. Por favor, intenta de nuevo.');
@@ -1240,6 +1544,46 @@
                 console.log('Esperando a que Google Maps API se cargue...');
             }
         }, 500);
+
+        // Funciones para el modal de emergencia
+        function closeEmergencyModal(confirmed) {
+            const modal = document.getElementById('emergencyModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+
+            // Obtener la instancia de Alpine.js y manejar el checkbox
+            const formData = Alpine.$data(document.querySelector('[x-data]'));
+
+            if (confirmed) {
+                if (formData.emergencyCheckbox) {
+                    formData.emergencyCheckbox.checked = true;
+                }
+                formData.deseaReporte = true;
+            } else {
+                if (formData.emergencyCheckbox) {
+                    formData.emergencyCheckbox.checked = false;
+                }
+                formData.deseaReporte = false;
+            }
+        }
+
+        // Cerrar modal al hacer click fuera de él
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('emergencyModal');
+            if (event.target === modal) {
+                closeEmergencyModal(false);
+            }
+        });
+
+        // Cerrar modal con tecla Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modal = document.getElementById('emergencyModal');
+                if (modal.classList.contains('show')) {
+                    closeEmergencyModal(false);
+                }
+            }
+        });
     </script>
 </body>
 </html>

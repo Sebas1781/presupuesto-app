@@ -65,6 +65,20 @@ class DashboardController extends Controller
     public function showEncuesta($id)
     {
         $encuesta = Encuesta::with(['colonia', 'propuestas', 'reportes'])->findOrFail($id);
-        return view('admin.encuestas.show', compact('encuesta'));
+
+        // Obtener nombres de obras para las calificaciones
+        $obrasCalificadasConNombres = [];
+        if ($encuesta->obras_calificadas) {
+            foreach ($encuesta->obras_calificadas as $obraId => $calificacion) {
+                $obra = \App\Models\ObraPublica::find($obraId);
+                $obrasCalificadasConNombres[] = [
+                    'id' => $obraId,
+                    'nombre' => $obra ? $obra->nombre : 'Obra no encontrada',
+                    'calificacion' => $calificacion
+                ];
+            }
+        }
+
+        return view('admin.encuestas.show', compact('encuesta', 'obrasCalificadasConNombres'));
     }
 }
