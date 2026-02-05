@@ -50,7 +50,7 @@ class ExportController extends Controller
     private function exportarSimple($encuestas)
     {
         $filename = 'encuestas_simple_' . date('Y-m-d_H-i-s') . '.csv';
-        
+
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
@@ -58,10 +58,10 @@ class ExportController extends Controller
 
         $callback = function() use ($encuestas) {
             $file = fopen('php://output', 'w');
-            
+
             // BOM para UTF-8
             fwrite($file, "\xEF\xBB\xBF");
-            
+
             // Encabezados
             fputcsv($file, [
                 'ID',
@@ -110,7 +110,7 @@ class ExportController extends Controller
     private function exportarDetallado($encuestas)
     {
         $filename = 'encuestas_detallado_' . date('Y-m-d_H-i-s') . '.csv';
-        
+
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
@@ -118,10 +118,10 @@ class ExportController extends Controller
 
         $callback = function() use ($encuestas) {
             $file = fopen('php://output', 'w');
-            
+
             // BOM para UTF-8
             fwrite($file, "\xEF\xBB\xBF");
-            
+
             // Encabezados para el reporte detallado
             fputcsv($file, [
                 'ID Encuesta',
@@ -144,8 +144,8 @@ class ExportController extends Controller
 
             // Datos detallados
             foreach ($encuestas as $encuesta) {
-                $obrasCalificadas = is_array($encuesta->obras_calificadas) 
-                    ? json_encode($encuesta->obras_calificadas) 
+                $obrasCalificadas = is_array($encuesta->obras_calificadas)
+                    ? json_encode($encuesta->obras_calificadas)
                     : ($encuesta->obras_calificadas ?? 'N/A');
 
                 // Si tiene propuestas o reportes, mostrar cada uno en una fila
@@ -160,9 +160,9 @@ class ExportController extends Controller
                     );
 
                     for ($i = 0; $i < $maxCount; $i++) {
-                        $propuesta = $hasPropuestas && isset($encuesta->propuestas[$i]) 
+                        $propuesta = $hasPropuestas && isset($encuesta->propuestas[$i])
                             ? $encuesta->propuestas[$i] : null;
-                        $reporte = $hasReportes && isset($encuesta->reportes[$i]) 
+                        $reporte = $hasReportes && isset($encuesta->reportes[$i])
                             ? $encuesta->reportes[$i] : null;
 
                         fputcsv($file, [
