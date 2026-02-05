@@ -33,7 +33,7 @@ return new class extends Migration
         Schema::table('encuestas', function (Blueprint $table) {
             $table->dropColumn([
                 'servicio_seguridad',
-                'confia_policia', 
+                'confia_policia',
                 'horario_inseguro',
                 'problemas_seguridad',
                 'lugares_seguros',

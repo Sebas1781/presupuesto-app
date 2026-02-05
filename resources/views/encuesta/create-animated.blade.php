@@ -775,7 +775,7 @@
                     <div class="space-y-2">
                         <template x-for="opcion in [
                             'De 6 a 9 de la mañana',
-                            'De 9 a 12 del día', 
+                            'De 9 a 12 del día',
                             'De 12 de medio día a 3 de la tarde',
                             'De 3 a 6 de la tarde',
                             'De 6 de la tarde a 9 de la noche',
@@ -887,7 +887,7 @@
                         C.31. Imagine las siguientes situaciones y responda en una escala del 1 al 10 (uno es "muy inseguro" y diez es "muy seguro")
                     </h4>
                     <p class="text-gray-600 mb-4 text-sm">Califique del 1 al 10:</p>
-                    
+
                     <div class="space-y-6">
                         <!-- C.32 -->
                         <div class="border-l-4 border-blue-400 pl-4">
@@ -897,7 +897,7 @@
                             <div class="flex items-center space-x-2">
                                 <span class="text-sm text-gray-500">1 (Muy inseguro)</span>
                                 <template x-for="i in 10">
-                                    <button type="button" 
+                                    <button type="button"
                                             class="w-8 h-8 rounded-full border-2 border-blue-400 text-sm font-medium transition-colors"
                                             :class="seguridad.situaciones_escala.emergencia_transporte == i ? 'bg-blue-500 text-white' : 'hover:bg-blue-100'"
                                             @click="seguridad.situaciones_escala.emergencia_transporte = i"
@@ -917,7 +917,7 @@
                             <div class="flex items-center space-x-2">
                                 <span class="text-sm text-gray-500">1 (Muy inseguro)</span>
                                 <template x-for="i in 10">
-                                    <button type="button" 
+                                    <button type="button"
                                             class="w-8 h-8 rounded-full border-2 border-blue-400 text-sm font-medium transition-colors"
                                             :class="seguridad.situaciones_escala.caminar_noche == i ? 'bg-blue-500 text-white' : 'hover:bg-blue-100'"
                                             @click="seguridad.situaciones_escala.caminar_noche = i"
@@ -937,7 +937,7 @@
                             <div class="flex items-center space-x-2">
                                 <span class="text-sm text-gray-500">1 (Muy inseguro)</span>
                                 <template x-for="i in 10">
-                                    <button type="button" 
+                                    <button type="button"
                                             class="w-8 h-8 rounded-full border-2 border-blue-400 text-sm font-medium transition-colors"
                                             :class="seguridad.situaciones_escala.hijos_solos == i ? 'bg-blue-500 text-white' : 'hover:bg-blue-100'"
                                             @click="seguridad.situaciones_escala.hijos_solos = i"
@@ -957,7 +957,7 @@
                             <div class="flex items-center space-x-2">
                                 <span class="text-sm text-gray-500">1 (Muy inseguro)</span>
                                 <template x-for="i in 10">
-                                    <button type="button" 
+                                    <button type="button"
                                             class="w-8 h-8 rounded-full border-2 border-blue-400 text-sm font-medium transition-colors"
                                             :class="seguridad.situaciones_escala.transporte_publico == i ? 'bg-blue-500 text-white' : 'hover:bg-blue-100'"
                                             @click="seguridad.situaciones_escala.transporte_publico = i"
