@@ -62,36 +62,67 @@
     </div>
 
     <div class="row">
-        <!-- Gráfico de participación por colonia -->
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Participación por Colonia</h3>
-                </div>
-                <div class="card-body">
-                    <canvas id="coloniaChart" width="400" height="200"></canvas>
-                </div>
-            </div>
-        </div>
-
         <!-- Acciones rápidas -->
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Acciones Rápidas</h3>
+                    <h3 class="card-title">
+                        <i class="fas fa-bolt mr-2"></i>Acciones Rápidas
+                    </h3>
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
-                        <a href="{{ route('admin.encuestas.index') }}" class="btn btn-primary btn-block">
+                        <a href="{{ route('admin.encuestas.index') }}" class="btn btn-primary btn-block mb-2">
                             <i class="fas fa-list"></i> Ver Todas las Encuestas
                         </a>
-                        <a href="{{ route('admin.export.encuestas') }}" class="btn btn-success btn-block">
+                        <a href="{{ route('admin.estadisticas') }}" class="btn btn-info btn-block mb-2">
+                            <i class="fas fa-chart-bar"></i> Ver Estadísticas Completas
+                        </a>
+                        <a href="{{ route('admin.export.encuestas') }}" class="btn btn-success btn-block mb-2">
                             <i class="fas fa-download"></i> Exportar a Excel
                         </a>
-                        <a href="{{ route('home') }}" class="btn btn-info btn-block" target="_blank">
+                        <a href="{{ route('home') }}" class="btn btn-secondary btn-block" target="_blank">
                             <i class="fas fa-external-link-alt"></i> Ver Sitio Público
                         </a>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resumen rápido -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-info-circle mr-2"></i>Resumen General
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="alert alert-success">
+                                <h5><i class="icon fas fa-check"></i> Sistema Operativo</h5>
+                                El sistema de encuestas está funcionando correctamente. 
+                                <strong>{{ $totalEncuestas }}</strong> ciudadanos han participado hasta el momento.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    @if($encuestasPorColonia->count() > 0)
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h6><i class="fas fa-map-marker-alt mr-2"></i>Colonias con Mayor Participación:</h6>
+                            <ul class="list-unstyled">
+                                @foreach($encuestasPorColonia->sortByDesc('total')->take(5) as $item)
+                                <li>
+                                    <span class="badge badge-primary">{{ $item->total }}</span>
+                                    {{ $item->colonia->nombre ?? 'Colonia no encontrada' }}
+                                </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -102,7 +133,9 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Encuestas Recientes</h3>
+                    <h3 class="card-title">
+                        <i class="fas fa-clock mr-2"></i>Encuestas Recientes
+                    </h3>
                 </div>
                 <div class="card-body table-responsive p-0">
                     <table class="table table-hover text-nowrap">
@@ -149,33 +182,4 @@
             </div>
         </div>
     </div>
-@stop
-
-@section('js')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    // Gráfico de participación por colonia
-    var ctx = document.getElementById('coloniaChart').getContext('2d');
-    var coloniaChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: {!! json_encode($encuestasPorColonia->pluck('colonia.nombre')) !!},
-            datasets: [{
-                label: 'Número de Encuestas',
-                data: {!! json_encode($encuestasPorColonia->pluck('total')) !!},
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-</script>
 @stop

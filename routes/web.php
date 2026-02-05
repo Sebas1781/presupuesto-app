@@ -22,6 +22,7 @@ Route::prefix('encuesta')->group(function () {
 // Rutas del panel de administración
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/estadisticas', [DashboardController::class, 'estadisticas'])->name('estadisticas');
     Route::get('/encuestas', [DashboardController::class, 'encuestas'])->name('encuestas.index');
     Route::get('/encuestas/{id}', [DashboardController::class, 'showEncuesta'])->name('encuestas.show');
     Route::get('/export/encuestas', [ExportController::class, 'encuestas'])->name('export.encuestas');
