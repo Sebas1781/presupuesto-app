@@ -66,6 +66,94 @@ class DashboardController extends Controller
         ->whereNotNull('emergencia_transporte')
         ->first();
 
+        // NUEVAS ESTADÍSTICAS POR DISTRITO
+        // BLOQUE A: Análisis demográfico por distrito
+        // Obtener colonias por distrito (asumiendo que tienes un campo distrito en colonias)
+        $distrito20Demograficos = Encuesta::join('colonias', 'encuestas.colonia_id', '=', 'colonias.id')
+            ->where('colonias.distrito', 20) // Asumiendo campo distrito
+            ->selectRaw('
+                colonias.nombre as colonia,
+                encuestas.genero,
+                encuestas.edad,
+                COUNT(*) as total
+            ')
+            ->groupBy('colonias.nombre', 'encuestas.genero', 'encuestas.edad')
+            ->get();
+
+        $distrito5Demograficos = Encuesta::join('colonias', 'encuestas.colonia_id', '=', 'colonias.id')
+            ->where('colonias.distrito', 5)
+            ->selectRaw('
+                colonias.nombre as colonia,
+                encuestas.genero,
+                encuestas.edad,
+                COUNT(*) as total
+            ')
+            ->groupBy('colonias.nombre', 'encuestas.genero', 'encuestas.edad')
+            ->get();
+
+        // BLOQUE B: Análisis de prioridad de obras por distrito
+        $distrito20Obras = Encuesta::join('colonias', 'encuestas.colonia_id', '=', 'colonias.id')
+            ->join('obras_publicas', 'obras_publicas.colonia_id', '=', 'colonias.id')
+            ->where('colonias.distrito', 20)
+            ->whereNotNull('encuestas.obras_calificadas')
+            ->get()
+            ->flatMap(function($encuesta) {
+                $obras = [];
+                if ($encuesta->obras_calificadas && is_array($encuesta->obras_calificadas)) {
+                    foreach ($encuesta->obras_calificadas as $obraId => $prioridad) {
+                        $obra = \App\Models\ObraPublica::find($obraId);
+                        if ($obra) {
+                            $obras[] = [
+                                'obra' => $obra->nombre,
+                                'prioridad' => $prioridad,
+                                'colonia' => $encuesta->colonia->nombre
+                            ];
+                        }
+                    }
+                }
+                return $obras;
+            })
+            ->groupBy('obra')
+            ->map(function($group) {
+                return [
+                    'obra' => $group->first()['obra'],
+                    'prioridad_promedio' => round($group->avg('prioridad'), 1),
+                    'total_respuestas' => $group->count()
+                ];
+            })
+            ->values();
+
+        $distrito5Obras = Encuesta::join('colonias', 'encuestas.colonia_id', '=', 'colonias.id')
+            ->join('obras_publicas', 'obras_publicas.colonia_id', '=', 'colonias.id')
+            ->where('colonias.distrito', 5)
+            ->whereNotNull('encuestas.obras_calificadas')
+            ->get()
+            ->flatMap(function($encuesta) {
+                $obras = [];
+                if ($encuesta->obras_calificadas && is_array($encuesta->obras_calificadas)) {
+                    foreach ($encuesta->obras_calificadas as $obraId => $prioridad) {
+                        $obra = \App\Models\ObraPublica::find($obraId);
+                        if ($obra) {
+                            $obras[] = [
+                                'obra' => $obra->nombre,
+                                'prioridad' => $prioridad,
+                                'colonia' => $encuesta->colonia->nombre
+                            ];
+                        }
+                    }
+                }
+                return $obras;
+            })
+            ->groupBy('obra')
+            ->map(function($group) {
+                return [
+                    'obra' => $group->first()['obra'],
+                    'prioridad_promedio' => round($group->avg('prioridad'), 1),
+                    'total_respuestas' => $group->count()
+                ];
+            })
+            ->values();
+
         return view('admin.dashboard', compact(
             'totalEncuestas',
             'totalPropuestas',
@@ -75,7 +163,11 @@ class DashboardController extends Controller
             'desconfianzaPoliciaPorEdad',
             'calificacionSeguridad',
             'horariosInseguros',
-            'promediosSeguridad'
+            'promediosSeguridad',
+            'distrito20Demograficos',
+            'distrito5Demograficos',
+            'distrito20Obras',
+            'distrito5Obras'
         ));
     }
 
@@ -187,5 +279,117 @@ class DashboardController extends Controller
         }
 
         return view('admin.encuestas.show', compact('encuesta', 'obrasCalificadasConNombres'));
+    }
+
+    public function getDashboardData()
+    {
+        $totalEncuestas = Encuesta::count();
+        $totalPropuestas = Propuesta::count();
+        $totalReportes = Reporte::count();
+
+        $encuestasPorColonia = Encuesta::with('colonia')
+            ->selectRaw('colonia_id, count(*) as total')
+            ->groupBy('colonia_id')
+            ->get();
+
+        // Estadísticas de Seguridad Pública
+        $seguridadStats = [];
+        $camposSeguridad = [
+            'emergencia_transporte' => 'Emergencia de Transporte',
+            'caminar_noche' => 'Caminar de Noche',
+            'hijos_solos' => 'Hijos Solos',
+            'transporte_publico' => 'Transporte Público'
+        ];
+
+        foreach ($camposSeguridad as $campo => $nombre) {
+            $promedio = Encuesta::whereNotNull($campo)->avg($campo);
+            if ($promedio) {
+                $seguridadStats[$campo] = $promedio;
+            }
+        }
+
+        // Distrito 20 - Demográfico
+        $distrito20Demograficos = \DB::select("
+            SELECT
+                c.nombre as colonia,
+                e.genero,
+                CASE
+                    WHEN e.edad BETWEEN 18 AND 25 THEN '18-25'
+                    WHEN e.edad BETWEEN 26 AND 35 THEN '26-35'
+                    WHEN e.edad BETWEEN 36 AND 45 THEN '36-45'
+                    WHEN e.edad BETWEEN 46 AND 55 THEN '46-55'
+                    WHEN e.edad > 55 THEN '56+'
+                    ELSE 'No especificado'
+                END as rango_edad,
+                COUNT(*) as total
+            FROM encuestas e
+            JOIN colonias c ON e.colonia_id = c.id
+            WHERE c.distrito = 20
+            GROUP BY c.nombre, e.genero, rango_edad
+            ORDER BY c.nombre, e.genero, rango_edad
+        ");
+
+        // Distrito 5 - Demográfico
+        $distrito5Demograficos = \DB::select("
+            SELECT
+                c.nombre as colonia,
+                e.genero,
+                CASE
+                    WHEN e.edad BETWEEN 18 AND 25 THEN '18-25'
+                    WHEN e.edad BETWEEN 26 AND 35 THEN '26-35'
+                    WHEN e.edad BETWEEN 36 AND 45 THEN '36-45'
+                    WHEN e.edad BETWEEN 46 AND 55 THEN '46-55'
+                    WHEN e.edad > 55 THEN '56+'
+                    ELSE 'No especificado'
+                END as rango_edad,
+                COUNT(*) as total
+            FROM encuestas e
+            JOIN colonias c ON e.colonia_id = c.id
+            WHERE c.distrito = 5
+            GROUP BY c.nombre, e.genero, rango_edad
+            ORDER BY c.nombre, e.genero, rango_edad
+        ");
+
+        // Distrito 20 - Obras
+        $distrito20Obras = \DB::select("
+            SELECT
+                op.nombre as obra,
+                AVG(CAST(JSON_EXTRACT(e.obras_calificadas, CONCAT('$.', op.id)) AS UNSIGNED)) as prioridad_promedio,
+                COUNT(*) as total_calificaciones
+            FROM encuestas e
+            JOIN colonias c ON e.colonia_id = c.id
+            JOIN obras_publicas op ON op.colonia_id = c.id
+            WHERE c.distrito = 20
+            AND JSON_EXTRACT(e.obras_calificadas, CONCAT('$.', op.id)) IS NOT NULL
+            GROUP BY op.id, op.nombre
+            ORDER BY prioridad_promedio DESC
+        ");
+
+        // Distrito 5 - Obras
+        $distrito5Obras = \DB::select("
+            SELECT
+                op.nombre as obra,
+                AVG(CAST(JSON_EXTRACT(e.obras_calificadas, CONCAT('$.', op.id)) AS UNSIGNED)) as prioridad_promedio,
+                COUNT(*) as total_calificaciones
+            FROM encuestas e
+            JOIN colonias c ON e.colonia_id = c.id
+            JOIN obras_publicas op ON op.colonia_id = c.id
+            WHERE c.distrito = 5
+            AND JSON_EXTRACT(e.obras_calificadas, CONCAT('$.', op.id)) IS NOT NULL
+            GROUP BY op.id, op.nombre
+            ORDER BY prioridad_promedio DESC
+        ");
+
+        return [
+            'totalEncuestas' => $totalEncuestas,
+            'totalPropuestas' => $totalPropuestas,
+            'totalReportes' => $totalReportes,
+            'encuestasPorColonia' => $encuestasPorColonia,
+            'seguridadStats' => $seguridadStats,
+            'distrito20Demograficos' => collect($distrito20Demograficos),
+            'distrito5Demograficos' => collect($distrito5Demograficos),
+            'distrito20Obras' => collect($distrito20Obras),
+            'distrito5Obras' => collect($distrito5Obras),
+        ];
     }
 }

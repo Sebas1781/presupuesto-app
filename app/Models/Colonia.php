@@ -9,6 +9,7 @@ class Colonia extends Model
 {
     protected $fillable = [
         'nombre',
+        'distrito',
         'descripcion',
     ];
 

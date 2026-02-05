@@ -23,6 +23,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Crear colonias y obras públicas
-        $this->call(ColoniasObrasSeeder::class);
+        $this->call(ColoniasObrasSeederFixed::class);
     }
 }
