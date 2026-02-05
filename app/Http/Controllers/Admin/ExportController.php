@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Encuesta;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\Response;
 
 class ExportController extends Controller
 {
@@ -38,18 +38,172 @@ class ExportController extends Controller
         $encuestas = $query->get();
 
         // Determinar tipo de exportación
-        $tipo = $request->get('tipo', 'simple'); // 'simple' o 'detallado'
+        $tipo = $request->get('tipo', 'simple');
 
         if ($tipo === 'detallado') {
-            return Excel::download(
-                new \App\Exports\EncuestasDetalladoExport($encuestas),
-                'encuestas_detallado_' . date('Y-m-d_H-i-s') . '.xlsx'
-            );
+            return $this->exportarDetallado($encuestas);
         }
 
-        return Excel::download(
-            new \App\Exports\EncuestasSimpleExport($encuestas),
-            'encuestas_simple_' . date('Y-m-d_H-i-s') . '.xlsx'
-        );
+        return $this->exportarSimple($encuestas);
+    }
+
+    private function exportarSimple($encuestas)
+    {
+        $filename = 'encuestas_simple_' . date('Y-m-d_H-i-s') . '.csv';
+        
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+
+        $callback = function() use ($encuestas) {
+            $file = fopen('php://output', 'w');
+            
+            // BOM para UTF-8
+            fwrite($file, "\xEF\xBB\xBF");
+            
+            // Encabezados
+            fputcsv($file, [
+                'ID',
+                'Colonia',
+                'Género',
+                'Edad',
+                'Nivel Educativo',
+                'Estado Civil',
+                'Calificación Obras',
+                'Desea Reporte',
+                'Total Propuestas',
+                'Total Reportes',
+                'Fecha'
+            ]);
+
+            // Datos
+            foreach ($encuestas as $encuesta) {
+                $obrasCalificadas = '';
+                if (is_array($encuesta->obras_calificadas)) {
+                    foreach ($encuesta->obras_calificadas as $obraId => $calificacion) {
+                        $obrasCalificadas .= "Obra $obraId: $calificacion estrellas; ";
+                    }
+                }
+
+                fputcsv($file, [
+                    $encuesta->id,
+                    $encuesta->colonia ? $encuesta->colonia->nombre : 'Sin colonia',
+                    $encuesta->genero,
+                    $encuesta->edad,
+                    $encuesta->nivel_educativo,
+                    $encuesta->estado_civil,
+                    trim($obrasCalificadas, '; ') ?: 'N/A',
+                    $encuesta->desea_reporte ? 'Sí' : 'No',
+                    $encuesta->propuestas ? $encuesta->propuestas->count() : 0,
+                    $encuesta->reportes ? $encuesta->reportes->count() : 0,
+                    $encuesta->created_at ? $encuesta->created_at->format('Y-m-d H:i:s') : 'N/A'
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    private function exportarDetallado($encuestas)
+    {
+        $filename = 'encuestas_detallado_' . date('Y-m-d_H-i-s') . '.csv';
+        
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+
+        $callback = function() use ($encuestas) {
+            $file = fopen('php://output', 'w');
+            
+            // BOM para UTF-8
+            fwrite($file, "\xEF\xBB\xBF");
+            
+            // Encabezados para el reporte detallado
+            fputcsv($file, [
+                'ID Encuesta',
+                'Colonia',
+                'Género',
+                'Edad',
+                'Nivel Educativo',
+                'Estado Civil',
+                'Obras Calificadas',
+                'Desea Reporte',
+                'Fecha Creación',
+                'ID Propuesta',
+                'Descripción Propuesta',
+                'Fecha Propuesta',
+                'ID Reporte',
+                'Descripción Reporte',
+                'Prioridad',
+                'Fecha Reporte'
+            ]);
+
+            // Datos detallados
+            foreach ($encuestas as $encuesta) {
+                $obrasCalificadas = is_array($encuesta->obras_calificadas) 
+                    ? json_encode($encuesta->obras_calificadas) 
+                    : ($encuesta->obras_calificadas ?? 'N/A');
+
+                // Si tiene propuestas o reportes, mostrar cada uno en una fila
+                $hasPropuestas = $encuesta->propuestas && $encuesta->propuestas->count() > 0;
+                $hasReportes = $encuesta->reportes && $encuesta->reportes->count() > 0;
+
+                if ($hasPropuestas || $hasReportes) {
+                    // Combinar propuestas y reportes para mostrar juntos
+                    $maxCount = max(
+                        $hasPropuestas ? $encuesta->propuestas->count() : 0,
+                        $hasReportes ? $encuesta->reportes->count() : 0
+                    );
+
+                    for ($i = 0; $i < $maxCount; $i++) {
+                        $propuesta = $hasPropuestas && isset($encuesta->propuestas[$i]) 
+                            ? $encuesta->propuestas[$i] : null;
+                        $reporte = $hasReportes && isset($encuesta->reportes[$i]) 
+                            ? $encuesta->reportes[$i] : null;
+
+                        fputcsv($file, [
+                            $encuesta->id,
+                            $encuesta->colonia ? $encuesta->colonia->nombre : 'Sin colonia',
+                            $encuesta->genero,
+                            $encuesta->edad,
+                            $encuesta->nivel_educativo,
+                            $encuesta->estado_civil,
+                            $obrasCalificadas,
+                            $encuesta->desea_reporte ? 'Sí' : 'No',
+                            $encuesta->created_at ? $encuesta->created_at->format('Y-m-d H:i:s') : 'N/A',
+                            $propuesta ? $propuesta->id : '',
+                            $propuesta ? $propuesta->descripcion : '',
+                            $propuesta && $propuesta->created_at ? $propuesta->created_at->format('Y-m-d H:i:s') : '',
+                            $reporte ? $reporte->id : '',
+                            $reporte ? $reporte->descripcion : '',
+                            $reporte ? $reporte->prioridad : '',
+                            $reporte && $reporte->created_at ? $reporte->created_at->format('Y-m-d H:i:s') : ''
+                        ]);
+                    }
+                } else {
+                    // Si no tiene propuestas ni reportes, mostrar solo la encuesta
+                    fputcsv($file, [
+                        $encuesta->id,
+                        $encuesta->colonia ? $encuesta->colonia->nombre : 'Sin colonia',
+                        $encuesta->genero,
+                        $encuesta->edad,
+                        $encuesta->nivel_educativo,
+                        $encuesta->estado_civil,
+                        $obrasCalificadas,
+                        $encuesta->desea_reporte ? 'Sí' : 'No',
+                        $encuesta->created_at ? $encuesta->created_at->format('Y-m-d H:i:s') : 'N/A',
+                        '', '', '', '', '', '', ''
+                    ]);
+                }
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }
