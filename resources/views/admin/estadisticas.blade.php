@@ -241,7 +241,7 @@
                 data: {!! json_encode($desconfianzaPoliciaPorEdad->pluck('total')) !!},
                 backgroundColor: [
                     '#FF6384',
-                    '#36A2EB', 
+                    '#36A2EB',
                     '#FFCE56',
                     '#4BC0C0',
                     '#9966FF',
@@ -275,7 +275,7 @@
                 data: {!! json_encode($calificacionSeguridad->pluck('total')) !!},
                 backgroundColor: [
                     '#28a745', // Verde para Excelente
-                    '#17a2b8', // Azul para Muy buena  
+                    '#17a2b8', // Azul para Muy buena
                     '#ffc107', // Amarillo para Buena
                     '#fd7e14', // Naranja para Regular
                     '#dc3545'  // Rojo para Mala

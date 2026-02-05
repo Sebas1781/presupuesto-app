@@ -30,7 +30,7 @@ class DashboardController extends Controller
         // 1. Rangos de edades de personas que NO confían en la policía
         $desconfianzaPoliciaPorEdad = Encuesta::where('confia_policia', 'No')
             ->selectRaw("
-                CASE 
+                CASE
                     WHEN edad = 'De 18 a 24 años' THEN '18-24'
                     WHEN edad = 'De 25 a 34 años' THEN '25-34'
                     WHEN edad = 'De 35 a 44 años' THEN '35-44'
@@ -94,7 +94,7 @@ class DashboardController extends Controller
         // 1. Rangos de edades de personas que NO confían en la policía
         $desconfianzaPoliciaPorEdad = Encuesta::where('confia_policia', 'No')
             ->selectRaw("
-                CASE 
+                CASE
                     WHEN edad = 'De 18 a 24 años' THEN '18-24'
                     WHEN edad = 'De 25 a 34 años' THEN '25-34'
                     WHEN edad = 'De 35 a 44 años' THEN '35-44'

@@ -102,12 +102,12 @@
                         <div class="col-md-12">
                             <div class="alert alert-success">
                                 <h5><i class="icon fas fa-check"></i> Sistema Operativo</h5>
-                                El sistema de encuestas está funcionando correctamente. 
+                                El sistema de encuestas está funcionando correctamente.
                                 <strong>{{ $totalEncuestas }}</strong> ciudadanos han participado hasta el momento.
                             </div>
                         </div>
                     </div>
-                    
+
                     @if($encuestasPorColonia->count() > 0)
                     <div class="row">
                         <div class="col-md-12">
