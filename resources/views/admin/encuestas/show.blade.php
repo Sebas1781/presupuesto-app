@@ -84,6 +84,171 @@
         </div>
     </div>
 
+    <!-- Seguridad Pública -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h3 class="card-title text-white">
+                        <i class="fas fa-shield-alt mr-2"></i>Seguridad Pública
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Columna 1: Preguntas básicas -->
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-6">Servicio de Seguridad:</dt>
+                                <dd class="col-sm-6">
+                                    <span class="badge badge-info">{{ $encuesta->servicio_seguridad ?? 'N/A' }}</span>
+                                </dd>
+
+                                <dt class="col-sm-6">Confía en Policía:</dt>
+                                <dd class="col-sm-6">
+                                    <span class="badge badge-{{ $encuesta->confia_policia == 'Sí' ? 'success' : ($encuesta->confia_policia == 'No' ? 'danger' : 'secondary') }}">
+                                        {{ $encuesta->confia_policia ?? 'N/A' }}
+                                    </span>
+                                </dd>
+
+                                <dt class="col-sm-6">Horario Inseguro:</dt>
+                                <dd class="col-sm-6">{{ $encuesta->horario_inseguro ?? 'N/A' }}</dd>
+                            </dl>
+                        </div>
+
+                        <!-- Columna 2: Escalas de seguridad -->
+                        <div class="col-md-6">
+                            <h5 class="mb-3">Escalas de Seguridad (1-10)</h5>
+                            <div class="row">
+                                @if($encuesta->emergencia_transporte)
+                                <div class="col-sm-6 mb-2">
+                                    <small class="text-muted">Emergencia y transporte:</small>
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar bg-danger" style="width: {{ ($encuesta->emergencia_transporte/10)*100 }}%">
+                                            {{ $encuesta->emergencia_transporte }}/10
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+
+                                @if($encuesta->caminar_noche)
+                                <div class="col-sm-6 mb-2">
+                                    <small class="text-muted">Caminar de noche:</small>
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar bg-warning" style="width: {{ ($encuesta->caminar_noche/10)*100 }}%">
+                                            {{ $encuesta->caminar_noche }}/10
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+
+                                @if($encuesta->hijos_solos)
+                                <div class="col-sm-6 mb-2">
+                                    <small class="text-muted">Hijos caminando solos:</small>
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar bg-info" style="width: {{ ($encuesta->hijos_solos/10)*100 }}%">
+                                            {{ $encuesta->hijos_solos }}/10
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+
+                                @if($encuesta->transporte_publico)
+                                <div class="col-sm-6 mb-2">
+                                    <small class="text-muted">Transporte público:</small>
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar bg-success" style="width: {{ ($encuesta->transporte_publico/10)*100 }}%">
+                                            {{ $encuesta->transporte_publico }}/10
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Problemas de Seguridad -->
+                    @if($encuesta->problemas_seguridad && is_array($encuesta->problemas_seguridad) && count($encuesta->problemas_seguridad) > 0)
+                    <hr>
+                    <h5 class="mb-3">
+                        <i class="fas fa-exclamation-triangle text-warning mr-2"></i>Problemas de Seguridad Calificados
+                    </h5>
+                    <div class="row">
+                        @php
+                            $problemasTexto = [
+                                'Corrupción de los elementos de seguridad',
+                                'Robo a casa habitación',
+                                'Asaltos a transeúntes',
+                                'Robo de vehículos, motos o autopartes',
+                                'Extorsión por llamada telefónica',
+                                'Venta de sustancias ilícitas (drogas)',
+                                'Falta de vigilancia y presencia de policías',
+                                'Venta y/o consumo de alcohol en la calle',
+                                'Violencia familiar, o contra las mujeres, niñas o niños',
+                                'Violencia en contra de los y las adultos mayores',
+                                'Violencia en contra de los animales domésticos o mascotas',
+                                'Violencia en contra de las personas discapacitadas',
+                                'Bullying en las escuelas',
+                                'Acoso o molestias en la calle a mujeres, señoritas, niñas',
+                                'Actos de discriminación o molestia a personas LGTTBIQ+',
+                                'Riñas, peleas o lesiones entre vecinos',
+                                'Venta y/o consumo de sustancias ilícitas (drogas) en la calle'
+                            ];
+                            $nivelesTexto = [1 => 'No me preocupa', 2 => 'Me preocupa poco', 3 => 'Más o menos me preocupa', 4 => 'Me preocupa mucho'];
+                        @endphp
+                        @foreach($encuesta->problemas_seguridad as $index => $nivel)
+                            @if(isset($problemasTexto[$index]))
+                            <div class="col-md-6 mb-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">{{ $problemasTexto[$index] }}</small>
+                                    <span class="badge badge-{{ $nivel == 4 ? 'danger' : ($nivel == 3 ? 'warning' : ($nivel == 2 ? 'info' : 'secondary')) }}">
+                                        {{ $nivelesTexto[$nivel] ?? 'N/A' }}
+                                    </span>
+                                </div>
+                            </div>
+                            @endif
+                        @endforeach
+                    </div>
+                    @endif
+
+                    <!-- Lugares Seguros -->
+                    @if($encuesta->lugares_seguros && is_array($encuesta->lugares_seguros) && count($encuesta->lugares_seguros) > 0)
+                    <hr>
+                    <h5 class="mb-3">
+                        <i class="fas fa-map-marker-alt text-success mr-2"></i>Percepción de Seguridad en Lugares
+                    </h5>
+                    <div class="row">
+                        @php
+                            $lugaresTexto = [
+                                'Un parque de su comunidad',
+                                'En el mercado o tianguis',
+                                'Al visitar una plaza comercial o un supermercado',
+                                'En un cajero automático',
+                                'A bordo de un camión, micro o vagoneta de transporte público de pasajeros',
+                                'Al exterior de una escuela',
+                                'Caminando en las calles cercanas a su domicilio',
+                                'En el Municipio de Tecámac'
+                            ];
+                            $seguridadTexto = [1 => 'Totalmente inseguros', 2 => 'Poco seguros', 3 => 'Más o menos seguros', 4 => 'Seguros'];
+                        @endphp
+                        @foreach($encuesta->lugares_seguros as $index => $nivel)
+                            @if(isset($lugaresTexto[$index]))
+                            <div class="col-md-6 mb-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">{{ $lugaresTexto[$index] }}</small>
+                                    <span class="badge badge-{{ $nivel == 4 ? 'success' : ($nivel == 3 ? 'info' : ($nivel == 2 ? 'warning' : 'danger')) }}">
+                                        {{ $seguridadTexto[$nivel] ?? 'N/A' }}
+                                    </span>
+                                </div>
+                            </div>
+                            @endif
+                        @endforeach
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Propuestas -->
     @if($encuesta->propuestas->count() > 0)
     <div class="row">
