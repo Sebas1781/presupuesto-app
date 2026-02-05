@@ -20,11 +20,23 @@ class Encuesta extends Model
         'descripcion_reporte',
         'evidencia_reporte',
         'ubicacion_reporte',
+        // Campos de Seguridad Pública
+        'servicio_seguridad',
+        'confia_policia',
+        'horario_inseguro',
+        'problemas_seguridad',
+        'lugares_seguros',
+        'emergencia_transporte',
+        'caminar_noche',
+        'hijos_solos',
+        'transporte_publico',
     ];
 
     protected $casts = [
         'obras_calificadas' => 'array',
         'desea_reporte' => 'boolean',
+        'problemas_seguridad' => 'array',
+        'lugares_seguros' => 'array',
     ];
 
     public function colonia(): BelongsTo

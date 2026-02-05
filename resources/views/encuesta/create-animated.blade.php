@@ -715,6 +715,263 @@
                 </div>
             </div>
 
+            <!-- Sección Seguridad Pública -->
+            <div id="seguridad-section" class="form-section slide-in-up hidden" x-data="{
+                seguridad: {
+                    servicio_seguridad: '',
+                    confia_policia: '',
+                    horario_inseguro: '',
+                    problemas_seguridad: {},
+                    lugares_seguros: {},
+                    situaciones_escala: {},
+                    emergencia_transporte: '',
+                    caminar_noche: '',
+                    hijos_solos: '',
+                    transporte_publico: ''
+                }
+            }">
+                <div class="flex items-center mb-6">
+                    <div class="w-12 h-12 bg-gradient-to-r from-blue-700 to-blue-500 rounded-full flex items-center justify-center mr-4">
+                        <i class="fas fa-shield-alt text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800">BLOQUE C: SEGURIDAD PÚBLICA</h3>
+                </div>
+
+                <!-- C.1. Calificación del servicio de seguridad pública -->
+                <div class="propuesta-card mb-6 slide-in-up">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">
+                        C.1. ¿Cómo califica el servicio de seguridad pública en su comunidad?
+                    </h4>
+                    <div class="space-y-2">
+                        <template x-for="opcion in ['Excelente', 'Muy buena', 'Buena', 'Regular', 'Mala']">
+                            <label class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                <input type="radio" :value="opcion" x-model="seguridad.servicio_seguridad" name="seguridad[servicio_seguridad]" class="form-radio text-blue-600">
+                                <span x-text="opcion" class="text-gray-700"></span>
+                            </label>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- C.2. Confianza en policías -->
+                <div class="propuesta-card mb-6 slide-in-up">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">
+                        C.2. En general, ¿confía en las y los policías de la Guardia Civil de Tecámac?
+                    </h4>
+                    <div class="space-y-2">
+                        <template x-for="opcion in ['Sí', 'No', 'No sé, no contestó']">
+                            <label class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                <input type="radio" :value="opcion" x-model="seguridad.confia_policia" name="seguridad[confia_policia]" class="form-radio text-blue-600">
+                                <span x-text="opcion" class="text-gray-700"></span>
+                            </label>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- C.3. Horario de inseguridad -->
+                <div class="propuesta-card mb-6 slide-in-up">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">
+                        C.3. ¿Cuál es el horario en la que usted y su familia sienten que están más inseguros en su comunidad?
+                    </h4>
+                    <div class="space-y-2">
+                        <template x-for="opcion in [
+                            'De 6 a 9 de la mañana',
+                            'De 9 a 12 del día', 
+                            'De 12 de medio día a 3 de la tarde',
+                            'De 3 a 6 de la tarde',
+                            'De 6 de la tarde a 9 de la noche',
+                            'De 9 de la noche a 12 de la madrugada',
+                            'De 12 a 06 de la madrugada'
+                        ]">
+                            <label class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                <input type="radio" :value="opcion" x-model="seguridad.horario_inseguro" name="seguridad[horario_inseguro]" class="form-radio text-blue-600">
+                                <span x-text="opcion" class="text-gray-700"></span>
+                            </label>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- C.4. Problemas de inseguridad y violencia -->
+                <div class="propuesta-card mb-6 slide-in-up">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">
+                        C.4. Refiriéndose al entorno de su domicilio, ¿qué tanta preocupación le causan los siguientes problemas de inseguridad o violencia?
+                    </h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="text-left p-3 font-medium text-gray-600">Problema</th>
+                                    <th class="text-center p-3 font-medium text-gray-600">Me preocupa mucho</th>
+                                    <th class="text-center p-3 font-medium text-gray-600">Más o menos me preocupa</th>
+                                    <th class="text-center p-3 font-medium text-gray-600">Me preocupa poco</th>
+                                    <th class="text-center p-3 font-medium text-gray-600">No me preocupa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template x-for="(problema, index) in [
+                                    'Corrupción de los elementos de seguridad',
+                                    'Robo a casa habitación',
+                                    'Asaltos a transeúntes',
+                                    'Robo de vehículos, motos o autopartes',
+                                    'Extorsión por llamada telefónica',
+                                    'Venta de sustancias ilícitas (drogas)',
+                                    'Falta de vigilancia y presencia de policías',
+                                    'Venta y/o consumo de alcohol en la calle',
+                                    'Violencia familiar, o contra las mujeres, niñas o niños',
+                                    'Violencia en contra de los y las adultos mayores',
+                                    'Violencia en contra de los animales domésticos o mascotas',
+                                    'Violencia en contra de las personas discapacitadas',
+                                    'Bullying en las escuelas',
+                                    'Acoso o molestias en la calle a mujeres, señoritas, niñas',
+                                    'Actos de discriminación o molestia a personas que se identifican como parte de la comunidad de LGTTBIQ+',
+                                    'Riñas, peleas o lesiones entre vecinos',
+                                    'Venta y/o consumo de sustancias ilícitas (drogas) en la calle'
+                                ]" :key="index">
+                                    <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                        <td class="p-3 text-gray-700" x-text="problema"></td>
+                                        <template x-for="valor in [4, 3, 2, 1]">
+                                            <td class="text-center p-3">
+                                                <input type="radio" :value="valor" :name="`seguridad[problemas_seguridad][${index}]`" class="form-radio text-blue-600">
+                                            </td>
+                                        </template>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- C.22. Lugares seguros -->
+                <div class="propuesta-card mb-6 slide-in-up">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">
+                        C.22. Imagine que se encuentra con su familia en los siguientes lugares que le voy a mencionar ¿qué tan seguros e inseguros se sentirían si fura un viernes a las 8 de la noche en?
+                    </h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="text-left p-3 font-medium text-gray-600">Lugar</th>
+                                    <th class="text-center p-3 font-medium text-gray-600">Seguros</th>
+                                    <th class="text-center p-3 font-medium text-gray-600">Más o menos seguros</th>
+                                    <th class="text-center p-3 font-medium text-gray-600">Poco seguros</th>
+                                    <th class="text-center p-3 font-medium text-gray-600">Totalmente inseguros</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template x-for="(lugar, index) in [
+                                    'Un parque de su comunidad',
+                                    'En el mercado o tianguis',
+                                    'Al visitar una plaza comercial o un supermercado',
+                                    'En un cajero automático',
+                                    'A bordo de un camión, micro o vagoneta de transporte público de pasajeros',
+                                    'Al exterior de una escuela',
+                                    'Caminando en las calles cercanas a su domicilio',
+                                    'En el Municipio de Tecámac'
+                                ]" :key="index">
+                                    <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                        <td class="p-3 text-gray-700" x-text="lugar"></td>
+                                        <template x-for="valor in [4, 3, 2, 1]">
+                                            <td class="text-center p-3">
+                                                <input type="radio" :value="valor" :name="`seguridad[lugares_seguros][${index}]`" class="form-radio text-blue-600">
+                                            </td>
+                                        </template>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- C.31. Escala de situaciones -->
+                <div class="propuesta-card mb-6 slide-in-up">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">
+                        C.31. Imagine las siguientes situaciones y responda en una escala del 1 al 10 (uno es "muy inseguro" y diez es "muy seguro")
+                    </h4>
+                    <p class="text-gray-600 mb-4 text-sm">Califique del 1 al 10:</p>
+                    
+                    <div class="space-y-6">
+                        <!-- C.32 -->
+                        <div class="border-l-4 border-blue-400 pl-4">
+                            <h5 class="font-medium text-gray-800 mb-3">
+                                C.32. Imaginando una situación de emergencia, si usted necesitara salir de su domicilio a las 3 de la madrugada y caminar cinco calles para tomar un taxi o transporte, ¿qué tan seguro/a se sentiría de hacerlo?
+                            </h5>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm text-gray-500">1 (Muy inseguro)</span>
+                                <template x-for="i in 10">
+                                    <button type="button" 
+                                            class="w-8 h-8 rounded-full border-2 border-blue-400 text-sm font-medium transition-colors"
+                                            :class="seguridad.situaciones_escala.emergencia_transporte == i ? 'bg-blue-500 text-white' : 'hover:bg-blue-100'"
+                                            @click="seguridad.situaciones_escala.emergencia_transporte = i"
+                                            x-text="i">
+                                    </button>
+                                </template>
+                                <span class="text-sm text-gray-500">10 (Muy seguro)</span>
+                                <input type="hidden" name="seguridad[emergencia_transporte]" :value="seguridad.situaciones_escala.emergencia_transporte">
+                            </div>
+                        </div>
+
+                        <!-- C.33 -->
+                        <div class="border-l-4 border-blue-400 pl-4">
+                            <h5 class="font-medium text-gray-800 mb-3">
+                                C.33. ¿Qué tan seguro/a se siente al caminar solo/a después de las 10 de la noche, en su colonia?
+                            </h5>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm text-gray-500">1 (Muy inseguro)</span>
+                                <template x-for="i in 10">
+                                    <button type="button" 
+                                            class="w-8 h-8 rounded-full border-2 border-blue-400 text-sm font-medium transition-colors"
+                                            :class="seguridad.situaciones_escala.caminar_noche == i ? 'bg-blue-500 text-white' : 'hover:bg-blue-100'"
+                                            @click="seguridad.situaciones_escala.caminar_noche = i"
+                                            x-text="i">
+                                    </button>
+                                </template>
+                                <span class="text-sm text-gray-500">10 (Muy seguro)</span>
+                                <input type="hidden" name="seguridad[caminar_noche]" :value="seguridad.situaciones_escala.caminar_noche">
+                            </div>
+                        </div>
+
+                        <!-- C.34 -->
+                        <div class="border-l-4 border-blue-400 pl-4">
+                            <h5 class="font-medium text-gray-800 mb-3">
+                                C.34. ¿Qué tan tranquilo/a se siente de que sus hijas o hijos caminen solos/as por su colonia durante el día?
+                            </h5>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm text-gray-500">1 (Muy inseguro)</span>
+                                <template x-for="i in 10">
+                                    <button type="button" 
+                                            class="w-8 h-8 rounded-full border-2 border-blue-400 text-sm font-medium transition-colors"
+                                            :class="seguridad.situaciones_escala.hijos_solos == i ? 'bg-blue-500 text-white' : 'hover:bg-blue-100'"
+                                            @click="seguridad.situaciones_escala.hijos_solos = i"
+                                            x-text="i">
+                                    </button>
+                                </template>
+                                <span class="text-sm text-gray-500">10 (Muy seguro)</span>
+                                <input type="hidden" name="seguridad[hijos_solos]" :value="seguridad.situaciones_escala.hijos_solos">
+                            </div>
+                        </div>
+
+                        <!-- C.35 -->
+                        <div class="border-l-4 border-blue-400 pl-4">
+                            <h5 class="font-medium text-gray-800 mb-3">
+                                C.35. ¿Qué tan seguro/a se siente al esperar el transporte público en su colonia durante la noche?
+                            </h5>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm text-gray-500">1 (Muy inseguro)</span>
+                                <template x-for="i in 10">
+                                    <button type="button" 
+                                            class="w-8 h-8 rounded-full border-2 border-blue-400 text-sm font-medium transition-colors"
+                                            :class="seguridad.situaciones_escala.transporte_publico == i ? 'bg-blue-500 text-white' : 'hover:bg-blue-100'"
+                                            @click="seguridad.situaciones_escala.transporte_publico = i"
+                                            x-text="i">
+                                    </button>
+                                </template>
+                                <span class="text-sm text-gray-500">10 (Muy seguro)</span>
+                                <input type="hidden" name="seguridad[transporte_publico]" :value="seguridad.situaciones_escala.transporte_publico">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Sección 3: Propuestas (inicialmente oculta) -->
             <div id="propuestas-section" class="form-section slide-in-up hidden" x-intersect="updateProgress(75)">
                 <div class="flex items-center mb-6">
@@ -1141,6 +1398,10 @@
                         // Mostrar sección de obras
                         const obrasSection = document.getElementById('obras-section');
                         obrasSection.classList.remove('hidden');
+
+                        // Mostrar sección de seguridad pública
+                        const seguridadSection = document.getElementById('seguridad-section');
+                        seguridadSection.classList.remove('hidden');
 
                         // Mostrar sección de propuestas
                         const propuestasSection = document.getElementById('propuestas-section');

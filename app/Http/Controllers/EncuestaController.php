@@ -50,6 +50,16 @@ class EncuestaController extends Controller
             'propuestas.*.fotografia' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
             'propuestas.*.ubicacion' => 'required_with:propuestas|string',
             'propuestas.*.descripcion_breve' => 'required_with:propuestas|string',
+            // Validaciones de Seguridad Pública
+            'seguridad.servicio_seguridad' => 'nullable|string',
+            'seguridad.confia_policia' => 'nullable|string',
+            'seguridad.horario_inseguro' => 'nullable|string',
+            'seguridad.problemas_seguridad' => 'nullable|array',
+            'seguridad.lugares_seguros' => 'nullable|array',
+            'seguridad.emergencia_transporte' => 'nullable|integer|min:1|max:10',
+            'seguridad.caminar_noche' => 'nullable|integer|min:1|max:10',
+            'seguridad.hijos_solos' => 'nullable|integer|min:1|max:10',
+            'seguridad.transporte_publico' => 'nullable|integer|min:1|max:10',
         ];
 
         // Solo requerir calificación de obras si la colonia tiene obras
@@ -68,6 +78,16 @@ class EncuestaController extends Controller
             'estado_civil' => $request->estado_civil,
             'obras_calificadas' => $tieneObras ? $request->obras_calificadas : null,
             'desea_reporte' => $request->boolean('desea_reporte'),
+            // Datos de Seguridad Pública
+            'servicio_seguridad' => $request->input('seguridad.servicio_seguridad'),
+            'confia_policia' => $request->input('seguridad.confia_policia'),
+            'horario_inseguro' => $request->input('seguridad.horario_inseguro'),
+            'problemas_seguridad' => $request->input('seguridad.problemas_seguridad'),
+            'lugares_seguros' => $request->input('seguridad.lugares_seguros'),
+            'emergencia_transporte' => $request->input('seguridad.emergencia_transporte'),
+            'caminar_noche' => $request->input('seguridad.caminar_noche'),
+            'hijos_solos' => $request->input('seguridad.hijos_solos'),
+            'transporte_publico' => $request->input('seguridad.transporte_publico'),
         ]);
 
         // Crear propuestas si existen
