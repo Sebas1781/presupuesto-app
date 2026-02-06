@@ -252,6 +252,34 @@
                         </div>
                     </div>
 
+                    <!-- BLOQUE A: Nivel Educativo -->
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <h5 class="mb-4" style="color: #4E232E;">
+                                <i class="fas fa-graduation-cap mr-2"></i>NIVEL EDUCATIVO DE LA POBLACIÓN GENERAL
+                            </h5>
+                        </div>
+
+                        <!-- Gráfica General de Nivel Educativo -->
+                        <div class="col-md-10 mx-auto">
+                            <div class="card">
+                                <div class="card-header" style="background-color: #9D2449; color: white;">
+                                    <h5 class="card-title text-white mb-0">Distribución de Nivel Educativo</h5>
+                                    <small class="text-white-50">Basado en todas las encuestas</small>
+                                </div>
+                                <div class="card-body" style="height: 500px; padding: 20px;">
+                                    @if(!isset($nivelEducativoData) || $nivelEducativoData->isEmpty())
+                                        <p class="text-muted text-center">No hay datos disponibles de nivel educativo</p>
+                                        <small class="text-info">Total encuestas: {{ $totalEncuestas ?? 0 }}</small>
+                                    @else
+                                        <canvas id="nivelEducativoChart" width="800" height="400"></canvas>
+                                        <small class="text-success">Datos encontrados: {{ $nivelEducativoData->count() }} niveles educativos</small>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- BLOQUE B: Análisis de Obras -->
                     <div class="row">
                         <div class="col-md-12">
@@ -600,6 +628,64 @@
                 title: {
                     display: true,
                     text: 'Distribución por Género - Distrito 5'
+                }
+            }
+        }
+    });
+    @endif
+
+    // BLOQUE A: Gráfico General de Nivel Educativo
+
+    @if(isset($nivelEducativoData) && !$nivelEducativoData->isEmpty())
+    // Gráfica General de Nivel Educativo
+    var ctxEducacion = document.getElementById('nivelEducativoChart').getContext('2d');
+
+    // Preparar datos de educación
+    const educacionData = {!! json_encode($nivelEducativoData) !!};
+    const nivelesEducativos = educacionData.map(item => item.nivel_educativo);
+    const totalesEducacion = educacionData.map(item => parseInt(item.total));
+
+    // Colores para niveles educativos (usando paleta Pantone)
+    const coloresEducacion = ['#9D2449', '#4E232E', '#56242A', '#B3865D', '#A0745A', '#8B6B47', '#7A5F3A'];
+
+    new Chart(ctxEducacion, {
+        type: 'bar',
+        data: {
+            labels: nivelesEducativos,
+            datasets: [{
+                label: 'Número de Personas',
+                data: totalesEducacion,
+                backgroundColor: coloresEducacion.slice(0, nivelesEducativos.length),
+                borderColor: coloresEducacion.slice(0, nivelesEducativos.length),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            aspectRatio: 2,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Número de Personas'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Nivel Educativo'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: 'Distribución de Nivel Educativo en la Población'
                 }
             }
         }

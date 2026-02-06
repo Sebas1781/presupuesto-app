@@ -602,21 +602,37 @@ class ExportController extends Controller
                 $html .= '<table class="data-table">
                         <thead>
                             <tr>
-                                <th style="width: 50%;">Género</th>
-                                <th style="width: 25%;">Total</th>
-                                <th style="width: 25%;">Porcentaje</th>
+                                <th style="width: 40%;">Colonia</th>
+                                <th style="width: 15%;">Masculino</th>
+                                <th style="width: 15%;">Femenino</th>
+                                <th style="width: 15%;">LGBTIQ+</th>
+                                <th style="width: 15%;">Total</th>
                             </tr>
                         </thead>
                         <tbody>';
 
-                foreach ($generoData20 as $genero => $cantidad) {
-                    $porcentaje = $total20 > 0 ? round(($cantidad / $total20) * 100, 1) : 0;
-                    $generoDisplay = $genero === 'LGBTIITTQ' ? 'LGBTIQ+' : $genero;
+                // Agrupar datos por colonia
+                $coloniaData20 = [];
+                foreach ($data['distrito20Demograficos'] as $demo) {
+                    $colonia = $demo->colonia ?? 'Sin especificar';
+                    if (!isset($coloniaData20[$colonia])) {
+                        $coloniaData20[$colonia] = ['Masculino' => 0, 'Femenino' => 0, 'LGBTIITTQ' => 0];
+                    }
+                    $coloniaData20[$colonia][$demo->genero] = ($coloniaData20[$colonia][$demo->genero] ?? 0) + $demo->total;
+                }
+
+                foreach ($coloniaData20 as $colonia => $generos) {
+                    $totalColonia = array_sum($generos);
+                    $masculinoPct = $totalColonia > 0 ? round(($generos['Masculino'] / $totalColonia) * 100, 1) : 0;
+                    $femeninoPct = $totalColonia > 0 ? round(($generos['Femenino'] / $totalColonia) * 100, 1) : 0;
+                    $lgbtqPct = $totalColonia > 0 ? round(($generos['LGBTIITTQ'] / $totalColonia) * 100, 1) : 0;
 
                     $html .= '<tr>
-                        <td>' . $generoDisplay . '</td>
-                        <td style="text-align: center;">' . $cantidad . '</td>
-                        <td style="text-align: center;">' . $porcentaje . '%</td>
+                        <td>' . $colonia . '</td>
+                        <td style="text-align: center;">' . $generos['Masculino'] . ' (' . $masculinoPct . '%)</td>
+                        <td style="text-align: center;">' . $generos['Femenino'] . ' (' . $femeninoPct . '%)</td>
+                        <td style="text-align: center;">' . $generos['LGBTIITTQ'] . ' (' . $lgbtqPct . '%)</td>
+                        <td style="text-align: center;">' . $totalColonia . '</td>
                     </tr>';
                 }
 
@@ -672,26 +688,99 @@ class ExportController extends Controller
                 $html .= '<table class="data-table">
                         <thead>
                             <tr>
-                                <th style="width: 50%;">Género</th>
-                                <th style="width: 25%;">Total</th>
-                                <th style="width: 25%;">Porcentaje</th>
+                                <th style="width: 40%;">Colonia</th>
+                                <th style="width: 15%;">Masculino</th>
+                                <th style="width: 15%;">Femenino</th>
+                                <th style="width: 15%;">LGBTIQ+</th>
+                                <th style="width: 15%;">Total</th>
                             </tr>
                         </thead>
                         <tbody>';
 
-                foreach ($generoData5 as $genero => $cantidad) {
-                    $porcentaje = $total5 > 0 ? round(($cantidad / $total5) * 100, 1) : 0;
-                    $generoDisplay = $genero === 'LGBTIITTQ' ? 'LGBTIQ+' : $genero;
+                // Agrupar datos por colonia para Distrito 5
+                $coloniaData5 = [];
+                foreach ($data['distrito5Demograficos'] as $demo) {
+                    $colonia = $demo->colonia ?? 'Sin especificar';
+                    if (!isset($coloniaData5[$colonia])) {
+                        $coloniaData5[$colonia] = ['Masculino' => 0, 'Femenino' => 0, 'LGBTIITTQ' => 0];
+                    }
+                    $coloniaData5[$colonia][$demo->genero] = ($coloniaData5[$colonia][$demo->genero] ?? 0) + $demo->total;
+                }
+
+                foreach ($coloniaData5 as $colonia => $generos) {
+                    $totalColonia = array_sum($generos);
+                    $masculinoPct = $totalColonia > 0 ? round(($generos['Masculino'] / $totalColonia) * 100, 1) : 0;
+                    $femeninoPct = $totalColonia > 0 ? round(($generos['Femenino'] / $totalColonia) * 100, 1) : 0;
+                    $lgbtqPct = $totalColonia > 0 ? round(($generos['LGBTIITTQ'] / $totalColonia) * 100, 1) : 0;
 
                     $html .= '<tr>
-                        <td>' . $generoDisplay . '</td>
-                        <td style="text-align: center;">' . $cantidad . '</td>
-                        <td style="text-align: center;">' . $porcentaje . '%</td>
+                        <td>' . $colonia . '</td>
+                        <td style="text-align: center;">' . $generos['Masculino'] . ' (' . $masculinoPct . '%)</td>
+                        <td style="text-align: center;">' . $generos['Femenino'] . ' (' . $femeninoPct . '%)</td>
+                        <td style="text-align: center;">' . $generos['LGBTIITTQ'] . ' (' . $lgbtqPct . '%)</td>
+                        <td style="text-align: center;">' . $totalColonia . '</td>
                     </tr>';
                 }
 
                 $html .= '</tbody></table></div>';
             }
+
+            $html .= '</div>';
+        }
+
+        // BLOQUE A: Análisis de Nivel Educativo General
+        if (!$data['nivelEducativoData']->isEmpty()) {
+            $html .= '<div class="section">
+                <h4 class="section-title" style="color: #4E232E; margin-top: 30px;">NIVEL EDUCATIVO DE LA POBLACIÓN GENERAL</h4>';
+
+            $html .= '<div class="chart-container" style="margin: 15px 0;">
+                <div class="chart-title" style="font-weight: bold; margin-bottom: 10px; text-align: center;">Distribución de Nivel Educativo</div>';
+
+            $totalEducacion = $data['nivelEducativoData']->sum('total');
+            $coloresEducacion = ['#9D2449', '#4E232E', '#56242A', '#B3865D', '#A0745A', '#8B6B47'];
+            $colorIndex = 0;
+
+            $html .= '<div class="bar-chart">';
+
+            foreach ($data['nivelEducativoData'] as $educacion) {
+                $porcentaje = $totalEducacion > 0 ? round(($educacion->total / $totalEducacion) * 100, 1) : 0;
+                $color = $coloresEducacion[$colorIndex % count($coloresEducacion)];
+                $ancho = max($porcentaje * 4, 30); // Hacer barras más grandes para mejor visibilidad
+
+                $html .= '<div class="bar-item" style="margin: 8px 0;">
+                    <span class="bar-label" style="width: 180px; display: inline-block; font-size: 10px;">' . $educacion->nivel_educativo . ':</span>
+                    <span class="bar-visual" style="width: ' . $ancho . 'px; height: 25px; background: ' . $color . '; display: inline-block; margin-right: 10px;"></span>
+                    <span class="bar-value" style="font-size: 10px; font-weight: bold;">' . $educacion->total . ' (' . $porcentaje . '%)</span>
+                </div>';
+                $colorIndex++;
+            }
+
+            $html .= '</div>
+            </div>';
+
+            // Tabla de datos
+            $html .= '<table class="data-table" style="margin-top: 15px;">
+                    <thead>
+                        <tr>
+                            <th style="width: 60%;">Nivel Educativo</th>
+                            <th style="width: 20%;">Total</th>
+                            <th style="width: 20%;">Porcentaje</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+
+            foreach ($data['nivelEducativoData'] as $educacion) {
+                $porcentaje = $totalEducacion > 0 ? round(($educacion->total / $totalEducacion) * 100, 1) : 0;
+
+                $html .= '<tr>
+                    <td>' . $educacion->nivel_educativo . '</td>
+                    <td style="text-align: center;">' . $educacion->total . '</td>
+                    <td style="text-align: center;">' . $porcentaje . '%</td>
+                </tr>';
+            }
+
+            $html .= '</tbody>
+            </table>';
 
             $html .= '</div>';
         }
@@ -843,11 +932,11 @@ class ExportController extends Controller
             $html .= '</div>';
         }
 
-        // Estadísticas de Seguridad
+        // BLOQUE C: Estadísticas de Seguridad
         if (!empty($data['seguridadStats'])) {
             $html .= '<div class="page-break"></div>';
             $html .= '<div class="section">
-                <h3 class="section-title">Estadísticas de Seguridad Pública</h3>';
+                <h3 class="section-title">BLOQUE C: Estadísticas de Seguridad Pública</h3>';
 
             $html .= '<div class="chart-container">
                 <div class="chart-title">Evaluación de Seguridad Pública (Escala 1-5)</div>

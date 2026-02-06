@@ -91,6 +91,27 @@ class DashboardController extends Controller
             ->groupBy('colonias.nombre', 'encuestas.genero', 'encuestas.edad')
             ->get();
 
+        // Datos de Nivel Educativo por Distrito
+        $distrito20EducacionData = Encuesta::join('colonias', 'encuestas.colonia_id', '=', 'colonias.id')
+            ->where('colonias.distrito', 20)
+            ->selectRaw('
+                colonias.nombre as colonia,
+                encuestas.nivel_educativo,
+                COUNT(*) as total
+            ')
+            ->groupBy('colonias.nombre', 'encuestas.nivel_educativo')
+            ->get();
+
+        $distrito5EducacionData = Encuesta::join('colonias', 'encuestas.colonia_id', '=', 'colonias.id')
+            ->where('colonias.distrito', 5)
+            ->selectRaw('
+                colonias.nombre as colonia,
+                encuestas.nivel_educativo,
+                COUNT(*) as total
+            ')
+            ->groupBy('colonias.nombre', 'encuestas.nivel_educativo')
+            ->get();
+
         // BLOQUE B: Análisis de prioridad de obras por distrito
         $distrito20Obras = Encuesta::join('colonias', 'encuestas.colonia_id', '=', 'colonias.id')
             ->join('obras_publicas', 'obras_publicas.colonia_id', '=', 'colonias.id')
@@ -167,6 +188,8 @@ class DashboardController extends Controller
             'promediosSeguridad',
             'distrito20Demograficos',
             'distrito5Demograficos',
+            'distrito20EducacionData',
+            'distrito5EducacionData',
             'distrito20Obras',
             'distrito5Obras'
         ));
@@ -251,6 +274,27 @@ class DashboardController extends Controller
             ->groupBy('colonias.nombre', 'encuestas.genero', 'encuestas.edad')
             ->get();
 
+        // Datos de Nivel Educativo por Distrito
+        $distrito20EducacionData = Encuesta::join('colonias', 'encuestas.colonia_id', '=', 'colonias.id')
+            ->where('colonias.distrito', 20)
+            ->selectRaw('
+                colonias.nombre as colonia,
+                encuestas.nivel_educativo,
+                COUNT(*) as total
+            ')
+            ->groupBy('colonias.nombre', 'encuestas.nivel_educativo')
+            ->get();
+
+        $distrito5EducacionData = Encuesta::join('colonias', 'encuestas.colonia_id', '=', 'colonias.id')
+            ->where('colonias.distrito', 5)
+            ->selectRaw('
+                colonias.nombre as colonia,
+                encuestas.nivel_educativo,
+                COUNT(*) as total
+            ')
+            ->groupBy('colonias.nombre', 'encuestas.nivel_educativo')
+            ->get();
+
         // BLOQUE B: Análisis de prioridad de obras por distrito
         $distrito20Obras = Encuesta::join('colonias', 'encuestas.colonia_id', '=', 'colonias.id')
             ->join('obras_publicas', 'obras_publicas.colonia_id', '=', 'colonias.id')
@@ -315,6 +359,16 @@ class DashboardController extends Controller
             })
             ->values();
 
+        // DATOS REALES: Nivel Educativo General (todas las encuestas)
+        $nivelEducativoData = Encuesta::whereNotNull('nivel_educativo')
+            ->where('nivel_educativo', '!=', '')
+            ->selectRaw('
+                nivel_educativo,
+                COUNT(*) as total
+            ')
+            ->groupBy('nivel_educativo')
+            ->get();
+
         return view('admin.estadisticas', compact(
             'totalEncuestas',
             'totalPropuestas',
@@ -326,6 +380,7 @@ class DashboardController extends Controller
             'promediosSeguridad',
             'distrito20Demograficos',
             'distrito5Demograficos',
+            'nivelEducativoData',
             'distrito20Obras',
             'distrito5Obras',
             'coloniasDistrito20',
@@ -481,6 +536,46 @@ class DashboardController extends Controller
             ORDER BY c.nombre, prioridad_promedio DESC
         ");
 
+        // Distrito 20 - Nivel Educativo
+        $distrito20EducacionData = \DB::select("
+            SELECT
+                c.nombre as colonia,
+                e.nivel_educativo,
+                COUNT(*) as total
+            FROM encuestas e
+            JOIN colonias c ON e.colonia_id = c.id
+            WHERE c.distrito = 20
+            AND e.nivel_educativo IS NOT NULL
+            GROUP BY c.nombre, e.nivel_educativo
+            ORDER BY c.nombre, e.nivel_educativo
+        ");
+
+        // Distrito 5 - Nivel Educativo
+        $distrito5EducacionData = \DB::select("
+            SELECT
+                c.nombre as colonia,
+                e.nivel_educativo,
+                COUNT(*) as total
+            FROM encuestas e
+            JOIN colonias c ON e.colonia_id = c.id
+            WHERE c.distrito = 5
+            AND e.nivel_educativo IS NOT NULL
+            GROUP BY c.nombre, e.nivel_educativo
+            ORDER BY c.nombre, e.nivel_educativo
+        ");
+
+        // Nivel Educativo General
+        $nivelEducativoData = \DB::select("
+            SELECT
+                nivel_educativo,
+                COUNT(*) as total
+            FROM encuestas
+            WHERE nivel_educativo IS NOT NULL
+            AND nivel_educativo != ''
+            GROUP BY nivel_educativo
+            ORDER BY total DESC
+        ");
+
         return [
             'totalEncuestas' => $totalEncuestas,
             'totalPropuestas' => $totalPropuestas,
@@ -489,6 +584,7 @@ class DashboardController extends Controller
             'seguridadStats' => $seguridadStats,
             'distrito20Demograficos' => collect($distrito20Demograficos),
             'distrito5Demograficos' => collect($distrito5Demograficos),
+            'nivelEducativoData' => collect($nivelEducativoData),
             'distrito20Obras' => collect($distrito20Obras),
             'distrito5Obras' => collect($distrito5Obras),
         ];
