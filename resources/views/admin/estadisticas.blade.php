@@ -468,7 +468,7 @@
     @endif
 
     <!-- ANÁLISIS POR DISTRITO MOVIDO DESDE DASHBOARD -->
-    
+
     // Variables globales para ambos distritos
     const generos = ['Masculino', 'Femenino', 'Otro'];
     const coloresGenero = [paletaColores.pantone420, paletaColores.pantone504, paletaColores.pantone490];
@@ -611,7 +611,7 @@
             const emptyId = chartId.replace('ObrasChart', 'ObrasEmpty');
             document.getElementById(containerId).style.display = 'none';
             document.getElementById(emptyId).style.display = 'block';
-            
+
             // Destruir gráfico existente si existe
             if (chartInstances[chartId]) {
                 chartInstances[chartId].destroy();
@@ -640,7 +640,7 @@
 
                 // Crear nuevo gráfico
                 const ctx = document.getElementById(chartId).getContext('2d');
-                
+
                 if (data.length === 0) {
                     document.getElementById(containerId).style.display = 'none';
                     document.getElementById(emptyId).style.display = 'block';
