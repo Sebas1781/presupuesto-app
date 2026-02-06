@@ -453,7 +453,7 @@
                     </div>
                     <div>
                         <h1 class="text-2xl font-bold">Encuesta Participativa 2026</h1>
-                        <p class="text-white/80 text-sm">Volamos alto para llegar mas lejos</p>
+                        <p class="text-white/80 text-sm">Nuestro municipio es mucha pieza</p>
                     </div>
                 </div>
                 <a href="{{ route('home') }}"
@@ -780,7 +780,8 @@
                             'De 3 a 6 de la tarde',
                             'De 6 de la tarde a 9 de la noche',
                             'De 9 de la noche a 12 de la madrugada',
-                            'De 12 a 06 de la madrugada'
+                            'De 12 a 06 de la madrugada',
+                            'Nos sentimos agusto en nuestra colonia'
                         ]">
                             <label class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
                                 <input type="radio" :value="opcion" x-model="seguridad.horario_inseguro" name="seguridad[horario_inseguro]" class="form-radio text-blue-600">
@@ -1001,13 +1002,13 @@
                                     <label class="form-label">Tipo de Propuesta *</label>
                                     <select :name="`propuestas[${index}][tipo_propuesta]`" class="form-input" required>
                                         <option value="">Selecciona el tipo...</option>
-                                        <option value="Infraestructura">Infraestructura</option>
-                                        <option value="Servicios">Servicios Públicos</option>
-                                        <option value="Seguridad">Seguridad</option>
-                                        <option value="Medio Ambiente">Medio Ambiente</option>
-                                        <option value="Cultura y Deporte">Cultura y Deporte</option>
-                                        <option value="Educación">Educación</option>
-                                        <option value="Salud">Salud</option>
+                                        <option value="Obra">Obra</option>
+                                        <option value="Bacheo">Bacheo</option>
+                                        <option value="Luminaria">Luminaria</option>
+                                        <option value="Apoyo">Apoyo</option>
+                                        <option value="Seguridad publica">Seguridad publica</option>
+                                        <option value="Bienestar animal">Bienestar animal</option>
+                                        <option value="Recolección de RSU">Recolección de RSU</option>
                                     </select>
                                 </div>
 

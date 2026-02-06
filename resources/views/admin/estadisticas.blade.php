@@ -470,7 +470,12 @@
     <!-- ANÁLISIS POR DISTRITO MOVIDO DESDE DASHBOARD -->
 
     // Variables globales para ambos distritos
-    const generos = ['Masculino', 'Femenino', 'Otro'];
+    const generos = ['Masculino', 'Femenino', 'LGBTIITTQ'];
+    const generosLabels = {
+        'Masculino': 'Masculino',
+        'Femenino': 'Femenino', 
+        'LGBTIITTQ': 'LGBTIQ+'
+    };
     const coloresGenero = [paletaColores.pantone420, paletaColores.pantone504, paletaColores.pantone490];
 
     // BLOQUE A: Gráficos demográficos por distrito
@@ -493,7 +498,7 @@
         });
 
         datasets20Demo.push({
-            label: genero,
+            label: generosLabels[genero] || genero,
             data: data,
             backgroundColor: coloresGenero[index],
             borderColor: coloresGenero[index],
@@ -556,7 +561,7 @@
         });
 
         datasets5Demo.push({
-            label: genero,
+            label: generosLabels[genero] || genero,
             data: data,
             backgroundColor: coloresGenero[index],
             borderColor: coloresGenero[index],
