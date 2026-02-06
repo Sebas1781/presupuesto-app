@@ -23,6 +23,7 @@ Route::prefix('encuesta')->group(function () {
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/estadisticas', [DashboardController::class, 'estadisticas'])->name('estadisticas');
+    Route::get('/obras-por-colonia/{colonia}', [DashboardController::class, 'getObrasPorColonia'])->name('obras-por-colonia');
     Route::get('/encuestas', [DashboardController::class, 'encuestas'])->name('encuestas.index');
     Route::get('/encuestas/{id}', [DashboardController::class, 'showEncuesta'])->name('encuestas.show');
     Route::get('/export/encuestas', [ExportController::class, 'encuestas'])->name('export.encuestas');

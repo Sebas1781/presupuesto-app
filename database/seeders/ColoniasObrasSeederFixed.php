@@ -18,7 +18,7 @@ class ColoniasObrasSeederFixed extends Seeder
         $coloniasConObras = [
             // DISTRITO 20
             'SAN JUAN PUEBLO NUEVO' => [
-                'distrito' => 20,
+                'distrito' => 5,  // CAMBIADO: era 20, ahora es 5
                 'obras' => [
                     'PAVIMENTACIÓN CDA RICARDO FLORES MAGÓN',
                     'PAVIMENTACIÓN Y DRENAJE EN CALLE RICARDO FLORES MAGÓN',
@@ -29,7 +29,7 @@ class ColoniasObrasSeederFixed extends Seeder
             ],
 
             'EJIDAL SAN LUCAS XOLOX' => [
-                'distrito' => 20,
+                'distrito' => 5,  // CAMBIADO: era 20, ahora es 5
                 'obras' => [
                     'LIENZO CHARRO CENTENARIO',
                     'PAVIMENTACIÓN MOGOTES',
@@ -48,7 +48,7 @@ class ColoniasObrasSeederFixed extends Seeder
             ],
 
             'SAN LUCAS XOLOX' => [
-                'distrito' => 20,
+                'distrito' => 5,  // CAMBIADO: era 20, ahora es 5
                 'obras' => [
                     'PAVIMENTACIÓN Y DRENAJE CALLE CHAPULTEPEC',
                     'PAVIMENTACIÓN CALLE PACHECO',
@@ -69,7 +69,7 @@ class ColoniasObrasSeederFixed extends Seeder
             ],
 
             'LOS REYES ACOZAC' => [
-                'distrito' => 20,
+                'distrito' => 5,  // CAMBIADO: era 20, ahora es 5
                 'obras' => [
                     'PAVIMENTACIÓN Y DRENAJE DE AV LAGO CASPIO. 532 MTS',
                     'PAVIMENTACIÓN Y DRENAJE AV HUARIQUIO. 350 MTS',
@@ -98,7 +98,7 @@ class ColoniasObrasSeederFixed extends Seeder
             ],
 
             'SANTA MARÍA AJOLOAPAN' => [
-                'distrito' => 20,
+                'distrito' => 5,  // CAMBIADO: era 20, ahora es 5
                 'obras' => [
                     'PAVIMENTACIÓN Y DRENAJE CALLE SANTA ANA. 320M',
                     'UNIDAD DEPORTIVA AJOLOAPAN',
@@ -113,7 +113,7 @@ class ColoniasObrasSeederFixed extends Seeder
             ],
 
             'STO. DOMINGO AJOLOAPAN' => [
-                'distrito' => 20,
+                'distrito' => 5,  // CAMBIADO: era 20, ahora es 5
                 'obras' => [
                     'PAVIMENTACIÓN CALLE MORELOS HACIA SAN PEDRO',
                     'PAVIMENTACIÓN CALLE SAN MIGUEL ENTRE MORELOS, LAGO DE CHAPALA Y AVENIDA DEL PANTEÓN',
@@ -124,7 +124,7 @@ class ColoniasObrasSeederFixed extends Seeder
             ],
 
             'SAN PEDRO POZOHUACAN' => [
-                'distrito' => 20,
+                'distrito' => 5,  // CAMBIADO: era 20, ahora es 5
                 'obras' => [
                     'PAVIMENTACIÓN Y DRENAJE DE CALLE MORELOS',
                     'PAVIMENTACIÓN Y DRENAJE DE CALLE HIDALGO DE OCAMPO',
@@ -137,7 +137,7 @@ class ColoniasObrasSeederFixed extends Seeder
             ],
 
             'SAN JERÓNIMO XONACAHUACAN' => [
-                'distrito' => 20,
+                'distrito' => 5,  // CAMBIADO: era 20, ahora es 5
                 'obras' => [
                     'UNIDAD DEPORTIVA SAN JERÓNIMO XONACAHUACAN',
                     'DRENAJE EN CALLE ABINO PASO TÉLLEZ ESQUINA PALO SOLO',
@@ -153,7 +153,7 @@ class ColoniasObrasSeederFixed extends Seeder
             ],
 
             'LA REDONDA' => [
-                'distrito' => 20,
+                'distrito' => 5,  // CAMBIADO: era 20, ahora es 5
                 'obras' => [
                     'CBT 2 E IMSS ADECUACIONES GEOMÉTRICAS, RETORNOS Y CARRETERA FEDERAL MÉXICO-PACHUCA',
                     'MIEMBROS LA REDONDA ADECUACIONES GEOMÉTRICAS, RETORNOS Y CARRETERA FEDERAL MÉXICO-PACHUCA'
@@ -161,7 +161,7 @@ class ColoniasObrasSeederFixed extends Seeder
             ],
 
             'LA REDONDA RANCHO LA LUZ' => [
-                'distrito' => 20,
+                'distrito' => 5,  // CAMBIADO: era 20, ahora es 5
                 'obras' => [
                     'REPAVIMENTACIÓN LA REDONDA',
                     'RENOVACIÓN DEL CENTRO HISTÓRICO DE TECÁMAC PARQUE LA SOLEDAD Y SU ENTORNO URBANO'
@@ -169,7 +169,7 @@ class ColoniasObrasSeederFixed extends Seeder
             ],
 
             'TECÁMAC DE F. VILLANUEVA' => [
-                'distrito' => 20,
+                'distrito' => 5,  // CAMBIADO: era 20, ahora es 5
                 'obras' => [
                     'PAVIMENTACIÓN Y DRENAJE CALLE FELIPE VILLANUEVA 160 M',
                     'PAVIMENTACIÓN Y DRENAJE CALLE MIGUEL HIDALGO',
@@ -183,7 +183,7 @@ class ColoniasObrasSeederFixed extends Seeder
             ],
 
             'COLONIA HUEYOTENCO' => [
-                'distrito' => 20,
+                'distrito' => 5,  // CAMBIADO: era 20, ahora es 5
                 'obras' => [
                     'REHABILITACIÓN DE C2 X C4',
                     'DEPORTIVO DE HUEYOTENCO HERMOSA 50%'
@@ -191,7 +191,7 @@ class ColoniasObrasSeederFixed extends Seeder
             ],
 
             'EX HACIENDA SIERRA HERMOSA' => [
-                'distrito' => 20,
+                'distrito' => 5,  // CAMBIADO: era 20, ahora es 5
                 'obras' => [
                     'MIEMBROS SAN FRANCISCO ADECUACIONES GEOMÉTRICAS, RETORNOS Y CARRETERA FEDERAL MÉXICO-PACHUCA',
                     'LOMARIA, PRIMARIA "MARIO MOLINA"',
@@ -200,7 +200,7 @@ class ColoniasObrasSeederFixed extends Seeder
             ],
 
             'CON URBE VILLAS DEL REAL' => [
-                'distrito' => 20,
+                'distrito' => 5,  // CAMBIADO: era 20, ahora es 5
                 'obras' => [
                     'REHABILITACIÓN DE PAVIMENTO',
                     'REHABILITACIÓN DE PAVIMENTO'
@@ -208,7 +208,7 @@ class ColoniasObrasSeederFixed extends Seeder
             ],
 
             'SAN FCO CUAUTLIQUIXCA' => [
-                'distrito' => 20,
+                'distrito' => 5,  // CAMBIADO: era 20, ahora es 5
                 'obras' => [
                     'PAVIMENTACIÓN',
                     'PAVIMENTACIÓN'
@@ -216,7 +216,7 @@ class ColoniasObrasSeederFixed extends Seeder
             ],
 
             'ATLAHUTENCO / EJIDOS' => [
-                'distrito' => 20,
+                'distrito' => 5,  // CAMBIADO: era 20, ahora es 5
                 'obras' => [
                     'REHABILITACIÓN DE PAVIMENTO',
                     'REHABILITACIÓN DE PAVIMENTO',
@@ -226,7 +226,7 @@ class ColoniasObrasSeederFixed extends Seeder
             ],
 
             'STA. MARÍA OZUMBILLA' => [
-                'distrito' => 20,
+                'distrito' => 5,  // CAMBIADO: era 20, ahora es 5
                 'obras' => [
                     'MIEMBROS OZUMBILLA ADECUACIONES GEOMÉTRICAS, RETORNOS Y CARRETERA FEDERAL MÉXICO-PACHUCA',
                     'REHABILITACIÓN INTEGRAL DEL CENTRO DE BIENESTAR ANIMAL OZUMBILLA',
@@ -237,7 +237,7 @@ class ColoniasObrasSeederFixed extends Seeder
             ],
 
             'OJO DE AGUA' => [
-                'distrito' => 20,
+                'distrito' => 5,  // CAMBIADO: era 20, ahora es 5
                 'obras' => [
                     'REHABILITACIÓN INTEGRAL DE CAMELLÓN BOULEVARD OJO DE AGUA',
                     'REHABILITACIÓN INTEGRAL DE CAMELLÓN BOULEVARD OJO DE AGUA',
@@ -247,7 +247,7 @@ class ColoniasObrasSeederFixed extends Seeder
             ],
 
             'SAN PEDRO ATZOMPA' => [
-                'distrito' => 20,
+                'distrito' => 5,  // CAMBIADO: era 20, ahora es 5
                 'obras' => [
                     'REMODELACIÓN INTEGRAL DEL AUDITORIO EJIDAL "EMILIANO ZAPATA"',
                     'REPARACIÓN TECHO DE LECHERÍA LICONSA'
@@ -256,21 +256,21 @@ class ColoniasObrasSeederFixed extends Seeder
 
             // DISTRITO 5
             'REAL TOSCANA' => [
-                'distrito' => 5,
+                'distrito' => 20,  // CAMBIADO: era 5, ahora es 20
                 'obras' => [
                     'LOMARIA EN TOSCANA'
                 ]
             ],
 
             'REAL CABRERRA' => [
-                'distrito' => 5,
+                'distrito' => 20,  // CAMBIADO: era 5, ahora es 20
                 'obras' => [
                     'LOMARIA EN CABRRERA'
                 ]
             ],
 
             'REAL VERONA' => [
-                'distrito' => 5,
+                'distrito' => 20,  // CAMBIADO: era 5, ahora es 20
                 'obras' => [
                     'LOMARIA EN VERONA',
                     'ZOCALAMIENTO ENTRE PONIENTE Y JUAN ESCUTIA'
@@ -278,35 +278,35 @@ class ColoniasObrasSeederFixed extends Seeder
             ],
 
             'LOMAS DE TECÁMAC' => [
-                'distrito' => 5,
+                'distrito' => 20,  // CAMBIADO: era 5, ahora es 20
                 'obras' => [
                     'REHABILITACIÓN DE PAVIMENTO VÍA REAL DE BOULEVARD VALLE SUPERFICIE A CARRETERA'
                 ]
             ],
 
             'ESMERALDA' => [
-                'distrito' => 5,
+                'distrito' => 20,  // CAMBIADO: era 5, ahora es 20
                 'obras' => [
                     'CONSTRUCCIÓN DE PLANTA DE TRANSFERENCIA RSU EN AMPLIACIÓN ESMERALDA'
                 ]
             ],
 
             'AMPLIACIÓN ESMERALDA' => [
-                'distrito' => 5,
+                'distrito' => 20,  // CAMBIADO: era 5, ahora es 20
                 'obras' => [
                     'CENTRO DE REHABILITACIÓN Y TRATAMIENTO DE ADICCIONES PARA JÓVENES'
                 ]
             ],
 
             'COLONIA TEZONTLA' => [
-                'distrito' => 5,
+                'distrito' => 20,  // CAMBIADO: era 5, ahora es 20
                 'obras' => [
                     'REHABILITACIÓN DE PAVIMENTO AV BOSQUE DE LOS ACÉFILOS'
                 ]
             ],
 
             'HÉROES TECÁMAC' => [
-                'distrito' => 5,
+                'distrito' => 20,  // CAMBIADO: era 5, ahora es 20
                 'obras' => [
                     'GIMNASIO ALBERCA EN BOSQUES DE PORTUGAL',
                     'CENTRO DE SERVICIOS PARA VEHÍCULOS AUTOMOTORES LA CHICHARRA',
@@ -337,28 +337,28 @@ class ColoniasObrasSeederFixed extends Seeder
 
         // Colonias adicionales (algunas pueden no tener obras específicas aún)
         $coloniasSinObras = [
-            'AMPLIACIÓN SANTO DOMINGO' => 5,
-            'COLONIA ISIDRO FABELA' => 20,
-            'COLONIA LA NOPALERA' => 20,
-            'FRACC GALAXIAS EL LLANO' => 5,
-            'PASEOS DE TECAMAC' => 5,
-            'RANCHO LA LUZ' => 20,
-            'FRACC REAL DE SAN GERMÁN DEL BOSQUE' => 5,
-            'COLONIA SAN JOSÉ EJIDOS DE TECAMAC' => 20,
-            'COLONIA EJIDOS DE TECAMAC' => 20,
-            'COLONIA 6 DE MAYO' => 5,
-            'COLONIA SAN MARTÍN AZCATEPEC' => 20,
-            'PUEBLO SAN PABLO TECALCO' => 5,
-            'FRACC REAL DE TECALCO' => 5,
-            'FRACC VILLA DEL REAL 1ERA Y 2DA SECCIÓN' => 5,
-            'COLONIA LOS OLIVOS' => 5,
-            'FRACC VILLA DEL REAL 3RA A 4TA SECCIÓN' => 5,
-            'CONJUNTO URBANO LAS FLORES' => 5,
-            'VISTA HERMOSA' => 20,
-            'LOMAS DE OZUMBILLA' => 5,
-            'CONJUNTO URBANO EL TEJOCOTE JIQUIPILCO' => 20,
-            'COLONIA AMPLIACIÓN OZUMBILLA' => 5,
-            'FRACC PROVENZAL DEL BOSQUE' => 5
+            'AMPLIACIÓN SANTO DOMINGO' => 20,  // CAMBIADO: era 5, ahora es 20
+            'COLONIA ISIDRO FABELA' => 5,         // CAMBIADO: era 20, ahora es 5
+            'COLONIA LA NOPALERA' => 5,           // CAMBIADO: era 20, ahora es 5
+            'FRACC GALAXIAS EL LLANO' => 20,      // CAMBIADO: era 5, ahora es 20
+            'PASEOS DE TECAMAC' => 20,            // CAMBIADO: era 5, ahora es 20
+            'RANCHO LA LUZ' => 5,                 // CAMBIADO: era 20, ahora es 5
+            'FRACC REAL DE SAN GERMÁN DEL BOSQUE' => 20,  // CAMBIADO: era 5, ahora es 20
+            'COLONIA SAN JOSÉ EJIDOS DE TECAMAC' => 5,    // CAMBIADO: era 20, ahora es 5
+            'COLONIA EJIDOS DE TECAMAC' => 5,              // CAMBIADO: era 20, ahora es 5
+            'COLONIA 6 DE MAYO' => 20,                     // CAMBIADO: era 5, ahora es 20
+            'COLONIA SAN MARTÍN AZCATEPEC' => 5,          // CAMBIADO: era 20, ahora es 5
+            'PUEBLO SAN PABLO TECALCO' => 20,              // CAMBIADO: era 5, ahora es 20
+            'FRACC REAL DE TECALCO' => 20,                 // CAMBIADO: era 5, ahora es 20
+            'FRACC VILLA DEL REAL 1ERA Y 2DA SECCIÓN' => 20,  // CAMBIADO: era 5, ahora es 20
+            'COLONIA LOS OLIVOS' => 20,                    // CAMBIADO: era 5, ahora es 20
+            'FRACC VILLA DEL REAL 3RA A 4TA SECCIÓN' => 20,   // CAMBIADO: era 5, ahora es 20
+            'CONJUNTO URBANO LAS FLORES' => 20,            // CAMBIADO: era 5, ahora es 20
+            'VISTA HERMOSA' => 5,                          // CAMBIADO: era 20, ahora es 5
+            'LOMAS DE OZUMBILLA' => 20,                    // CAMBIADO: era 5, ahora es 20
+            'CONJUNTO URBANO EL TEJOCOTE JIQUIPILCO' => 5, // CAMBIADO: era 20, ahora es 5
+            'COLONIA AMPLIACIÓN OZUMBILLA' => 20,         // CAMBIADO: era 5, ahora es 20
+            'FRACC PROVENZAL DEL BOSQUE' => 20             // CAMBIADO: era 5, ahora es 20
         ];
 
         foreach ($coloniasSinObras as $nombreColonia => $distrito) {

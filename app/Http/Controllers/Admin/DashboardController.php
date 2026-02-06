@@ -222,6 +222,97 @@ class DashboardController extends Controller
         ->whereNotNull('emergencia_transporte')
         ->first();
 
+        // ESTADÍSTICAS POR DISTRITO
+        // Obtener colonias por distrito para los dropdowns
+        $coloniasDistrito20 = \App\Models\Colonia::where('distrito', '20')->orderBy('nombre')->get();
+        $coloniasDistrito5 = \App\Models\Colonia::where('distrito', '5')->orderBy('nombre')->get();
+
+        // BLOQUE A: Análisis demográfico por distrito
+        $distrito20Demograficos = Encuesta::join('colonias', 'encuestas.colonia_id', '=', 'colonias.id')
+            ->where('colonias.distrito', '20')
+            ->selectRaw('
+                colonias.nombre as colonia,
+                encuestas.genero,
+                encuestas.edad,
+                COUNT(*) as total
+            ')
+            ->groupBy('colonias.nombre', 'encuestas.genero', 'encuestas.edad')
+            ->get();
+
+        $distrito5Demograficos = Encuesta::join('colonias', 'encuestas.colonia_id', '=', 'colonias.id')
+            ->where('colonias.distrito', '5')
+            ->selectRaw('
+                colonias.nombre as colonia,
+                encuestas.genero,
+                encuestas.edad,
+                COUNT(*) as total
+            ')
+            ->groupBy('colonias.nombre', 'encuestas.genero', 'encuestas.edad')
+            ->get();
+
+        // BLOQUE B: Análisis de prioridad de obras por distrito
+        $distrito20Obras = Encuesta::join('colonias', 'encuestas.colonia_id', '=', 'colonias.id')
+            ->join('obras_publicas', 'obras_publicas.colonia_id', '=', 'colonias.id')
+            ->where('colonias.distrito', '20')
+            ->whereNotNull('encuestas.obras_calificadas')
+            ->get()
+            ->flatMap(function($encuesta) {
+                $obras = [];
+                if ($encuesta->obras_calificadas && is_array($encuesta->obras_calificadas)) {
+                    foreach ($encuesta->obras_calificadas as $obraId => $prioridad) {
+                        $obra = \App\Models\ObraPublica::find($obraId);
+                        if ($obra) {
+                            $obras[] = [
+                                'obra' => $obra->nombre,
+                                'prioridad' => $prioridad,
+                                'colonia' => $encuesta->colonia->nombre
+                            ];
+                        }
+                    }
+                }
+                return $obras;
+            })
+            ->groupBy('obra')
+            ->map(function($group) {
+                return [
+                    'obra' => $group->first()['obra'],
+                    'prioridad_promedio' => round($group->avg('prioridad'), 1),
+                    'total_respuestas' => $group->count()
+                ];
+            })
+            ->values();
+
+        $distrito5Obras = Encuesta::join('colonias', 'encuestas.colonia_id', '=', 'colonias.id')
+            ->join('obras_publicas', 'obras_publicas.colonia_id', '=', 'colonias.id')
+            ->where('colonias.distrito', '5')
+            ->whereNotNull('encuestas.obras_calificadas')
+            ->get()
+            ->flatMap(function($encuesta) {
+                $obras = [];
+                if ($encuesta->obras_calificadas && is_array($encuesta->obras_calificadas)) {
+                    foreach ($encuesta->obras_calificadas as $obraId => $prioridad) {
+                        $obra = \App\Models\ObraPublica::find($obraId);
+                        if ($obra) {
+                            $obras[] = [
+                                'obra' => $obra->nombre,
+                                'prioridad' => $prioridad,
+                                'colonia' => $encuesta->colonia->nombre
+                            ];
+                        }
+                    }
+                }
+                return $obras;
+            })
+            ->groupBy('obra')
+            ->map(function($group) {
+                return [
+                    'obra' => $group->first()['obra'],
+                    'prioridad_promedio' => round($group->avg('prioridad'), 1),
+                    'total_respuestas' => $group->count()
+                ];
+            })
+            ->values();
+
         return view('admin.estadisticas', compact(
             'totalEncuestas',
             'totalPropuestas',
@@ -230,7 +321,13 @@ class DashboardController extends Controller
             'desconfianzaPoliciaPorEdad',
             'calificacionSeguridad',
             'horariosInseguros',
-            'promediosSeguridad'
+            'promediosSeguridad',
+            'distrito20Demograficos',
+            'distrito5Demograficos',
+            'distrito20Obras',
+            'distrito5Obras',
+            'coloniasDistrito20',
+            'coloniasDistrito5'
         ));
     }
 
@@ -391,5 +488,39 @@ class DashboardController extends Controller
             'distrito20Obras' => collect($distrito20Obras),
             'distrito5Obras' => collect($distrito5Obras),
         ];
+    }
+
+    public function getObrasPorColonia($coloniaId)
+    {
+        $obras = Encuesta::where('colonia_id', $coloniaId)
+            ->whereNotNull('obras_calificadas')
+            ->get()
+            ->flatMap(function($encuesta) {
+                $obras = [];
+                if ($encuesta->obras_calificadas && is_array($encuesta->obras_calificadas)) {
+                    foreach ($encuesta->obras_calificadas as $obraId => $prioridad) {
+                        $obra = \App\Models\ObraPublica::find($obraId);
+                        if ($obra) {
+                            $obras[] = [
+                                'obra' => $obra->nombre,
+                                'prioridad' => $prioridad,
+                                'obra_id' => $obraId
+                            ];
+                        }
+                    }
+                }
+                return $obras;
+            })
+            ->groupBy('obra')
+            ->map(function($group) {
+                return [
+                    'obra' => $group->first()['obra'],
+                    'prioridad_promedio' => round($group->avg('prioridad'), 1),
+                    'total_respuestas' => $group->count()
+                ];
+            })
+            ->values();
+
+        return response()->json($obras);
     }
 }

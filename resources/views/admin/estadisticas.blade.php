@@ -200,11 +200,146 @@
             </div>
         </div>
     </div>
+
+    <!-- ANÁLISIS POR DISTRITO MOVIDO DESDE DASHBOARD -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="background-color: #9D2449; color: white;">
+                    <h3 class="card-title text-white">
+                        <i class="fas fa-chart-bar mr-2"></i>ANÁLISIS POR DISTRITO
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <!-- BLOQUE A: Análisis Demográfico -->
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <h4 class="mb-4" style="color: #4E232E;">
+                                <i class="fas fa-users mr-2"></i>BLOQUE A: Análisis Demográfico
+                            </h4>
+                        </div>
+
+                        <!-- Distrito 20 Demográfico -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header" style="background-color: #4E232E; color: white;">
+                                    <h5 class="card-title text-white mb-0">Colonias del Distrito 20</h5>
+                                    <small class="text-white-50">Género y Edad por Colonia</small>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="distrito20DemograficoChart" height="300"></canvas>
+                                    @if($distrito20Demograficos->isEmpty())
+                                        <p class="text-muted text-center">No hay datos disponibles para el Distrito 20</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Distrito 5 Demográfico -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header" style="background-color: #56242A; color: white;">
+                                    <h5 class="card-title text-white mb-0">Colonias del Distrito 5</h5>
+                                    <small class="text-white-50">Género y Edad por Colonia</small>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="distrito5DemograficoChart" height="300"></canvas>
+                                    @if($distrito5Demograficos->isEmpty())
+                                        <p class="text-muted text-center">No hay datos disponibles para el Distrito 5</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE B: Análisis de Obras -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="mb-4" style="color: #B3865D;">
+                                <i class="fas fa-hammer mr-2"></i>BLOQUE B: Prioridad de Obras Públicas por Colonia
+                            </h4>
+                        </div>
+
+                        <!-- Distrito 20 Obras -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header" style="background-color: #9D2449; color: white;">
+                                    <h5 class="card-title text-white mb-0">Distrito 20</h5>
+                                    <small class="text-white-50">Seleccione una colonia para ver las obras</small>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="colonia20Select">Seleccionar Colonia:</label>
+                                        <select class="form-control" id="colonia20Select" onchange="cargarObrasColonia(this.value, 'distrito20ObrasChart', '#9D2449', '#4E232E')">
+                                            <option value="">-- Seleccione una colonia --</option>
+                                            @foreach($coloniasDistrito20 as $colonia)
+                                                <option value="{{ $colonia->id }}">{{ $colonia->nombre }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div id="distrito20ObrasContainer" style="display: none;">
+                                        <canvas id="distrito20ObrasChart" height="300"></canvas>
+                                    </div>
+                                    <div id="distrito20ObrasEmpty" class="text-muted text-center">
+                                        <i class="fas fa-info-circle mr-1"></i>Seleccione una colonia para ver las obras
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Distrito 5 Obras -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header" style="background-color: #B3865D; color: white;">
+                                    <h5 class="card-title text-white mb-0">Distrito 5</h5>
+                                    <small class="text-white-50">Seleccione una colonia para ver las obras</small>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="colonia5Select">Seleccionar Colonia:</label>
+                                        <select class="form-control" id="colonia5Select" onchange="cargarObrasColonia(this.value, 'distrito5ObrasChart', '#B3865D', '#56242A')">
+                                            <option value="">-- Seleccione una colonia --</option>
+                                            @foreach($coloniasDistrito5 as $colonia)
+                                                <option value="{{ $colonia->id }}">{{ $colonia->nombre }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div id="distrito5ObrasContainer" style="display: none;">
+                                        <canvas id="distrito5ObrasChart" height="300"></canvas>
+                                    </div>
+                                    <div id="distrito5ObrasEmpty" class="text-muted text-center">
+                                        <i class="fas fa-info-circle mr-1"></i>Seleccione una colonia para ver las obras
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botón para generar PDF -->
+                    <div class="row mt-4">
+                        <div class="col-md-12 text-center">
+                            <a href="{{ route('admin.export.estadisticas-pdf') }}" class="btn btn-lg" style="background-color: #9D2449; color: white;">
+                                <i class="fas fa-file-pdf mr-2"></i>Generar Reporte PDF con Todas las Gráficas
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    // Paleta de colores Pantone corporativa
+    const paletaColores = {
+        pantone420: '#9D2449',    // Rojo corporativo principal
+        pantone504: '#4E232E',    // Rojo oscuro
+        pantone490: '#56242A',    // Rojo medio
+        pantone465: '#B3865D'     // Beige/dorado
+    };
+
     // Gráfico de participación por colonia
     var ctx = document.getElementById('coloniaChart').getContext('2d');
     var coloniaChart = new Chart(ctx, {
@@ -331,5 +466,240 @@
         }
     });
     @endif
+
+    <!-- ANÁLISIS POR DISTRITO MOVIDO DESDE DASHBOARD -->
+    
+    // Variables globales para ambos distritos
+    const generos = ['Masculino', 'Femenino', 'Otro'];
+    const coloresGenero = [paletaColores.pantone420, paletaColores.pantone504, paletaColores.pantone490];
+
+    // BLOQUE A: Gráficos demográficos por distrito
+    @if(!$distrito20Demograficos->isEmpty())
+    // Distrito 20 - Demográfico
+    var ctxD20Demo = document.getElementById('distrito20DemograficoChart').getContext('2d');
+
+    // Preparar datos para Distrito 20
+    const distrito20Data = {!! json_encode($distrito20Demograficos->groupBy('colonia')) !!};
+    const colonias20 = Object.keys(distrito20Data);
+
+    // Crear datasets por género
+    const datasets20Demo = [];
+
+    generos.forEach((genero, index) => {
+        const data = colonias20.map(colonia => {
+            return distrito20Data[colonia]
+                .filter(item => item.genero === genero)
+                .reduce((sum, item) => sum + item.total, 0);
+        });
+
+        datasets20Demo.push({
+            label: genero,
+            data: data,
+            backgroundColor: coloresGenero[index],
+            borderColor: coloresGenero[index],
+            borderWidth: 1
+        });
+    });
+
+    new Chart(ctxD20Demo, {
+        type: 'bar',
+        data: {
+            labels: colonias20,
+            datasets: datasets20Demo
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Número de Personas'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Colonias'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top'
+                },
+                title: {
+                    display: true,
+                    text: 'Distribución por Género - Distrito 20'
+                }
+            }
+        }
+    });
+    @endif
+
+    @if(!$distrito5Demograficos->isEmpty())
+    // Distrito 5 - Demográfico
+    var ctxD5Demo = document.getElementById('distrito5DemograficoChart').getContext('2d');
+
+    // Preparar datos para Distrito 5
+    const distrito5Data = {!! json_encode($distrito5Demograficos->groupBy('colonia')) !!};
+    const colonias5 = Object.keys(distrito5Data);
+
+    // Crear datasets por género
+    const datasets5Demo = [];
+    generos.forEach((genero, index) => {
+        const data = colonias5.map(colonia => {
+            return distrito5Data[colonia]
+                .filter(item => item.genero === genero)
+                .reduce((sum, item) => sum + item.total, 0);
+        });
+
+        datasets5Demo.push({
+            label: genero,
+            data: data,
+            backgroundColor: coloresGenero[index],
+            borderColor: coloresGenero[index],
+            borderWidth: 1
+        });
+    });
+
+    new Chart(ctxD5Demo, {
+        type: 'bar',
+        data: {
+            labels: colonias5,
+            datasets: datasets5Demo
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Número de Personas'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Colonias'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top'
+                },
+                title: {
+                    display: true,
+                    text: 'Distribución por Género - Distrito 5'
+                }
+            }
+        }
+    });
+    @endif
+
+    // BLOQUE B: Función para cargar gráficos dinámicos de obras por colonia
+    let chartInstances = {}; // Para almacenar las instancias de los gráficos
+
+    function cargarObrasColonia(coloniaId, chartId, backgroundColor, borderColor) {
+        if (!coloniaId) {
+            // Si no hay colonia seleccionada, ocultar el gráfico
+            const containerId = chartId.replace('Chart', 'Container');
+            const emptyId = chartId.replace('ObrasChart', 'ObrasEmpty');
+            document.getElementById(containerId).style.display = 'none';
+            document.getElementById(emptyId).style.display = 'block';
+            
+            // Destruir gráfico existente si existe
+            if (chartInstances[chartId]) {
+                chartInstances[chartId].destroy();
+                delete chartInstances[chartId];
+            }
+            return;
+        }
+
+        // Mostrar indicador de carga
+        const containerId = chartId.replace('Chart', 'Container');
+        const emptyId = chartId.replace('ObrasChart', 'ObrasEmpty');
+        document.getElementById(emptyId).innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Cargando obras...';
+
+        // Realizar petición AJAX
+        fetch(`/admin/obras-por-colonia/${coloniaId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Ocultar mensaje vacío y mostrar contenedor del gráfico
+                document.getElementById(emptyId).style.display = 'none';
+                document.getElementById(containerId).style.display = 'block';
+
+                // Destruir gráfico existente si existe
+                if (chartInstances[chartId]) {
+                    chartInstances[chartId].destroy();
+                }
+
+                // Crear nuevo gráfico
+                const ctx = document.getElementById(chartId).getContext('2d');
+                
+                if (data.length === 0) {
+                    document.getElementById(containerId).style.display = 'none';
+                    document.getElementById(emptyId).style.display = 'block';
+                    document.getElementById(emptyId).innerHTML = '<i class="fas fa-info-circle mr-1"></i>No hay datos de obras para esta colonia';
+                    return;
+                }
+
+                chartInstances[chartId] = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.map(obra => obra.obra),
+                        datasets: [{
+                            label: 'Prioridad Promedio',
+                            data: data.map(obra => obra.prioridad_promedio),
+                            backgroundColor: backgroundColor,
+                            borderColor: borderColor,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 5,
+                                title: {
+                                    display: true,
+                                    text: 'Prioridad (1-5)'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Obras Públicas'
+                                },
+                                ticks: {
+                                    maxRotation: 45
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            title: {
+                                display: true,
+                                text: 'Prioridad de Obras por Colonia'
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error cargando obras:', error);
+                document.getElementById(emptyId).style.display = 'block';
+                document.getElementById(emptyId).innerHTML = '<i class="fas fa-exclamation-triangle mr-1"></i>Error al cargar las obras';
+                document.getElementById(containerId).style.display = 'none';
+            });
+    }
 </script>
 @stop
