@@ -148,8 +148,9 @@ class DashboardController extends Controller
             ->map(function($group) {
                 return [
                     'obra' => $group->first()['obra'],
+                    'colonia_nombre' => $group->first()['colonia'],
                     'prioridad_promedio' => round($group->avg('prioridad'), 1),
-                    'total_respuestas' => $group->count()
+                    'total_calificaciones' => $group->count()
                 ];
             })
             ->values();
@@ -307,8 +308,9 @@ class DashboardController extends Controller
             ->map(function($group) {
                 return [
                     'obra' => $group->first()['obra'],
+                    'colonia_nombre' => $group->first()['colonia'],
                     'prioridad_promedio' => round($group->avg('prioridad'), 1),
-                    'total_respuestas' => $group->count()
+                    'total_calificaciones' => $group->count()
                 ];
             })
             ->values();
@@ -450,31 +452,33 @@ class DashboardController extends Controller
         // Distrito 20 - Obras
         $distrito20Obras = \DB::select("
             SELECT
+                c.nombre as colonia_nombre,
                 op.nombre as obra,
-                AVG(CAST(JSON_EXTRACT(e.obras_calificadas, CONCAT('$.', op.id)) AS UNSIGNED)) as prioridad_promedio,
+                AVG(CAST(JSON_EXTRACT(e.obras_calificadas, '$.' || op.id) AS UNSIGNED)) as prioridad_promedio,
                 COUNT(*) as total_calificaciones
             FROM encuestas e
             JOIN colonias c ON e.colonia_id = c.id
             JOIN obras_publicas op ON op.colonia_id = c.id
             WHERE c.distrito = 20
-            AND JSON_EXTRACT(e.obras_calificadas, CONCAT('$.', op.id)) IS NOT NULL
-            GROUP BY op.id, op.nombre
-            ORDER BY prioridad_promedio DESC
+            AND JSON_EXTRACT(e.obras_calificadas, '$.' || op.id) IS NOT NULL
+            GROUP BY c.nombre, op.id, op.nombre
+            ORDER BY c.nombre, prioridad_promedio DESC
         ");
 
         // Distrito 5 - Obras
         $distrito5Obras = \DB::select("
             SELECT
+                c.nombre as colonia_nombre,
                 op.nombre as obra,
-                AVG(CAST(JSON_EXTRACT(e.obras_calificadas, CONCAT('$.', op.id)) AS UNSIGNED)) as prioridad_promedio,
+                AVG(CAST(JSON_EXTRACT(e.obras_calificadas, '$.' || op.id) AS UNSIGNED)) as prioridad_promedio,
                 COUNT(*) as total_calificaciones
             FROM encuestas e
             JOIN colonias c ON e.colonia_id = c.id
             JOIN obras_publicas op ON op.colonia_id = c.id
             WHERE c.distrito = 5
-            AND JSON_EXTRACT(e.obras_calificadas, CONCAT('$.', op.id)) IS NOT NULL
-            GROUP BY op.id, op.nombre
-            ORDER BY prioridad_promedio DESC
+            AND JSON_EXTRACT(e.obras_calificadas, '$.' || op.id) IS NOT NULL
+            GROUP BY c.nombre, op.id, op.nombre
+            ORDER BY c.nombre, prioridad_promedio DESC
         ");
 
         return [
