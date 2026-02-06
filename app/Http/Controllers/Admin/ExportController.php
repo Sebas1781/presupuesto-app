@@ -570,22 +570,22 @@ class ExportController extends Controller
                 if (!empty($generoData20)) {
                     $html .= '<div class="chart-container">
                         <div class="chart-title">Distribución por Género - Distrito 20</div>';
-                    
+
                     $colores = ['#9D2449', '#4E232E', '#56242A', '#B3865D'];
                     $total20 = array_sum($generoData20);
                     $colorIndex = 0;
-                    
+
                     // Crear gráfico de barras horizontales tipo pie
                     $html .= '<div class="bar-chart" style="margin: 15px 0;">';
-                    
+
                     foreach ($generoData20 as $genero => $cantidad) {
                         $porcentaje = $total20 > 0 ? round(($cantidad / $total20) * 100, 1) : 0;
                         $color = $colores[$colorIndex % count($colores)];
                         $ancho = max($porcentaje * 3, 30); // Hacer barras más grandes
-                        
+
                         // Mostrar nombre más amigable para LGBTIITTQ
                         $generoDisplay = $genero === 'LGBTIITTQ' ? 'LGBTIQ+' : $genero;
-                        
+
                         $html .= '<div class="bar-item" style="margin: 8px 0;">
                             <span class="bar-label" style="width: 80px; display: inline-block;">' . $generoDisplay . ':</span>
                             <span class="bar-visual" style="width: ' . $ancho . 'px; height: 25px; background: ' . $color . '; display: inline-block; margin-right: 10px;"></span>
@@ -593,7 +593,7 @@ class ExportController extends Controller
                         </div>';
                         $colorIndex++;
                     }
-                    
+
                     $html .= '</div>
                     </div>';
                 }
@@ -612,7 +612,7 @@ class ExportController extends Controller
                 foreach ($generoData20 as $genero => $cantidad) {
                     $porcentaje = $total20 > 0 ? round(($cantidad / $total20) * 100, 1) : 0;
                     $generoDisplay = $genero === 'LGBTIITTQ' ? 'LGBTIQ+' : $genero;
-                    
+
                     $html .= '<tr>
                         <td>' . $generoDisplay . '</td>
                         <td style="text-align: center;">' . $cantidad . '</td>
@@ -640,22 +640,22 @@ class ExportController extends Controller
                 if (!empty($generoData5)) {
                     $html .= '<div class="chart-container">
                         <div class="chart-title">Distribución por Género - Distrito 5</div>';
-                    
+
                     $colores5 = ['#B3865D', '#56242A', '#4E232E', '#9D2449'];
                     $total5 = array_sum($generoData5);
                     $colorIndex = 0;
-                    
+
                     // Crear gráfico de barras horizontales tipo pie
                     $html .= '<div class="bar-chart" style="margin: 15px 0;">';
-                    
+
                     foreach ($generoData5 as $genero => $cantidad) {
                         $porcentaje = $total5 > 0 ? round(($cantidad / $total5) * 100, 1) : 0;
                         $color = $colores5[$colorIndex % count($colores5)];
                         $ancho = max($porcentaje * 3, 30); // Hacer barras más grandes
-                        
+
                         // Mostrar nombre más amigable para LGBTIITTQ
                         $generoDisplay = $genero === 'LGBTIITTQ' ? 'LGBTIQ+' : $genero;
-                        
+
                         $html .= '<div class="bar-item" style="margin: 8px 0;">
                             <span class="bar-label" style="width: 80px; display: inline-block;">' . $generoDisplay . ':</span>
                             <span class="bar-visual" style="width: ' . $ancho . 'px; height: 25px; background: ' . $color . '; display: inline-block; margin-right: 10px;"></span>
@@ -663,7 +663,7 @@ class ExportController extends Controller
                         </div>';
                         $colorIndex++;
                     }
-                    
+
                     $html .= '</div>
                     </div>';
                 }
@@ -682,7 +682,7 @@ class ExportController extends Controller
                 foreach ($generoData5 as $genero => $cantidad) {
                     $porcentaje = $total5 > 0 ? round(($cantidad / $total5) * 100, 1) : 0;
                     $generoDisplay = $genero === 'LGBTIITTQ' ? 'LGBTIQ+' : $genero;
-                    
+
                     $html .= '<tr>
                         <td>' . $generoDisplay . '</td>
                         <td style="text-align: center;">' . $cantidad . '</td>

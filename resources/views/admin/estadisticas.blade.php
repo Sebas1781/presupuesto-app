@@ -473,7 +473,7 @@
     const generos = ['Masculino', 'Femenino', 'LGBTIITTQ'];
     const generosLabels = {
         'Masculino': 'Masculino',
-        'Femenino': 'Femenino', 
+        'Femenino': 'Femenino',
         'LGBTIITTQ': 'LGBTIQ+'
     };
     const coloresGenero = [paletaColores.pantone420, paletaColores.pantone504, paletaColores.pantone490];
