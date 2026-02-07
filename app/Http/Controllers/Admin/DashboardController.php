@@ -369,6 +369,179 @@ class DashboardController extends Controller
             ->groupBy('nivel_educativo')
             ->get();
 
+        // ============ NUEVAS GRÁFICAS BLOQUE A ============
+
+        // Distribución por Rango de Edad (general)
+        $edadDistribucion = Encuesta::whereNotNull('edad')
+            ->where('edad', '!=', '')
+            ->selectRaw('edad, COUNT(*) as total')
+            ->groupBy('edad')
+            ->orderByRaw("CASE
+                WHEN edad = 'De 18 a 24 años' THEN 1
+                WHEN edad = 'De 25 a 34 años' THEN 2
+                WHEN edad = 'De 35 a 49 años' THEN 3
+                WHEN edad = 'De 50 a 59 años' THEN 4
+                WHEN edad = 'Más de 60 años' THEN 5
+                ELSE 6
+            END")
+            ->get();
+
+        // Estado Civil de la Población
+        $estadoCivilDistribucion = Encuesta::whereNotNull('estado_civil')
+            ->where('estado_civil', '!=', '')
+            ->selectRaw('estado_civil, COUNT(*) as total')
+            ->groupBy('estado_civil')
+            ->orderBy('total', 'desc')
+            ->get();
+
+        // Género × Nivel Educativo (cross-tabulation)
+        $generoEducacion = Encuesta::whereNotNull('genero')
+            ->whereNotNull('nivel_educativo')
+            ->where('nivel_educativo', '!=', '')
+            ->selectRaw('genero, nivel_educativo, COUNT(*) as total')
+            ->groupBy('genero', 'nivel_educativo')
+            ->get();
+
+        // ============ NUEVAS GRÁFICAS BLOQUE B ============
+
+        // Top Obras con Mayor Prioridad (general, todas las colonias)
+        $topObrasGeneral = Encuesta::whereNotNull('obras_calificadas')
+            ->get()
+            ->flatMap(function($encuesta) {
+                $obras = [];
+                if ($encuesta->obras_calificadas && is_array($encuesta->obras_calificadas)) {
+                    foreach ($encuesta->obras_calificadas as $obraId => $prioridad) {
+                        $obra = \App\Models\ObraPublica::find($obraId);
+                        if ($obra) {
+                            $obras[] = [
+                                'obra' => $obra->nombre,
+                                'prioridad' => $prioridad,
+                            ];
+                        }
+                    }
+                }
+                return $obras;
+            })
+            ->groupBy('obra')
+            ->map(function($group) {
+                return [
+                    'obra' => $group->first()['obra'],
+                    'prioridad_promedio' => round($group->avg('prioridad'), 1),
+                    'total_calificaciones' => $group->count()
+                ];
+            })
+            ->sortByDesc('prioridad_promedio')
+            ->take(10)
+            ->values();
+
+        // Distribución de Reportes por Tipo
+        $reportesPorTipo = Reporte::whereNotNull('tipo_reporte')
+            ->where('tipo_reporte', '!=', '')
+            ->selectRaw('tipo_reporte, COUNT(*) as total')
+            ->groupBy('tipo_reporte')
+            ->orderBy('total', 'desc')
+            ->get();
+
+        // Colonias con Mayor Solicitud de Reportes
+        $coloniasMasReportes = Encuesta::with('colonia')
+            ->where('desea_reporte', true)
+            ->selectRaw('colonia_id, COUNT(*) as total')
+            ->groupBy('colonia_id')
+            ->orderBy('total', 'desc')
+            ->get();
+
+        // ============ NUEVAS GRÁFICAS BLOQUE C ============
+
+        // Confianza en la Policía (Sí/No general)
+        $confianzaPoliciaGeneral = Encuesta::whereNotNull('confia_policia')
+            ->where('confia_policia', '!=', '')
+            ->selectRaw('confia_policia, COUNT(*) as total')
+            ->groupBy('confia_policia')
+            ->get();
+
+        // Problemas de Seguridad más Frecuentes (from JSON)
+        $problemasSeguridadRaw = Encuesta::whereNotNull('problemas_seguridad')
+            ->pluck('problemas_seguridad');
+
+        $problemasLabels = [
+            'Corrupción de los elementos de seguridad',
+            'Robo a casa habitación',
+            'Asaltos a transeúntes',
+            'Robo de vehículos, motos o autopartes',
+            'Extorsión por llamada telefónica',
+            'Venta de sustancias ilícitas (drogas)',
+            'Falta de vigilancia y presencia de policías',
+            'Venta y/o consumo de alcohol en la calle',
+            'Violencia familiar',
+            'Violencia contra adultos mayores',
+            'Violencia contra animales',
+            'Violencia contra personas discapacitadas',
+            'Bullying en las escuelas',
+            'Acoso a mujeres en la calle',
+            'Discriminación a comunidad LGBTIQ+',
+            'Riñas entre vecinos',
+            'Consumo de drogas en la calle'
+        ];
+
+        $problemasPromedios = [];
+        foreach ($problemasSeguridadRaw as $json) {
+            $problemas = is_array($json) ? $json : json_decode($json, true);
+            if (is_array($problemas)) {
+                foreach ($problemas as $index => $valor) {
+                    if (!isset($problemasPromedios[$index])) {
+                        $problemasPromedios[$index] = ['suma' => 0, 'count' => 0];
+                    }
+                    $problemasPromedios[$index]['suma'] += intval($valor);
+                    $problemasPromedios[$index]['count']++;
+                }
+            }
+        }
+
+        $problemasSeguridad = collect($problemasPromedios)->map(function($item, $index) use ($problemasLabels) {
+            return [
+                'problema' => $problemasLabels[$index] ?? "Problema " . ($index + 1),
+                'promedio' => $item['count'] > 0 ? round($item['suma'] / $item['count'], 2) : 0,
+                'total_respuestas' => $item['count']
+            ];
+        })->sortByDesc('promedio')->values();
+
+        // Percepción de Seguridad en Lugares (from JSON)
+        $lugaresRaw = Encuesta::whereNotNull('lugares_seguros')
+            ->pluck('lugares_seguros');
+
+        $lugaresLabels = [
+            'Un parque de su comunidad',
+            'En el mercado o tianguis',
+            'Plaza comercial o supermercado',
+            'En un cajero automático',
+            'Transporte público',
+            'Al exterior de una escuela',
+            'Calles cercanas a su domicilio',
+            'Municipio de Tecámac'
+        ];
+
+        $lugaresPromedios = [];
+        foreach ($lugaresRaw as $json) {
+            $lugares = is_array($json) ? $json : json_decode($json, true);
+            if (is_array($lugares)) {
+                foreach ($lugares as $index => $valor) {
+                    if (!isset($lugaresPromedios[$index])) {
+                        $lugaresPromedios[$index] = ['suma' => 0, 'count' => 0];
+                    }
+                    $lugaresPromedios[$index]['suma'] += intval($valor);
+                    $lugaresPromedios[$index]['count']++;
+                }
+            }
+        }
+
+        $percepcionLugares = collect($lugaresPromedios)->map(function($item, $index) use ($lugaresLabels) {
+            return [
+                'lugar' => $lugaresLabels[$index] ?? "Lugar " . ($index + 1),
+                'promedio' => $item['count'] > 0 ? round($item['suma'] / $item['count'], 2) : 0,
+                'total_respuestas' => $item['count']
+            ];
+        })->sortByDesc('promedio')->values();
+
         return view('admin.estadisticas', compact(
             'totalEncuestas',
             'totalPropuestas',
@@ -384,7 +557,16 @@ class DashboardController extends Controller
             'distrito20Obras',
             'distrito5Obras',
             'coloniasDistrito20',
-            'coloniasDistrito5'
+            'coloniasDistrito5',
+            'edadDistribucion',
+            'estadoCivilDistribucion',
+            'generoEducacion',
+            'topObrasGeneral',
+            'reportesPorTipo',
+            'coloniasMasReportes',
+            'confianzaPoliciaGeneral',
+            'problemasSeguridad',
+            'percepcionLugares'
         ));
     }
 
@@ -576,6 +758,141 @@ class DashboardController extends Controller
             ORDER BY total DESC
         ");
 
+        // ============ NUEVAS GRÁFICAS BLOQUE A ============
+        $edadDistribucion = \DB::select("
+            SELECT edad, COUNT(*) as total FROM encuestas
+            WHERE edad IS NOT NULL AND edad != ''
+            GROUP BY edad
+            ORDER BY CASE
+                WHEN edad = 'De 18 a 24 años' THEN 1
+                WHEN edad = 'De 25 a 34 años' THEN 2
+                WHEN edad = 'De 35 a 49 años' THEN 3
+                WHEN edad = 'De 50 a 59 años' THEN 4
+                WHEN edad = 'Más de 60 años' THEN 5
+                ELSE 6
+            END
+        ");
+
+        $estadoCivilDistribucion = \DB::select("
+            SELECT estado_civil, COUNT(*) as total FROM encuestas
+            WHERE estado_civil IS NOT NULL AND estado_civil != ''
+            GROUP BY estado_civil ORDER BY total DESC
+        ");
+
+        $generoEducacion = \DB::select("
+            SELECT genero, nivel_educativo, COUNT(*) as total FROM encuestas
+            WHERE genero IS NOT NULL AND nivel_educativo IS NOT NULL AND nivel_educativo != ''
+            GROUP BY genero, nivel_educativo
+        ");
+
+        // ============ NUEVAS GRÁFICAS BLOQUE B ============
+        $reportesPorTipo = \DB::select("
+            SELECT tipo_reporte, COUNT(*) as total FROM reportes
+            WHERE tipo_reporte IS NOT NULL AND tipo_reporte != ''
+            GROUP BY tipo_reporte ORDER BY total DESC
+        ");
+
+        $coloniasMasReportes = \DB::select("
+            SELECT c.nombre as colonia, COUNT(*) as total
+            FROM encuestas e JOIN colonias c ON e.colonia_id = c.id
+            WHERE e.desea_reporte = 1
+            GROUP BY c.nombre ORDER BY total DESC
+        ");
+
+        // Top Obras con Mayor Prioridad (general)
+        $topObrasGeneral = Encuesta::whereNotNull('obras_calificadas')
+            ->get()
+            ->flatMap(function($encuesta) {
+                $obras = [];
+                if ($encuesta->obras_calificadas && is_array($encuesta->obras_calificadas)) {
+                    foreach ($encuesta->obras_calificadas as $obraId => $prioridad) {
+                        $obra = \App\Models\ObraPublica::find($obraId);
+                        if ($obra) {
+                            $obras[] = ['obra' => $obra->nombre, 'prioridad' => $prioridad];
+                        }
+                    }
+                }
+                return $obras;
+            })
+            ->groupBy('obra')
+            ->map(function($group) {
+                return [
+                    'obra' => $group->first()['obra'],
+                    'prioridad_promedio' => round($group->avg('prioridad'), 1),
+                    'total_calificaciones' => $group->count()
+                ];
+            })
+            ->sortByDesc('prioridad_promedio')
+            ->take(10)
+            ->values();
+
+        // ============ NUEVAS GRÁFICAS BLOQUE C ============
+        $confianzaPoliciaGeneral = \DB::select("
+            SELECT confia_policia, COUNT(*) as total FROM encuestas
+            WHERE confia_policia IS NOT NULL AND confia_policia != ''
+            GROUP BY confia_policia
+        ");
+
+        // Problemas de Seguridad
+        $problemasSeguridadRaw = Encuesta::whereNotNull('problemas_seguridad')->pluck('problemas_seguridad');
+        $problemasLabels = [
+            'Corrupción de seguridad', 'Robo a casa', 'Asaltos a transeúntes',
+            'Robo de vehículos', 'Extorsión telefónica', 'Venta de drogas',
+            'Falta de vigilancia', 'Alcohol en la calle', 'Violencia familiar',
+            'Violencia contra adultos mayores', 'Violencia contra animales',
+            'Violencia contra discapacitados', 'Bullying escolar',
+            'Acoso a mujeres', 'Discriminación LGBTIQ+', 'Riñas entre vecinos',
+            'Consumo de drogas en calle'
+        ];
+        $problemasPromedios = [];
+        foreach ($problemasSeguridadRaw as $json) {
+            $problemas = is_array($json) ? $json : json_decode($json, true);
+            if (is_array($problemas)) {
+                foreach ($problemas as $index => $valor) {
+                    if (!isset($problemasPromedios[$index])) {
+                        $problemasPromedios[$index] = ['suma' => 0, 'count' => 0];
+                    }
+                    $problemasPromedios[$index]['suma'] += intval($valor);
+                    $problemasPromedios[$index]['count']++;
+                }
+            }
+        }
+        $problemasSeguridad = collect($problemasPromedios)->map(function($item, $index) use ($problemasLabels) {
+            return [
+                'problema' => $problemasLabels[$index] ?? "Problema " . ($index + 1),
+                'promedio' => $item['count'] > 0 ? round($item['suma'] / $item['count'], 2) : 0,
+                'total_respuestas' => $item['count']
+            ];
+        })->sortByDesc('promedio')->values();
+
+        // Percepción de Lugares
+        $lugaresRaw = Encuesta::whereNotNull('lugares_seguros')->pluck('lugares_seguros');
+        $lugaresLabels = [
+            'Parque comunitario', 'Mercado/tianguis', 'Plaza comercial',
+            'Cajero automático', 'Transporte público', 'Exterior de escuela',
+            'Calles cercanas', 'Municipio de Tecámac'
+        ];
+        $lugaresPromedios = [];
+        foreach ($lugaresRaw as $json) {
+            $lugares = is_array($json) ? $json : json_decode($json, true);
+            if (is_array($lugares)) {
+                foreach ($lugares as $index => $valor) {
+                    if (!isset($lugaresPromedios[$index])) {
+                        $lugaresPromedios[$index] = ['suma' => 0, 'count' => 0];
+                    }
+                    $lugaresPromedios[$index]['suma'] += intval($valor);
+                    $lugaresPromedios[$index]['count']++;
+                }
+            }
+        }
+        $percepcionLugares = collect($lugaresPromedios)->map(function($item, $index) use ($lugaresLabels) {
+            return [
+                'lugar' => $lugaresLabels[$index] ?? "Lugar " . ($index + 1),
+                'promedio' => $item['count'] > 0 ? round($item['suma'] / $item['count'], 2) : 0,
+                'total_respuestas' => $item['count']
+            ];
+        })->sortByDesc('promedio')->values();
+
         return [
             'totalEncuestas' => $totalEncuestas,
             'totalPropuestas' => $totalPropuestas,
@@ -587,6 +904,15 @@ class DashboardController extends Controller
             'nivelEducativoData' => collect($nivelEducativoData),
             'distrito20Obras' => collect($distrito20Obras),
             'distrito5Obras' => collect($distrito5Obras),
+            'edadDistribucion' => collect($edadDistribucion),
+            'estadoCivilDistribucion' => collect($estadoCivilDistribucion),
+            'generoEducacion' => collect($generoEducacion),
+            'reportesPorTipo' => collect($reportesPorTipo),
+            'coloniasMasReportes' => collect($coloniasMasReportes),
+            'confianzaPoliciaGeneral' => collect($confianzaPoliciaGeneral),
+            'problemasSeguridad' => $problemasSeguridad,
+            'percepcionLugares' => $percepcionLugares,
+            'topObrasGeneral' => $topObrasGeneral,
         ];
     }
 

@@ -157,7 +157,7 @@
         }
 
         .president-intro {
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             font-weight: 300;
             margin-bottom: 1rem;
             opacity: 0.9;
@@ -171,7 +171,7 @@
         }
 
         .main-slogan {
-            font-size: 3.5rem;
+            font-size: 4rem;
             font-weight: 700;
             margin: 2rem 0;
             line-height: 1.2;
@@ -199,7 +199,7 @@
         }
 
         .slogan-subtitle {
-            font-size: 2.2rem;
+            font-size: 2.6rem;
             font-weight: 500;
             color: rgba(255,255,255,0.95);
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
@@ -227,11 +227,11 @@
             display: inline-block;
             background: rgba(255,255,255,0.95);
             color: var(--color-primary);
-            padding: 1.2rem 3rem;
+            padding: 1.3rem 3.5rem;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             margin-top: 2rem;
             transition: all 0.3s ease;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -263,11 +263,11 @@
             }
 
             .main-slogan {
-                font-size: 2.5rem;
+                font-size: 2.8rem;
             }
 
             .slogan-subtitle {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
 
             .logo-container {
@@ -417,7 +417,7 @@
             <div class="content-text">
                 <div class="fade-in fade-in-delay-1">
                     <p class="president-intro">
-                        La Presidenta Municipal, <span class="president-name">Rosi Wong</span>, te invita a definir juntos el presupuesto 2026. ¡Participa! Porque:
+                        ¡La Presidenta Municipal, <span class="president-name">Rosi Wong</span>, te invita a definir juntos el presupuesto 2026!
                     </p>
                 </div>
 
@@ -428,7 +428,7 @@
                 <div class="fade-in fade-in-delay-3">
                     <a href="{{ route('encuesta.create') }}" class="cta-button">
                         <i class="fas fa-vote-yea mr-3"></i>
-                        ¡Participa Ahora!
+                        ¡Participe Ahora!
                     </a>
                 </div>
             </div>

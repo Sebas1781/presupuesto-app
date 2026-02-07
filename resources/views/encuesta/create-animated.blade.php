@@ -452,7 +452,7 @@
                         <i class="fas fa-poll text-2xl"></i>
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold">Encuesta Participativa 2026</h1>
+                        <h1 class="text-2xl font-bold">Consulta Ciudadana 2026</h1>
                         <p class="text-white/80 text-sm">Nuestro municipio es mucha pieza</p>
                     </div>
                 </div>
@@ -469,7 +469,7 @@
     <div class="progress-container">
         <div class="max-w-4xl mx-auto px-6">
             <div class="flex items-center justify-between mb-2">
-                <span class="text-sm font-medium text-gray-600">Progreso del formulario</span>
+                <span class="text-sm font-medium text-gray-600">Progreso de la consulta ciudadana</span>
                 <span class="text-sm font-medium text-gray-600" x-text="Math.round(progress) + '%'">0%</span>
             </div>
             <div class="progress-bar">
@@ -619,7 +619,7 @@
                         </label>
                         <select name="nivel_educativo" class="form-input" required>
                             <option value="">Selecciona...</option>
-                            <option value="Sin estudios" {{ old('nivel_educativo') == 'Sin estudios' ? 'selected' : '' }}>Sin estudios</option>
+                            <option value="Ninguno" {{ old('nivel_educativo') == 'Sin estudios' ? 'selected' : '' }}>Ninguno</option>
                             <option value="Primaria" {{ old('nivel_educativo') == 'Primaria' ? 'selected' : '' }}>Primaria</option>
                             <option value="Secundaria" {{ old('nivel_educativo') == 'Secundaria' ? 'selected' : '' }}>Secundaria</option>
                             <option value="Preparatoria" {{ old('nivel_educativo') == 'Preparatoria' ? 'selected' : '' }}>Preparatoria</option>
@@ -651,7 +651,7 @@
                             @click="validateAndContinue()"
                             class="btn-primary">
                         <i class="fas fa-arrow-right mr-2"></i>
-                        Continuar a calificación de prioridad de obras
+                        Continuar
                     </button>
                 </div>
 
@@ -675,7 +675,7 @@
 
                 <p class="text-gray-600 mb-6 bg-red-50 p-4 rounded-lg border-l-4 border-red-400">
                     <i class="fas fa-info-circle mr-2 text-red-500"></i>
-                    Califique la prioridad de estas obras públicas del 1 al 5 (donde 1 poco urgente y 5 es muy urgente)
+                    Califique la prioridad de estas obras públicas del 1 al 5 (donde "1" es poco urgente y "5" es muy urgente)
                 </p>
 
                 <div class="grid md:grid-cols-2 gap-4">
@@ -758,7 +758,7 @@
                         C.2. En general, ¿confía en las y los policías de la Guardia Civil de Tecámac?
                     </h4>
                     <div class="space-y-2">
-                        <template x-for="opcion in ['Sí', 'No', 'No sé, no contestó']">
+                        <template x-for="opcion in ['Sí', 'No', 'No sé']">
                             <label class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
                                 <input type="radio" :value="opcion" x-model="seguridad.confia_policia" name="seguridad[confia_policia]" class="form-radio text-blue-600">
                                 <span x-text="opcion" class="text-gray-700"></span>
@@ -770,7 +770,7 @@
                 <!-- C.3. Horario de inseguridad -->
                 <div class="propuesta-card mb-6 slide-in-up">
                     <h4 class="text-lg font-semibold text-gray-800 mb-4">
-                        C.3. ¿Cuál es el horario en la que usted y su familia sienten que están más inseguros en su comunidad?
+                        En caso de que usted y su familia se sientan inseguros en la comunidad en donde viven, ¿en qué horario es más frecuente?
                     </h4>
                     <div class="space-y-2">
                         <template x-for="opcion in [
@@ -780,8 +780,8 @@
                             'De 3 a 6 de la tarde',
                             'De 6 de la tarde a 9 de la noche',
                             'De 9 de la noche a 12 de la madrugada',
-                            'De 12 a 06 de la madrugada',
-                            'Nos sentimos agusto en nuestra colonia'
+                            'De 12 a 6 de la madrugada',
+                            'Nos sentimos seguros en nuestra colonia'
                         ]">
                             <label class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
                                 <input type="radio" :value="opcion" x-model="seguridad.horario_inseguro" name="seguridad[horario_inseguro]" class="form-radio text-blue-600">
@@ -794,7 +794,7 @@
                 <!-- C.4. Problemas de inseguridad y violencia -->
                 <div class="propuesta-card mb-6 slide-in-up">
                     <h4 class="text-lg font-semibold text-gray-800 mb-4">
-                        C.4. Refiriéndose al entorno de su domicilio, ¿qué tanta preocupación le causan los siguientes problemas de inseguridad o violencia?
+                        C.4. Refiriéndonos al entorno de su domicilio, ¿qué tanta preocupación le causan los siguientes problemas de inseguridad o violencia?
                     </h4>
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm">
@@ -844,7 +844,7 @@
                 <!-- C.22. Lugares seguros -->
                 <div class="propuesta-card mb-6 slide-in-up">
                     <h4 class="text-lg font-semibold text-gray-800 mb-4">
-                        C.22. Imagine que se encuentra con su familia en los siguientes lugares que le voy a mencionar ¿qué tan seguros e inseguros se sentirían si fura un viernes a las 8 de la noche en?
+                        C.22. Imagine que se encuentra con su familia en los siguientes lugares que le voy a mencionar ¿qué tan seguros e inseguros se sentirían si fuera un viernes a las 8 de la noche en?
                     </h4>
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm">
@@ -1217,7 +1217,8 @@
 
                     <p class="text-sm text-gray-500 mt-4">
                         <i class="fas fa-lock mr-2"></i>
-                        Tus datos están protegidos y serán tratados de forma confidencial
+                        Las opiniones y propuestas recabadas en esta encuesta serán consideradas como un ejercicio de participación ciudadana para la integración del Presupuesto Municipal 2026, conforme a la Ley Orgánica Municipal del Estado de México y el Código Financiero del Estado de México y Municipios. La asignación y aprobación final de los recursos corresponde al Ayuntamiento, a través del Cabildo, con base en la viabilidad técnica, la disponibilidad presupuestal y las prioridades del municipio.
+Los resultados de este ejercicio se integrarán al proceso de planeación y se darán a conocer de manera transparente, como parte del compromiso del gobierno municipal con la rendición de cuentas y el uso responsable de los recursos públicos.
                     </p>
                 </div>
 

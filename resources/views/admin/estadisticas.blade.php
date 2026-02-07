@@ -280,6 +280,65 @@
                         </div>
                     </div>
 
+                    <!-- BLOQUE A: Nuevas Gráficas Demográficas -->
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <h5 class="mb-4" style="color: #4E232E;">
+                                <i class="fas fa-chart-pie mr-2"></i>ANÁLISIS DEMOGRÁFICO COMPLEMENTARIO
+                            </h5>
+                        </div>
+
+                        <!-- Distribución por Rango de Edad -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header" style="background-color: #4E232E; color: white;">
+                                    <h5 class="card-title text-white mb-0">Distribución por Rango de Edad</h5>
+                                    <small class="text-white-50">Todos los encuestados</small>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="edadDistribucionChart" height="300"></canvas>
+                                    @if($edadDistribucion->isEmpty())
+                                        <p class="text-muted text-center">No hay datos disponibles</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Estado Civil -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header" style="background-color: #56242A; color: white;">
+                                    <h5 class="card-title text-white mb-0">Estado Civil de la Población</h5>
+                                    <small class="text-white-50">Todos los encuestados</small>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="estadoCivilChart" height="300"></canvas>
+                                    @if($estadoCivilDistribucion->isEmpty())
+                                        <p class="text-muted text-center">No hay datos disponibles</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Género × Nivel Educativo -->
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header" style="background-color: #B3865D; color: white;">
+                                    <h5 class="card-title text-white mb-0">Género por Nivel Educativo</h5>
+                                    <small class="text-white-50">Relación entre género y escolaridad</small>
+                                </div>
+                                <div class="card-body" style="height: 450px;">
+                                    <canvas id="generoEducacionChart"></canvas>
+                                    @if($generoEducacion->isEmpty())
+                                        <p class="text-muted text-center">No hay datos disponibles</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- BLOQUE B: Análisis de Obras -->
                     <div class="row">
                         <div class="col-md-12">
@@ -338,6 +397,121 @@
                                     <div id="distrito5ObrasEmpty" class="text-muted text-center">
                                         <i class="fas fa-info-circle mr-1"></i>Seleccione una colonia para ver las obras
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE B: Nuevas Gráficas de Obras y Reportes -->
+                    <div class="row mt-5 mb-5">
+                        <div class="col-md-12">
+                            <h5 class="mb-4" style="color: #B3865D;">
+                                <i class="fas fa-chart-bar mr-2"></i>ANÁLISIS GENERAL DE OBRAS Y REPORTES
+                            </h5>
+                        </div>
+
+                        <!-- Top 10 Obras con Mayor Prioridad -->
+                        <div class="col-md-12 mb-4">
+                            <div class="card">
+                                <div class="card-header" style="background-color: #9D2449; color: white;">
+                                    <h5 class="card-title text-white mb-0">Top 10 Obras con Mayor Prioridad</h5>
+                                    <small class="text-white-50">Promedio general de todas las colonias</small>
+                                </div>
+                                <div class="card-body" style="height: 400px;">
+                                    <canvas id="topObrasChart"></canvas>
+                                    @if($topObrasGeneral->isEmpty())
+                                        <p class="text-muted text-center">No hay datos disponibles</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reportes por Tipo -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header" style="background-color: #4E232E; color: white;">
+                                    <h5 class="card-title text-white mb-0">Distribución de Reportes por Tipo</h5>
+                                    <small class="text-white-50">Tipos de violencia reportados</small>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="reportesTipoChart" height="300"></canvas>
+                                    @if($reportesPorTipo->isEmpty())
+                                        <p class="text-muted text-center">No hay reportes registrados</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Colonias con Mayor Solicitud de Reportes -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header" style="background-color: #56242A; color: white;">
+                                    <h5 class="card-title text-white mb-0">Colonias con Mayor Solicitud de Reportes</h5>
+                                    <small class="text-white-50">Encuestados que desean reportar</small>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="coloniasReportesChart" height="300"></canvas>
+                                    @if($coloniasMasReportes->isEmpty())
+                                        <p class="text-muted text-center">No hay datos disponibles</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE C: Nuevas Gráficas de Seguridad Complementarias -->
+                    <div class="row mt-5 mb-5">
+                        <div class="col-md-12">
+                            <h4 class="mb-4" style="color: #9D2449;">
+                                <i class="fas fa-shield-alt mr-2"></i>BLOQUE C: Análisis Detallado de Seguridad Pública
+                            </h4>
+                        </div>
+
+                        <!-- Confianza en la Policía -->
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header" style="background-color: #9D2449; color: white;">
+                                    <h5 class="card-title text-white mb-0">¿Confía en la Policía?</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="confianzaPoliciaChart" height="280"></canvas>
+                                    @if($confianzaPoliciaGeneral->isEmpty())
+                                        <p class="text-muted text-center">No hay datos disponibles</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Percepción de Seguridad en Lugares -->
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header" style="background-color: #4E232E; color: white;">
+                                    <h5 class="card-title text-white mb-0">Percepción de Seguridad por Lugar</h5>
+                                    <small class="text-white-50">Escala: 1 (Inseguro) - 4 (Seguro)</small>
+                                </div>
+                                <div class="card-body" style="height: 400px;">
+                                    <canvas id="percepcionLugaresChart"></canvas>
+                                    @if($percepcionLugares->isEmpty())
+                                        <p class="text-muted text-center">No hay datos disponibles</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Problemas de Seguridad más Frecuentes -->
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header" style="background-color: #56242A; color: white;">
+                                    <h5 class="card-title text-white mb-0">Problemas de Seguridad: Nivel de Preocupación</h5>
+                                    <small class="text-white-50">Escala: 1 (No preocupa) - 4 (Preocupa mucho)</small>
+                                </div>
+                                <div class="card-body" style="height: 550px;">
+                                    <canvas id="problemasChart"></canvas>
+                                    @if($problemasSeguridad->isEmpty())
+                                        <p class="text-muted text-center">No hay datos disponibles</p>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -694,6 +868,261 @@
 
     // BLOQUE B: Función para cargar gráficos dinámicos de obras por colonia
     let chartInstances = {}; // Para almacenar las instancias de los gráficos
+
+    // ============ NUEVAS GRÁFICAS BLOQUE A ============
+
+    // Distribución por Rango de Edad
+    @if(!$edadDistribucion->isEmpty())
+    var ctxEdad = document.getElementById('edadDistribucionChart').getContext('2d');
+    new Chart(ctxEdad, {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($edadDistribucion->pluck('edad')) !!},
+            datasets: [{
+                label: 'Número de personas',
+                data: {!! json_encode($edadDistribucion->pluck('total')) !!},
+                backgroundColor: ['#9D2449', '#4E232E', '#56242A', '#B3865D', '#A0745A'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false }, title: { display: true, text: 'Distribución por Rango de Edad' } },
+            scales: { y: { beginAtZero: true, title: { display: true, text: 'Personas' } } }
+        }
+    });
+    @endif
+
+    // Estado Civil
+    @if(!$estadoCivilDistribucion->isEmpty())
+    var ctxEstadoCivil = document.getElementById('estadoCivilChart').getContext('2d');
+    new Chart(ctxEstadoCivil, {
+        type: 'doughnut',
+        data: {
+            labels: {!! json_encode($estadoCivilDistribucion->pluck('estado_civil')) !!},
+            datasets: [{
+                data: {!! json_encode($estadoCivilDistribucion->pluck('total')) !!},
+                backgroundColor: ['#9D2449', '#4E232E', '#56242A', '#B3865D', '#A0745A'],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' },
+                title: { display: true, text: 'Estado Civil' }
+            }
+        }
+    });
+    @endif
+
+    // Género × Nivel Educativo (stacked bar)
+    @if(!$generoEducacion->isEmpty())
+    (function(){
+        var ctxGE = document.getElementById('generoEducacionChart').getContext('2d');
+        const geData = {!! json_encode($generoEducacion) !!};
+        const niveles = [...new Set(geData.map(d => d.nivel_educativo))];
+        const generosGE = [...new Set(geData.map(d => d.genero))];
+        const generosGELabels = {'Masculino': 'Masculino', 'Femenino': 'Femenino', 'LGBTIITTQ': 'LGBTIQ+'};
+        const coloresGE = {'Masculino': '#9D2449', 'Femenino': '#4E232E', 'LGBTIITTQ': '#B3865D'};
+
+        const datasetsGE = generosGE.map(gen => ({
+            label: generosGELabels[gen] || gen,
+            data: niveles.map(niv => {
+                const found = geData.find(d => d.genero === gen && d.nivel_educativo === niv);
+                return found ? found.total : 0;
+            }),
+            backgroundColor: coloresGE[gen] || '#56242A'
+        }));
+
+        new Chart(ctxGE, {
+            type: 'bar',
+            data: { labels: niveles, datasets: datasetsGE },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { position: 'top' }, title: { display: true, text: 'Género por Nivel Educativo' } },
+                scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true, title: { display: true, text: 'Personas' } } }
+            }
+        });
+    })();
+    @endif
+
+    // ============ NUEVAS GRÁFICAS BLOQUE B ============
+
+    // Top 10 Obras con Mayor Prioridad
+    @if(!$topObrasGeneral->isEmpty())
+    (function(){
+        var ctxTop = document.getElementById('topObrasChart').getContext('2d');
+        const topData = {!! json_encode($topObrasGeneral) !!};
+        new Chart(ctxTop, {
+            type: 'bar',
+            data: {
+                labels: topData.map(d => d.obra.length > 40 ? d.obra.substring(0, 40) + '...' : d.obra),
+                datasets: [{
+                    label: 'Prioridad Promedio',
+                    data: topData.map(d => d.prioridad_promedio),
+                    backgroundColor: '#9D2449',
+                    borderColor: '#4E232E',
+                    borderWidth: 1
+                }, {
+                    label: 'Total Calificaciones',
+                    data: topData.map(d => d.total_calificaciones),
+                    backgroundColor: '#B3865D',
+                    borderColor: '#56242A',
+                    borderWidth: 1,
+                    yAxisID: 'y1'
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+                plugins: { legend: { position: 'top' }, title: { display: true, text: 'Top 10 Obras Públicas con Mayor Prioridad' } },
+                scales: {
+                    x: { beginAtZero: true, max: 5, title: { display: true, text: 'Prioridad (1-5)' } },
+                    x1: { display: false },
+                    y1: { display: false }
+                }
+            }
+        });
+    })();
+    @endif
+
+    // Reportes por Tipo
+    @if(!$reportesPorTipo->isEmpty())
+    var ctxReportes = document.getElementById('reportesTipoChart').getContext('2d');
+    new Chart(ctxReportes, {
+        type: 'doughnut',
+        data: {
+            labels: {!! json_encode($reportesPorTipo->pluck('tipo_reporte')) !!},
+            datasets: [{
+                data: {!! json_encode($reportesPorTipo->pluck('total')) !!},
+                backgroundColor: ['#9D2449', '#4E232E', '#56242A', '#B3865D', '#A0745A'],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' }, title: { display: true, text: 'Tipos de Reportes' } }
+        }
+    });
+    @endif
+
+    // Colonias con Mayor Solicitud de Reportes
+    @if(!$coloniasMasReportes->isEmpty())
+    var ctxColRep = document.getElementById('coloniasReportesChart').getContext('2d');
+    new Chart(ctxColRep, {
+        type: 'bar',
+        data: {
+            labels: {!! json_encode($coloniasMasReportes->map(function($c) { return $c->colonia ? $c->colonia->nombre : 'Sin col.'; })) !!},
+            datasets: [{
+                label: 'Solicitudes de Reporte',
+                data: {!! json_encode($coloniasMasReportes->pluck('total')) !!},
+                backgroundColor: '#56242A',
+                borderColor: '#4E232E',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false }, title: { display: true, text: 'Colonias con Más Solicitudes de Reporte' } },
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: 'Solicitudes' } },
+                x: { ticks: { maxRotation: 45, minRotation: 30 } }
+            }
+        }
+    });
+    @endif
+
+    // ============ NUEVAS GRÁFICAS BLOQUE C ============
+
+    // Confianza en la Policía
+    @if(!$confianzaPoliciaGeneral->isEmpty())
+    var ctxConfianza = document.getElementById('confianzaPoliciaChart').getContext('2d');
+    new Chart(ctxConfianza, {
+        type: 'doughnut',
+        data: {
+            labels: {!! json_encode($confianzaPoliciaGeneral->pluck('confia_policia')) !!},
+            datasets: [{
+                data: {!! json_encode($confianzaPoliciaGeneral->pluck('total')) !!},
+                backgroundColor: ['#28a745', '#dc3545', '#ffc107'],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' },
+                title: { display: true, text: '¿Confía en la Policía?' }
+            }
+        }
+    });
+    @endif
+
+    // Percepción de Seguridad por Lugar
+    @if(!$percepcionLugares->isEmpty())
+    (function(){
+        var ctxLugares = document.getElementById('percepcionLugaresChart').getContext('2d');
+        const lugaresData = {!! json_encode($percepcionLugares) !!};
+        new Chart(ctxLugares, {
+            type: 'radar',
+            data: {
+                labels: lugaresData.map(d => d.lugar),
+                datasets: [{
+                    label: 'Promedio de Seguridad (1-4)',
+                    data: lugaresData.map(d => d.promedio),
+                    backgroundColor: 'rgba(157, 36, 73, 0.2)',
+                    borderColor: '#9D2449',
+                    pointBackgroundColor: '#9D2449',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#9D2449',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { position: 'top' }, title: { display: true, text: 'Percepción de Seguridad por Lugar' } },
+                scales: { r: { min: 0, max: 4, ticks: { stepSize: 1 } } }
+            }
+        });
+    })();
+    @endif
+
+    // Problemas de Seguridad más Frecuentes
+    @if(!$problemasSeguridad->isEmpty())
+    (function(){
+        var ctxProblemas = document.getElementById('problemasChart').getContext('2d');
+        const probData = {!! json_encode($problemasSeguridad) !!};
+        new Chart(ctxProblemas, {
+            type: 'bar',
+            data: {
+                labels: probData.map(d => d.problema.length > 35 ? d.problema.substring(0, 35) + '...' : d.problema),
+                datasets: [{
+                    label: 'Nivel de Preocupación (Promedio)',
+                    data: probData.map(d => d.promedio),
+                    backgroundColor: probData.map((d, i) => {
+                        if (d.promedio >= 3) return '#dc3545';
+                        if (d.promedio >= 2.5) return '#fd7e14';
+                        if (d.promedio >= 2) return '#ffc107';
+                        return '#28a745';
+                    }),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: 'Problemas de Seguridad: Nivel de Preocupación Ciudadana' }
+                },
+                scales: {
+                    x: { beginAtZero: true, max: 4, title: { display: true, text: '1=No preocupa → 4=Preocupa mucho' } }
+                }
+            }
+        });
+    })();
+    @endif
 
     function cargarObrasColonia(coloniaId, chartId, backgroundColor, borderColor) {
         if (!coloniaId) {

@@ -745,7 +745,7 @@ class ExportController extends Controller
             foreach ($data['nivelEducativoData'] as $educacion) {
                 $porcentaje = $totalEducacion > 0 ? round(($educacion->total / $totalEducacion) * 100, 1) : 0;
                 $color = $coloresEducacion[$colorIndex % count($coloresEducacion)];
-                $ancho = max($porcentaje * 4, 30); // Hacer barras más grandes para mejor visibilidad
+                $ancho = max($porcentaje * 4, 30);
 
                 $html .= '<div class="bar-item" style="margin: 8px 0;">
                     <span class="bar-label" style="width: 180px; display: inline-block; font-size: 10px;">' . $educacion->nivel_educativo . ':</span>
@@ -758,7 +758,6 @@ class ExportController extends Controller
             $html .= '</div>
             </div>';
 
-            // Tabla de datos
             $html .= '<table class="data-table" style="margin-top: 15px;">
                     <thead>
                         <tr>
@@ -779,10 +778,124 @@ class ExportController extends Controller
                 </tr>';
             }
 
-            $html .= '</tbody>
-            </table>';
+            $html .= '</tbody></table></div>';
+        }
 
-            $html .= '</div>';
+        // ============ NUEVAS GRÁFICAS BLOQUE A ============
+
+        // Distribución por Rango de Edad
+        if (!$data['edadDistribucion']->isEmpty()) {
+            $html .= '<div class="section">
+                <h4 class="section-title" style="color: #4E232E;">DISTRIBUCIÓN POR RANGO DE EDAD</h4>';
+
+            $html .= '<div class="chart-container">
+                <div class="chart-title">Distribución por Edad de los Encuestados</div>
+                <div class="bar-chart">';
+
+            $totalEdad = $data['edadDistribucion']->sum('total');
+            $coloresEdad = ['#9D2449', '#4E232E', '#56242A', '#B3865D', '#A0745A'];
+            $ci = 0;
+
+            foreach ($data['edadDistribucion'] as $edad) {
+                $pct = $totalEdad > 0 ? round(($edad->total / $totalEdad) * 100, 1) : 0;
+                $color = $coloresEdad[$ci % count($coloresEdad)];
+                $ancho = max($pct * 3, 25);
+
+                $html .= '<div class="bar-item" style="margin: 8px 0;">
+                    <span class="bar-label" style="width: 150px; display: inline-block;">' . $edad->edad . ':</span>
+                    <span class="bar-visual" style="width: ' . $ancho . 'px; height: 22px; background: ' . $color . '; display: inline-block; margin-right: 8px;"></span>
+                    <span class="bar-value">' . $edad->total . ' (' . $pct . '%)</span>
+                </div>';
+                $ci++;
+            }
+
+            $html .= '</div></div>';
+
+            $html .= '<table class="data-table"><thead><tr>
+                <th>Rango de Edad</th><th>Total</th><th>Porcentaje</th>
+                </tr></thead><tbody>';
+            foreach ($data['edadDistribucion'] as $edad) {
+                $pct = $totalEdad > 0 ? round(($edad->total / $totalEdad) * 100, 1) : 0;
+                $html .= '<tr><td>' . $edad->edad . '</td><td style="text-align:center;">' . $edad->total . '</td><td style="text-align:center;">' . $pct . '%</td></tr>';
+            }
+            $html .= '</tbody></table></div>';
+        }
+
+        // Estado Civil
+        if (!$data['estadoCivilDistribucion']->isEmpty()) {
+            $html .= '<div class="section">
+                <h4 class="section-title" style="color: #56242A;">ESTADO CIVIL DE LA POBLACIÓN</h4>';
+
+            $html .= '<div class="chart-container">
+                <div class="chart-title">Estado Civil de los Encuestados</div>
+                <div class="bar-chart">';
+
+            $totalEC = $data['estadoCivilDistribucion']->sum('total');
+            $coloresEC = ['#9D2449', '#4E232E', '#56242A', '#B3865D', '#A0745A'];
+            $ci = 0;
+
+            foreach ($data['estadoCivilDistribucion'] as $ec) {
+                $pct = $totalEC > 0 ? round(($ec->total / $totalEC) * 100, 1) : 0;
+                $color = $coloresEC[$ci % count($coloresEC)];
+                $ancho = max($pct * 3, 25);
+
+                $html .= '<div class="bar-item" style="margin: 8px 0;">
+                    <span class="bar-label" style="width: 120px; display: inline-block;">' . $ec->estado_civil . ':</span>
+                    <span class="bar-visual" style="width: ' . $ancho . 'px; height: 22px; background: ' . $color . '; display: inline-block; margin-right: 8px;"></span>
+                    <span class="bar-value">' . $ec->total . ' (' . $pct . '%)</span>
+                </div>';
+                $ci++;
+            }
+
+            $html .= '</div></div>';
+
+            $html .= '<table class="data-table"><thead><tr>
+                <th>Estado Civil</th><th>Total</th><th>Porcentaje</th>
+                </tr></thead><tbody>';
+            foreach ($data['estadoCivilDistribucion'] as $ec) {
+                $pct = $totalEC > 0 ? round(($ec->total / $totalEC) * 100, 1) : 0;
+                $html .= '<tr><td>' . $ec->estado_civil . '</td><td style="text-align:center;">' . $ec->total . '</td><td style="text-align:center;">' . $pct . '%</td></tr>';
+            }
+            $html .= '</tbody></table></div>';
+        }
+
+        // Género × Nivel Educativo
+        if (!$data['generoEducacion']->isEmpty()) {
+            $html .= '<div class="section">
+                <h4 class="section-title" style="color: #B3865D;">GÉNERO POR NIVEL EDUCATIVO</h4>';
+
+            // Build cross-tab data
+            $geData = [];
+            $niveles = [];
+            $generosGE = [];
+            foreach ($data['generoEducacion'] as $item) {
+                $gen = $item->genero;
+                $niv = $item->nivel_educativo;
+                if (!in_array($niv, $niveles)) $niveles[] = $niv;
+                if (!in_array($gen, $generosGE)) $generosGE[] = $gen;
+                $geData[$niv][$gen] = $item->total;
+            }
+
+            $genLabels = ['LGBTIITTQ' => 'LGBTIQ+'];
+
+            $html .= '<table class="data-table"><thead><tr><th>Nivel Educativo</th>';
+            foreach ($generosGE as $gen) {
+                $html .= '<th style="text-align:center;">' . ($genLabels[$gen] ?? $gen) . '</th>';
+            }
+            $html .= '<th style="text-align:center;">Total</th></tr></thead><tbody>';
+
+            foreach ($niveles as $niv) {
+                $html .= '<tr><td>' . $niv . '</td>';
+                $totalNiv = 0;
+                foreach ($generosGE as $gen) {
+                    $val = $geData[$niv][$gen] ?? 0;
+                    $totalNiv += $val;
+                    $html .= '<td style="text-align:center;">' . $val . '</td>';
+                }
+                $html .= '<td style="text-align:center; font-weight:bold;">' . $totalNiv . '</td></tr>';
+            }
+
+            $html .= '</tbody></table></div>';
         }
 
         // BLOQUE B: Análisis de Obras
@@ -932,6 +1045,102 @@ class ExportController extends Controller
             $html .= '</div>';
         }
 
+        // ============ NUEVAS GRÁFICAS BLOQUE B ============
+
+        // Top Obras con Mayor Prioridad (general)
+        if (isset($data['topObrasGeneral']) && !$data['topObrasGeneral']->isEmpty()) {
+            $html .= '<div class="section">
+                <h4 class="section-title" style="color: #9D2449;">TOP 10 OBRAS CON MAYOR PRIORIDAD</h4>';
+
+            $html .= '<div class="chart-container">
+                <div class="chart-title">Obras Públicas Mejor Calificadas (General)</div>
+                <div class="bar-chart">';
+
+            foreach ($data['topObrasGeneral'] as $obra) {
+                $prioridad = floatval($obra['prioridad_promedio']);
+                $ancho = max(($prioridad / 5) * 200, 20);
+                $obraNombre = strlen($obra['obra']) > 40 ? substr($obra['obra'], 0, 40) . '...' : $obra['obra'];
+
+                $html .= '<div class="bar-item" style="margin: 6px 0;">
+                    <span class="bar-label" style="width: 200px; display: inline-block; font-size: 9px;">' . $obraNombre . ':</span>
+                    <span class="bar-visual" style="width: ' . $ancho . 'px; height: 20px; background: #9D2449; display: inline-block; margin-right: 8px;"></span>
+                    <span class="bar-value" style="font-size: 9px;">' . number_format($prioridad, 1) . ' (' . $obra['total_calificaciones'] . ' cal.)</span>
+                </div>';
+            }
+
+            $html .= '</div></div>';
+
+            $html .= '<table class="data-table"><thead><tr>
+                <th>Obra Pública</th><th>Prioridad Promedio</th><th>Total Calificaciones</th>
+                </tr></thead><tbody>';
+            foreach ($data['topObrasGeneral'] as $obra) {
+                $html .= '<tr><td>' . $obra['obra'] . '</td><td style="text-align:center;">' . number_format($obra['prioridad_promedio'], 1) . '</td><td style="text-align:center;">' . $obra['total_calificaciones'] . '</td></tr>';
+            }
+            $html .= '</tbody></table></div>';
+        }
+
+        // Reportes por Tipo
+        if (!$data['reportesPorTipo']->isEmpty()) {
+            $html .= '<div class="page-break"></div>';
+            $html .= '<div class="section">
+                <h3 class="section-title" style="color: #4E232E;">ANÁLISIS DE REPORTES CIUDADANOS</h3>';
+
+            $html .= '<div class="chart-container">
+                <div class="chart-title">Distribución de Reportes por Tipo</div>
+                <div class="bar-chart">';
+
+            $totalRep = $data['reportesPorTipo']->sum('total');
+            $coloresRep = ['#9D2449', '#4E232E', '#56242A', '#B3865D'];
+            $ci = 0;
+
+            foreach ($data['reportesPorTipo'] as $rep) {
+                $pct = $totalRep > 0 ? round(($rep->total / $totalRep) * 100, 1) : 0;
+                $color = $coloresRep[$ci % count($coloresRep)];
+                $ancho = max($pct * 3, 25);
+                $html .= '<div class="bar-item" style="margin: 8px 0;">
+                    <span class="bar-label" style="width: 200px; display: inline-block;">' . $rep->tipo_reporte . ':</span>
+                    <span class="bar-visual" style="width: ' . $ancho . 'px; height: 22px; background: ' . $color . '; display: inline-block; margin-right: 8px;"></span>
+                    <span class="bar-value">' . $rep->total . ' (' . $pct . '%)</span>
+                </div>';
+                $ci++;
+            }
+
+            $html .= '</div></div>';
+
+            $html .= '<table class="data-table"><thead><tr>
+                <th>Tipo de Reporte</th><th>Total</th><th>Porcentaje</th>
+                </tr></thead><tbody>';
+            foreach ($data['reportesPorTipo'] as $rep) {
+                $pct = $totalRep > 0 ? round(($rep->total / $totalRep) * 100, 1) : 0;
+                $html .= '<tr><td>' . $rep->tipo_reporte . '</td><td style="text-align:center;">' . $rep->total . '</td><td style="text-align:center;">' . $pct . '%</td></tr>';
+            }
+            $html .= '</tbody></table>';
+        }
+
+        // Colonias con Mayor Solicitud de Reportes
+        if (!$data['coloniasMasReportes']->isEmpty()) {
+            $html .= '<div class="chart-container" style="margin-top: 20px;">
+                <div class="chart-title">Colonias con Mayor Solicitud de Reportes</div>
+                <div class="bar-chart">';
+
+            $maxColRep = $data['coloniasMasReportes']->max('total');
+            foreach ($data['coloniasMasReportes'] as $col) {
+                $ancho = $maxColRep > 0 ? max(($col->total / $maxColRep) * 200, 20) : 20;
+                $colNombre = $col->colonia ?? 'Sin especificar';
+                $html .= '<div class="bar-item" style="margin: 6px 0;">
+                    <span class="bar-label" style="width: 150px; display: inline-block;">' . $colNombre . ':</span>
+                    <span class="bar-visual" style="width: ' . $ancho . 'px; height: 20px; background: #56242A; display: inline-block; margin-right: 8px;"></span>
+                    <span class="bar-value">' . $col->total . '</span>
+                </div>';
+            }
+
+            $html .= '</div></div>';
+
+            if (!$data['reportesPorTipo']->isEmpty()) {
+                $html .= '</div>';
+            }
+        }
+
         // BLOQUE C: Estadísticas de Seguridad
         if (!empty($data['seguridadStats'])) {
             $html .= '<div class="page-break"></div>';
@@ -939,42 +1148,149 @@ class ExportController extends Controller
                 <h3 class="section-title">BLOQUE C: Estadísticas de Seguridad Pública</h3>';
 
             $html .= '<div class="chart-container">
-                <div class="chart-title">Evaluación de Seguridad Pública (Escala 1-5)</div>
+                <div class="chart-title">Evaluación de Seguridad Pública (Escala 1-10)</div>
                 <div class="radar-chart">';
+
+            $nombresSeguridad = [
+                'emergencia_transporte' => 'Emergencia y Transporte',
+                'caminar_noche' => 'Caminar de Noche',
+                'hijos_solos' => 'Hijos Caminando Solos',
+                'transporte_publico' => 'Transporte Público'
+            ];
 
             foreach ($data['seguridadStats'] as $aspecto => $valor) {
                 $valorFloat = floatval($valor);
-                $porcentaje = ($valorFloat / 5) * 100;
-                $ancho = max($porcentaje * 1.5, 15);
-                $aspectoNombre = ucfirst(str_replace('_', ' ', $aspecto));
+                $porcentaje = ($valorFloat / 10) * 100;
+                $ancho = max($porcentaje * 2, 15);
+                $aspectoNombre = $nombresSeguridad[$aspecto] ?? ucfirst(str_replace('_', ' ', $aspecto));
 
                 $html .= '<div class="radar-item">
-                    <span class="radar-label">' . $aspectoNombre . ':</span>
+                    <span class="radar-label" style="width: 160px;">' . $aspectoNombre . ':</span>
                     <span class="radar-bar" style="width: ' . $ancho . 'px;"></span>
-                    <span class="radar-value">' . number_format($valorFloat, 2) . '</span>
+                    <span class="radar-value">' . number_format($valorFloat, 1) . '/10</span>
                 </div>';
             }
 
-            $html .= '</div>
-            </div>
+            $html .= '</div></div>';
 
-            <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Aspecto</th>
-                            <th>Calificación Promedio</th>
-                        </tr>
-                    </thead>
+            $html .= '<table class="data-table">
+                    <thead><tr><th>Aspecto</th><th>Calificación Promedio</th></tr></thead>
                     <tbody>';
-
             foreach ($data['seguridadStats'] as $aspecto => $valor) {
-                $html .= '<tr>
-                    <td>' . ucfirst(str_replace('_', ' ', $aspecto)) . '</td>
-                    <td style="text-align: center;">' . number_format($valor, 2) . '</td>
-                </tr>';
+                $aspectoNombre = $nombresSeguridad[$aspecto] ?? ucfirst(str_replace('_', ' ', $aspecto));
+                $html .= '<tr><td>' . $aspectoNombre . '</td><td style="text-align:center;">' . number_format($valor, 1) . '/10</td></tr>';
+            }
+            $html .= '</tbody></table>';
+        }
+
+        // ============ NUEVAS GRÁFICAS BLOQUE C ============
+
+        // Confianza en la Policía
+        if (!$data['confianzaPoliciaGeneral']->isEmpty()) {
+            if (empty($data['seguridadStats'])) {
+                $html .= '<div class="page-break"></div>';
+                $html .= '<div class="section">
+                    <h3 class="section-title">BLOQUE C: Estadísticas de Seguridad Pública</h3>';
             }
 
+            $html .= '<div class="chart-container" style="margin-top: 20px;">
+                <div class="chart-title">¿Confía en la Policía?</div>
+                <div class="bar-chart">';
+
+            $totalConf = $data['confianzaPoliciaGeneral']->sum('total');
+            $coloresConf = ['Sí' => '#28a745', 'Si' => '#28a745', 'No' => '#dc3545'];
+
+            foreach ($data['confianzaPoliciaGeneral'] as $conf) {
+                $pct = $totalConf > 0 ? round(($conf->total / $totalConf) * 100, 1) : 0;
+                $color = $coloresConf[$conf->confia_policia] ?? '#ffc107';
+                $ancho = max($pct * 2.5, 30);
+
+                $html .= '<div class="bar-item" style="margin: 10px 0;">
+                    <span class="bar-label" style="width: 50px; display: inline-block; font-size: 12px; font-weight: bold;">' . $conf->confia_policia . ':</span>
+                    <span class="bar-visual" style="width: ' . $ancho . 'px; height: 28px; background: ' . $color . '; display: inline-block; margin-right: 10px;"></span>
+                    <span class="bar-value" style="font-size: 11px;">' . $conf->total . ' (' . $pct . '%)</span>
+                </div>';
+            }
+
+            $html .= '</div></div>';
+        }
+
+        // Problemas de Seguridad
+        if (!$data['problemasSeguridad']->isEmpty()) {
+            $html .= '<div class="page-break"></div>';
+            $html .= '<div class="section">
+                <h4 class="section-title" style="color: #56242A;">PROBLEMAS DE SEGURIDAD: NIVEL DE PREOCUPACIÓN</h4>
+                <p style="font-size: 9px; color: #666;">Escala: 1 (No preocupa) - 4 (Preocupa mucho)</p>';
+
+            $html .= '<div class="chart-container">
+                <div class="chart-title">Preocupación Ciudadana por Problemas de Seguridad</div>
+                <div class="bar-chart">';
+
+            foreach ($data['problemasSeguridad'] as $prob) {
+                $promedio = floatval($prob['promedio']);
+                $ancho = max($promedio * 60, 15);
+                if ($promedio >= 3) $color = '#dc3545';
+                elseif ($promedio >= 2.5) $color = '#fd7e14';
+                elseif ($promedio >= 2) $color = '#ffc107';
+                else $color = '#28a745';
+
+                $html .= '<div class="bar-item" style="margin: 5px 0;">
+                    <span class="bar-label" style="width: 200px; display: inline-block; font-size: 8px;">' . $prob['problema'] . ':</span>
+                    <span class="bar-visual" style="width: ' . $ancho . 'px; height: 18px; background: ' . $color . '; display: inline-block; margin-right: 5px;"></span>
+                    <span class="bar-value" style="font-size: 8px;">' . number_format($promedio, 2) . '</span>
+                </div>';
+            }
+
+            $html .= '</div></div>';
+
+            $html .= '<table class="data-table" style="font-size: 9px;"><thead><tr>
+                <th>Problema</th><th>Promedio</th><th>Respuestas</th>
+                </tr></thead><tbody>';
+            foreach ($data['problemasSeguridad'] as $prob) {
+                $html .= '<tr><td>' . $prob['problema'] . '</td><td style="text-align:center;">' . number_format($prob['promedio'], 2) . '</td><td style="text-align:center;">' . $prob['total_respuestas'] . '</td></tr>';
+            }
             $html .= '</tbody></table></div>';
+        }
+
+        // Percepción de Seguridad por Lugar
+        if (!$data['percepcionLugares']->isEmpty()) {
+            $html .= '<div class="section">
+                <h4 class="section-title" style="color: #4E232E;">PERCEPCIÓN DE SEGURIDAD POR LUGAR</h4>
+                <p style="font-size: 9px; color: #666;">Escala: 1 (Totalmente inseguro) - 4 (Seguro)</p>';
+
+            $html .= '<div class="chart-container">
+                <div class="chart-title">Sensación de Seguridad en Diferentes Lugares</div>
+                <div class="bar-chart">';
+
+            foreach ($data['percepcionLugares'] as $lugar) {
+                $promedio = floatval($lugar['promedio']);
+                $ancho = max($promedio * 60, 15);
+                if ($promedio >= 3) $color = '#28a745';
+                elseif ($promedio >= 2.5) $color = '#ffc107';
+                elseif ($promedio >= 2) $color = '#fd7e14';
+                else $color = '#dc3545';
+
+                $html .= '<div class="bar-item" style="margin: 8px 0;">
+                    <span class="bar-label" style="width: 180px; display: inline-block; font-size: 9px;">' . $lugar['lugar'] . ':</span>
+                    <span class="bar-visual" style="width: ' . $ancho . 'px; height: 22px; background: ' . $color . '; display: inline-block; margin-right: 8px;"></span>
+                    <span class="bar-value" style="font-size: 9px;">' . number_format($promedio, 2) . '/4</span>
+                </div>';
+            }
+
+            $html .= '</div></div>';
+
+            $html .= '<table class="data-table"><thead><tr>
+                <th>Lugar</th><th>Promedio Seguridad</th><th>Respuestas</th>
+                </tr></thead><tbody>';
+            foreach ($data['percepcionLugares'] as $lugar) {
+                $html .= '<tr><td>' . $lugar['lugar'] . '</td><td style="text-align:center;">' . number_format($lugar['promedio'], 2) . '/4</td><td style="text-align:center;">' . $lugar['total_respuestas'] . '</td></tr>';
+            }
+            $html .= '</tbody></table></div>';
+        }
+
+        // Close any open section from seguridad
+        if (!empty($data['seguridadStats']) || !$data['confianzaPoliciaGeneral']->isEmpty()) {
+            $html .= '</div>';
         }
 
         $html .= '
