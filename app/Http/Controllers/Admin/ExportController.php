@@ -247,7 +247,7 @@ class ExportController extends Controller
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Estadísticas - Presupuesto Participativo 2026</title>
+    <title>Estadísticas - Presupuesto 2026</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; font-size: 12px; }
@@ -271,7 +271,7 @@ class ExportController extends Controller
 </head>
 <body>
     <div class="header">
-        <h1 class="pantone-420">Estadísticas del Presupuesto Participativo 2026</h1>
+        <h1 class="pantone-420">Estadísticas del Presupuesto 2026</h1>
         <p>Generado el ' . date('d/m/Y H:i:s') . '</p>
     </div>
 
@@ -434,7 +434,7 @@ class ExportController extends Controller
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Estadísticas - Presupuesto Participativo 2026</title>
+    <title>Estadísticas - Presupuesto 2026</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 15px; font-size: 11px; }
         .header { text-align: center; margin-bottom: 20px; border-bottom: 3px solid #9D2449; padding-bottom: 10px; }
@@ -477,7 +477,7 @@ class ExportController extends Controller
 </head>
 <body>
     <div class="header">
-        <h1 style="color: #9D2449; margin: 0;">Estadísticas del Presupuesto Participativo 2026</h1>
+        <h1 style="color: #9D2449; margin: 0;">Estadísticas del Presupuesto 2026</h1>
         <p style="margin: 5px 0;">Generado el ' . date('d/m/Y H:i:s') . '</p>
     </div>
 
@@ -1295,7 +1295,7 @@ class ExportController extends Controller
 
         $html .= '
     <div style="text-align: center; margin-top: 30px; font-size: 10px; color: #666;">
-        <p>Este reporte fue generado automáticamente por el Sistema de Presupuesto Participativo 2026</p>
+        <p>Este reporte fue generado automáticamente por el Sistema de Presupuesto 2026</p>
         <p>Para visualizar las gráficas interactivas, visite el dashboard web en: <strong>admin/estadisticas</strong></p>
     </div>
 </body>
