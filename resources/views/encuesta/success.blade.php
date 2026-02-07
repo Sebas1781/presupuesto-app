@@ -23,7 +23,7 @@
         </h1>
 
         <p class="text-gray-600 mb-8">
-            ¡GRACIAS POR AYUDARNOS A CONTRUIR EL PRESUPUESTO 2026!
+            ¡GRACIAS POR AYUDARNOS A CONSTRUIR EL PRESUPUESTO 2026!
             Tu opinión es muy importante para nosotros y será considerada.
         </p>
 
