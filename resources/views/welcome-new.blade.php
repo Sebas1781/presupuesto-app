@@ -410,6 +410,47 @@
         html {
             scroll-behavior: smooth;
         }
+
+        /* Footer styles */
+        .footer-section {
+            background: linear-gradient(180deg, rgba(83,0,0,0.9) 0%, rgba(42,0,0,1) 100%);
+            padding: 3rem 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .footer-logo {
+            max-width: 250px;
+            height: auto;
+            opacity: 0.9;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .footer-logo:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .footer-logo {
+                max-width: 180px;
+            }
+
+            .footer-section {
+                padding: 2rem 1rem;
+            }
+        }
     </style>
 </head>
 
@@ -462,6 +503,13 @@
             </div>
         </div>
     </section>
+
+    <!-- Footer con Logo Verde -->
+    <footer class="footer-section">
+        <div class="footer-content">
+            <img src="{{ asset('images/logoverde.png') }}" alt="Logo Verde" class="footer-logo fade-in">
+        </div>
+    </footer>
 
     <script>
         // Efectos de scroll suave
