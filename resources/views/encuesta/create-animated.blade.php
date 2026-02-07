@@ -1602,7 +1602,7 @@ Los resultados de este ejercicio se integrarán al proceso de planeación y se d
                         this.updateProgress(50);
                     } else {
                         // Mostrar snackbar con campos faltantes
-                        showSnackbar('Campos obligatorios faltantes: ' + missingFields.join(', '), 5000);
+                        showSnackbar('Campos obligatorios faltantes: ' + missingFields.join(', '), 3000);
 
                         // Mostrar mensaje de error inline también
                         errorDiv.classList.remove('hidden');
@@ -2077,7 +2077,7 @@ Los resultados de este ejercicio se integrarán al proceso de planeación y se d
                         } else {
                             msg = 'Faltan ' + errorMessages.length + ' campos obligatorios por completar';
                         }
-                        showSnackbar(msg, 5000);
+                        showSnackbar(msg, 3000);
 
                         if (firstInvalid) {
                             firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -2147,7 +2147,7 @@ Los resultados de este ejercicio se integrarán al proceso de planeación y se d
 
         // === SNACKBAR GLOBAL ===
         function showSnackbar(message, duration) {
-            duration = duration || 4000;
+            duration = duration || 3000;
             const snackbar = document.getElementById('snackbar');
             if (!snackbar) return;
             snackbar.textContent = message;
