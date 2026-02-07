@@ -413,8 +413,9 @@
 
         /* Footer styles */
         .footer-section {
-            background: linear-gradient(180deg, rgba(83,0,0,0.9) 0%, rgba(42,0,0,1) 100%);
-            padding: 3rem 2rem;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            padding: 0.8rem 2rem;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -425,12 +426,17 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            max-width: 1200px;
-            width: 100%;
+            gap: 1rem;
+        }
+
+        .footer-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            font-weight: 400;
         }
 
         .footer-logo {
-            max-width: 250px;
+            max-width: 100px;
             height: auto;
             opacity: 0.9;
             transition: all 0.3s ease;
@@ -444,11 +450,15 @@
 
         @media (max-width: 768px) {
             .footer-logo {
-                max-width: 180px;
+                max-width: 70px;
             }
 
             .footer-section {
-                padding: 2rem 1rem;
+                padding: 0.6rem 1rem;
+            }
+
+            .footer-text {
+                font-size: 0.75rem;
             }
         }
     </style>
@@ -507,7 +517,8 @@
     <!-- Footer con Logo Verde -->
     <footer class="footer-section">
         <div class="footer-content">
-            <img src="{{ asset('images/logoverde.png') }}" alt="Logo Verde" class="footer-logo fade-in">
+            <span class="footer-text">By:</span>
+            <img src="{{ asset('images/logoverde.png') }}" alt="Logo Verde" class="footer-logo">
         </div>
     </footer>
 

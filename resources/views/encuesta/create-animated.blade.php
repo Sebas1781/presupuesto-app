@@ -2210,5 +2210,13 @@ Los resultados de este ejercicio se integrarán al proceso de planeación y se d
             }
         });
     </script>
+
+    <!-- Footer con Logo Verde -->
+    <footer style="background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px); padding: 0.8rem 2rem; display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(255,255,255,0.1);">
+        <div style="display: flex; justify-content: center; align-items: center; gap: 1rem;">
+            <span style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; font-weight: 400;">By:</span>
+            <img src="{{ asset('images/logoverde.png') }}" alt="Logo Verde" style="max-width: 100px; height: auto; opacity: 0.9; transition: all 0.3s ease; display: block;">
+        </div>
+    </footer>
 </body>
 </html>
