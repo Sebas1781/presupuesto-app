@@ -649,14 +649,7 @@ class DashboardController extends Controller
             SELECT
                 c.nombre as colonia,
                 e.genero,
-                CASE
-                    WHEN e.edad BETWEEN 18 AND 25 THEN '18-25'
-                    WHEN e.edad BETWEEN 26 AND 35 THEN '26-35'
-                    WHEN e.edad BETWEEN 36 AND 45 THEN '36-45'
-                    WHEN e.edad BETWEEN 46 AND 55 THEN '46-55'
-                    WHEN e.edad > 55 THEN '56+'
-                    ELSE 'No especificado'
-                END as rango_edad,
+                COALESCE(e.edad, 'No especificado') as rango_edad,
                 COUNT(*) as total
             FROM encuestas e
             JOIN colonias c ON e.colonia_id = c.id
@@ -670,14 +663,7 @@ class DashboardController extends Controller
             SELECT
                 c.nombre as colonia,
                 e.genero,
-                CASE
-                    WHEN e.edad BETWEEN 18 AND 25 THEN '18-25'
-                    WHEN e.edad BETWEEN 26 AND 35 THEN '26-35'
-                    WHEN e.edad BETWEEN 36 AND 45 THEN '36-45'
-                    WHEN e.edad BETWEEN 46 AND 55 THEN '46-55'
-                    WHEN e.edad > 55 THEN '56+'
-                    ELSE 'No especificado'
-                END as rango_edad,
+                COALESCE(e.edad, 'No especificado') as rango_edad,
                 COUNT(*) as total
             FROM encuestas e
             JOIN colonias c ON e.colonia_id = c.id
@@ -691,13 +677,13 @@ class DashboardController extends Controller
             SELECT
                 c.nombre as colonia_nombre,
                 op.nombre as obra,
-                AVG(CAST(JSON_EXTRACT(e.obras_calificadas, '$.' || op.id) AS UNSIGNED)) as prioridad_promedio,
+                AVG(CAST(JSON_EXTRACT(e.obras_calificadas, CONCAT('$.\"', op.id, '\"')) AS UNSIGNED)) as prioridad_promedio,
                 COUNT(*) as total_calificaciones
             FROM encuestas e
             JOIN colonias c ON e.colonia_id = c.id
             JOIN obras_publicas op ON op.colonia_id = c.id
             WHERE c.distrito = 20
-            AND JSON_EXTRACT(e.obras_calificadas, '$.' || op.id) IS NOT NULL
+            AND JSON_EXTRACT(e.obras_calificadas, CONCAT('$.\"', op.id, '\"')) IS NOT NULL
             GROUP BY c.nombre, op.id, op.nombre
             ORDER BY c.nombre, prioridad_promedio DESC
         ");
@@ -707,13 +693,13 @@ class DashboardController extends Controller
             SELECT
                 c.nombre as colonia_nombre,
                 op.nombre as obra,
-                AVG(CAST(JSON_EXTRACT(e.obras_calificadas, '$.' || op.id) AS UNSIGNED)) as prioridad_promedio,
+                AVG(CAST(JSON_EXTRACT(e.obras_calificadas, CONCAT('$.\"', op.id, '\"')) AS UNSIGNED)) as prioridad_promedio,
                 COUNT(*) as total_calificaciones
             FROM encuestas e
             JOIN colonias c ON e.colonia_id = c.id
             JOIN obras_publicas op ON op.colonia_id = c.id
             WHERE c.distrito = 5
-            AND JSON_EXTRACT(e.obras_calificadas, '$.' || op.id) IS NOT NULL
+            AND JSON_EXTRACT(e.obras_calificadas, CONCAT('$.\"', op.id, '\"')) IS NOT NULL
             GROUP BY c.nombre, op.id, op.nombre
             ORDER BY c.nombre, prioridad_promedio DESC
         ");

@@ -273,6 +273,128 @@
             transform: scale(1.2);
         }
 
+        /* === LOGO RESPONSIVE === */
+        .header-logo {
+            height: 48px;
+            width: auto;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+        }
+
+        /* === TABLAS: desktop visible, mobile oculto === */
+        .tabla-desktop { display: block; }
+        .tabla-mobile { display: none; }
+
+        /* === ESCALA 1-10 RESPONSIVE === */
+        .escala-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+        .escala-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid #60a5fa;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+            color: #374151;
+            flex-shrink: 0;
+        }
+        .escala-btn.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        .escala-btn:hover {
+            background: #dbeafe;
+        }
+        .escala-label {
+            font-size: 12px;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+
+        /* === SNACKBAR === */
+        .snackbar {
+            position: fixed;
+            bottom: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #dc2626;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 10000;
+            box-shadow: 0 8px 30px rgba(220, 38, 38, 0.4);
+            transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 90vw;
+            text-align: center;
+        }
+        .snackbar.show {
+            bottom: 30px;
+        }
+
+        /* === CAMPO CON ERROR === */
+        .field-error {
+            border-color: #dc2626 !important;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2) !important;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* === MOBILE DROPDOWN CARD === */
+        .mobile-question-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 10px;
+        }
+        .mobile-question-card label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .mobile-question-card select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            background: white;
+        }
+
+        @media (max-width: 768px) {
+            .header-logo {
+                height: 36px;
+            }
+            .tabla-desktop { display: none !important; }
+            .tabla-mobile { display: block !important; }
+
+            .escala-container {
+                justify-content: center;
+                gap: 8px;
+            }
+            .escala-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 15px;
+            }
+            .escala-label {
+                width: 100%;
+                text-align: center;
+                font-size: 11px;
+            }
+        }
+
         /* Header mejorado con colores Pantone */
         .header-gradient {
             background: linear-gradient(135deg, #8B1538 0%, #C8102E 100%);
@@ -448,9 +570,7 @@
         <div class="max-w-6xl mx-auto px-6 py-6 relative z-10">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-4 slide-in-up">
-                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                        <i class="fas fa-poll text-2xl"></i>
-                    </div>
+                    <img src="{{ asset('images/ayunto-2026-h.png') }}" alt="Tecámac 2026" class="header-logo">
                     <div>
                         <h1 class="text-2xl font-bold">Consulta Ciudadana 2026</h1>
                         <p class="text-white/80 text-sm">Nuestro municipio es mucha pieza</p>
@@ -796,7 +916,9 @@
                     <h4 class="text-lg font-semibold text-gray-800 mb-4">
                         C.4. Refiriéndonos al entorno de su domicilio, ¿qué tanta preocupación le causan los siguientes problemas de inseguridad o violencia?
                     </h4>
-                    <div class="overflow-x-auto">
+
+                    <!-- DESKTOP: Tabla con radios -->
+                    <div class="tabla-desktop overflow-x-auto">
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="bg-gray-50">
@@ -831,13 +953,47 @@
                                         <td class="p-3 text-gray-700" x-text="problema"></td>
                                         <template x-for="valor in [4, 3, 2, 1]">
                                             <td class="text-center p-3">
-                                                <input type="radio" :value="valor" :name="`seguridad[problemas_seguridad][${index}]`" class="form-radio text-blue-600">
+                                                <input type="radio" :value="valor" :name="`seguridad[problemas_seguridad][${index}]`" class="form-radio text-blue-600 seguridad-required" :data-pregunta="problema">
                                             </td>
                                         </template>
                                     </tr>
                                 </template>
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- MOBILE: Dropdowns -->
+                    <div class="tabla-mobile space-y-2">
+                        <template x-for="(problema, index) in [
+                            'Corrupción de los elementos de seguridad',
+                            'Robo a casa habitación',
+                            'Asaltos a transeúntes',
+                            'Robo de vehículos, motos o autopartes',
+                            'Extorsión por llamada telefónica',
+                            'Venta de sustancias ilícitas (drogas)',
+                            'Falta de vigilancia y presencia de policías',
+                            'Venta y/o consumo de alcohol en la calle',
+                            'Violencia familiar, o contra las mujeres, niñas o niños',
+                            'Violencia en contra de los y las adultos mayores',
+                            'Violencia en contra de los animales domésticos o mascotas',
+                            'Violencia en contra de las personas discapacitadas',
+                            'Bullying en las escuelas',
+                            'Acoso o molestias en la calle a mujeres, señoritas, niñas',
+                            'Actos de discriminación o molestia a personas que se identifican como parte de la comunidad de LGTTBIQ+',
+                            'Riñas, peleas o lesiones entre vecinos',
+                            'Venta y/o consumo de sustancias ilícitas (drogas) en la calle'
+                        ]" :key="'m-prob-'+index">
+                            <div class="mobile-question-card">
+                                <label x-text="problema"></label>
+                                <select :name="`seguridad[problemas_seguridad][${index}]`" class="seguridad-required" :data-pregunta="problema">
+                                    <option value="">Seleccione...</option>
+                                    <option value="4">Me preocupa mucho</option>
+                                    <option value="3">Más o menos me preocupa</option>
+                                    <option value="2">Me preocupa poco</option>
+                                    <option value="1">No me preocupa</option>
+                                </select>
+                            </div>
+                        </template>
                     </div>
                 </div>
 
@@ -846,7 +1002,9 @@
                     <h4 class="text-lg font-semibold text-gray-800 mb-4">
                         C.22. Imagine que se encuentra con su familia en los siguientes lugares que le voy a mencionar ¿qué tan seguros e inseguros se sentirían si fuera un viernes a las 8 de la noche en?
                     </h4>
-                    <div class="overflow-x-auto">
+
+                    <!-- DESKTOP: Tabla con radios -->
+                    <div class="tabla-desktop overflow-x-auto">
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="bg-gray-50">
@@ -872,13 +1030,38 @@
                                         <td class="p-3 text-gray-700" x-text="lugar"></td>
                                         <template x-for="valor in [4, 3, 2, 1]">
                                             <td class="text-center p-3">
-                                                <input type="radio" :value="valor" :name="`seguridad[lugares_seguros][${index}]`" class="form-radio text-blue-600">
+                                                <input type="radio" :value="valor" :name="`seguridad[lugares_seguros][${index}]`" class="form-radio text-blue-600 seguridad-required" :data-pregunta="lugar">
                                             </td>
                                         </template>
                                     </tr>
                                 </template>
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- MOBILE: Dropdowns -->
+                    <div class="tabla-mobile space-y-2">
+                        <template x-for="(lugar, index) in [
+                            'Un parque de su comunidad',
+                            'En el mercado o tianguis',
+                            'Al visitar una plaza comercial o un supermercado',
+                            'En un cajero automático',
+                            'A bordo de un camión, micro o vagoneta de transporte público de pasajeros',
+                            'Al exterior de una escuela',
+                            'Caminando en las calles cercanas a su domicilio',
+                            'En el Municipio de Tecámac'
+                        ]" :key="'m-lug-'+index">
+                            <div class="mobile-question-card">
+                                <label x-text="lugar"></label>
+                                <select :name="`seguridad[lugares_seguros][${index}]`" class="seguridad-required" :data-pregunta="lugar">
+                                    <option value="">Seleccione...</option>
+                                    <option value="4">Seguros</option>
+                                    <option value="3">Más o menos seguros</option>
+                                    <option value="2">Poco seguros</option>
+                                    <option value="1">Totalmente inseguros</option>
+                                </select>
+                            </div>
+                        </template>
                     </div>
                 </div>
 
@@ -895,17 +1078,17 @@
                             <h5 class="font-medium text-gray-800 mb-3">
                                 C.32. Imaginando una situación de emergencia, si usted necesitara salir de su domicilio a las 3 de la madrugada y caminar cinco calles para tomar un taxi o transporte, ¿qué tan seguro/a se sentiría de hacerlo?
                             </h5>
-                            <div class="flex items-center space-x-2">
-                                <span class="text-sm text-gray-500">1 (Muy inseguro)</span>
+                            <div class="escala-container">
+                                <span class="escala-label">1 (Muy inseguro)</span>
                                 <template x-for="i in 10">
                                     <button type="button"
-                                            class="w-8 h-8 rounded-full border-2 border-blue-400 text-sm font-medium transition-colors"
-                                            :class="seguridad.situaciones_escala.emergencia_transporte == i ? 'bg-blue-500 text-white' : 'hover:bg-blue-100'"
+                                            class="escala-btn"
+                                            :class="seguridad.situaciones_escala.emergencia_transporte == i ? 'active' : ''"
                                             @click="seguridad.situaciones_escala.emergencia_transporte = i"
                                             x-text="i">
                                     </button>
                                 </template>
-                                <span class="text-sm text-gray-500">10 (Muy seguro)</span>
+                                <span class="escala-label">10 (Muy seguro)</span>
                                 <input type="hidden" name="seguridad[emergencia_transporte]" :value="seguridad.situaciones_escala.emergencia_transporte">
                             </div>
                         </div>
@@ -915,17 +1098,17 @@
                             <h5 class="font-medium text-gray-800 mb-3">
                                 C.33. ¿Qué tan seguro/a se siente al caminar solo/a después de las 10 de la noche, en su colonia?
                             </h5>
-                            <div class="flex items-center space-x-2">
-                                <span class="text-sm text-gray-500">1 (Muy inseguro)</span>
+                            <div class="escala-container">
+                                <span class="escala-label">1 (Muy inseguro)</span>
                                 <template x-for="i in 10">
                                     <button type="button"
-                                            class="w-8 h-8 rounded-full border-2 border-blue-400 text-sm font-medium transition-colors"
-                                            :class="seguridad.situaciones_escala.caminar_noche == i ? 'bg-blue-500 text-white' : 'hover:bg-blue-100'"
+                                            class="escala-btn"
+                                            :class="seguridad.situaciones_escala.caminar_noche == i ? 'active' : ''"
                                             @click="seguridad.situaciones_escala.caminar_noche = i"
                                             x-text="i">
                                     </button>
                                 </template>
-                                <span class="text-sm text-gray-500">10 (Muy seguro)</span>
+                                <span class="escala-label">10 (Muy seguro)</span>
                                 <input type="hidden" name="seguridad[caminar_noche]" :value="seguridad.situaciones_escala.caminar_noche">
                             </div>
                         </div>
@@ -935,17 +1118,17 @@
                             <h5 class="font-medium text-gray-800 mb-3">
                                 C.34. ¿Qué tan tranquilo/a se siente de que sus hijas o hijos caminen solos/as por su colonia durante el día?
                             </h5>
-                            <div class="flex items-center space-x-2">
-                                <span class="text-sm text-gray-500">1 (Muy inseguro)</span>
+                            <div class="escala-container">
+                                <span class="escala-label">1 (Muy inseguro)</span>
                                 <template x-for="i in 10">
                                     <button type="button"
-                                            class="w-8 h-8 rounded-full border-2 border-blue-400 text-sm font-medium transition-colors"
-                                            :class="seguridad.situaciones_escala.hijos_solos == i ? 'bg-blue-500 text-white' : 'hover:bg-blue-100'"
+                                            class="escala-btn"
+                                            :class="seguridad.situaciones_escala.hijos_solos == i ? 'active' : ''"
                                             @click="seguridad.situaciones_escala.hijos_solos = i"
                                             x-text="i">
                                     </button>
                                 </template>
-                                <span class="text-sm text-gray-500">10 (Muy seguro)</span>
+                                <span class="escala-label">10 (Muy seguro)</span>
                                 <input type="hidden" name="seguridad[hijos_solos]" :value="seguridad.situaciones_escala.hijos_solos">
                             </div>
                         </div>
@@ -955,17 +1138,17 @@
                             <h5 class="font-medium text-gray-800 mb-3">
                                 C.35. ¿Qué tan seguro/a se siente al esperar el transporte público en su colonia durante la noche?
                             </h5>
-                            <div class="flex items-center space-x-2">
-                                <span class="text-sm text-gray-500">1 (Muy inseguro)</span>
+                            <div class="escala-container">
+                                <span class="escala-label">1 (Muy inseguro)</span>
                                 <template x-for="i in 10">
                                     <button type="button"
-                                            class="w-8 h-8 rounded-full border-2 border-blue-400 text-sm font-medium transition-colors"
-                                            :class="seguridad.situaciones_escala.transporte_publico == i ? 'bg-blue-500 text-white' : 'hover:bg-blue-100'"
+                                            class="escala-btn"
+                                            :class="seguridad.situaciones_escala.transporte_publico == i ? 'active' : ''"
                                             @click="seguridad.situaciones_escala.transporte_publico = i"
                                             x-text="i">
                                     </button>
                                 </template>
-                                <span class="text-sm text-gray-500">10 (Muy seguro)</span>
+                                <span class="escala-label">10 (Muy seguro)</span>
                                 <input type="hidden" name="seguridad[transporte_publico]" :value="seguridad.situaciones_escala.transporte_publico">
                             </div>
                         </div>
@@ -1238,6 +1421,9 @@ Los resultados de este ejercicio se integrarán al proceso de planeación y se d
         </form>
     </div>
 
+    <!-- Snackbar de validación -->
+    <div id="snackbar" class="snackbar"></div>
+
     <script>
         let mapInstances = {};
         let autocompleteInstances = {};
@@ -1366,28 +1552,23 @@ Los resultados de este ejercicio se integrarán al proceso de planeación y se d
                 // Validar datos sociodemográficos antes de continuar
                 validateAndContinue() {
                     const requiredFields = [
-                        'colonia_id',
-                        'genero',
-                        'edad',
-                        'nivel_educativo',
-                        'estado_civil'
+                        { name: 'colonia_id', label: 'Colonia' },
+                        { name: 'genero', label: 'Género' },
+                        { name: 'edad', label: 'Edad' },
+                        { name: 'nivel_educativo', label: 'Nivel Educativo' },
+                        { name: 'estado_civil', label: 'Estado Civil' }
                     ];
 
                     let allFieldsValid = true;
-                    let errorMessage = 'Por favor completa los siguientes campos obligatorios: ';
                     let missingFields = [];
+                    let firstMissing = null;
 
-                    requiredFields.forEach(fieldName => {
-                        const field = document.querySelector(`[name="${fieldName}"]`);
+                    requiredFields.forEach(function(f) {
+                        const field = document.querySelector('[name="' + f.name + '"]');
                         if (!field || !field.value.trim()) {
                             allFieldsValid = false;
-                            switch(fieldName) {
-                                case 'colonia_id': missingFields.push('Colonia'); break;
-                                case 'genero': missingFields.push('Género'); break;
-                                case 'edad': missingFields.push('Edad'); break;
-                                case 'nivel_educativo': missingFields.push('Nivel Educativo'); break;
-                                case 'estado_civil': missingFields.push('Estado Civil'); break;
-                            }
+                            missingFields.push(f.label);
+                            if (!firstMissing && field) { firstMissing = field; markFieldError(field); }
                         }
                     });
 
@@ -1420,12 +1601,18 @@ Los resultados de este ejercicio se integrarán al proceso de planeación y se d
                         this.progress = Math.max(this.progress, 50);
                         this.updateProgress(50);
                     } else {
-                        // Mostrar mensaje de error
-                        errorDiv.classList.remove('hidden');
-                        errorDiv.querySelector('span').textContent = errorMessage + missingFields.join(', ');
+                        // Mostrar snackbar con campos faltantes
+                        showSnackbar('Campos obligatorios faltantes: ' + missingFields.join(', '), 5000);
 
-                        // Scroll al error
-                        errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        // Mostrar mensaje de error inline también
+                        errorDiv.classList.remove('hidden');
+                        errorDiv.querySelector('span').textContent = 'Por favor completa: ' + missingFields.join(', ');
+
+                        // Focus al primer campo faltante
+                        if (firstMissing) {
+                            firstMissing.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            setTimeout(function() { firstMissing.focus(); }, 500);
+                        }
                     }
                 },
 
@@ -1746,20 +1933,170 @@ Los resultados de este ejercicio se integrarán al proceso de planeación y se d
                 handleSubmit(event) {
                     event.preventDefault();
 
-                    if (!this.selectedColonia) {
-                        alert('Por favor, selecciona una colonia antes de enviar.');
-                        return;
-                    }
+                    // ============================
+                    // VALIDACIÓN COMPLETA DEL FORMULARIO
+                    // ============================
+                    let firstInvalid = null;
+                    let errorMessages = [];
 
-                    // Solo validar obras si la colonia tiene obras disponibles
-                    if (this.obras.length > 0) {
+                    // --- 1. DATOS SOCIODEMOGRÁFICOS ---
+                    const socioFields = [
+                        { name: 'colonia_id', label: 'Colonia' },
+                        { name: 'genero', label: 'Género' },
+                        { name: 'edad', label: 'Edad' },
+                        { name: 'nivel_educativo', label: 'Nivel Educativo' },
+                        { name: 'estado_civil', label: 'Estado Civil' }
+                    ];
+                    socioFields.forEach(function(f) {
+                        const el = document.querySelector('[name="' + f.name + '"]');
+                        if (!el || !el.value || !el.value.trim()) {
+                            errorMessages.push(f.label);
+                            if (!firstInvalid && el) { firstInvalid = el; markFieldError(el); }
+                        }
+                    });
+
+                    // --- 2. OBRAS PÚBLICAS (al menos una si hay obras) ---
+                    if (this.obras && this.obras.length > 0) {
                         const calificaciones = Object.keys(this.obrasCalificadas);
                         if (calificaciones.length === 0) {
-                            alert('Por favor, califica al menos una obra pública.');
-                            return;
+                            errorMessages.push('Calificación de al menos una obra');
+                            if (!firstInvalid) {
+                                var obrasEl = document.getElementById('obras-section');
+                                if (obrasEl) firstInvalid = obrasEl;
+                            }
                         }
                     }
 
+                    // --- 3. SEGURIDAD: C.1 servicio_seguridad ---
+                    var c1Checked = document.querySelector('input[name="seguridad[servicio_seguridad]"]:checked');
+                    if (!c1Checked) {
+                        errorMessages.push('C.1 Servicio de seguridad');
+                        if (!firstInvalid) {
+                            var c1El = document.querySelector('input[name="seguridad[servicio_seguridad]"]');
+                            if (c1El) { firstInvalid = c1El.closest('.propuesta-card') || c1El; markFieldError(c1El.closest('.propuesta-card')); }
+                        }
+                    }
+
+                    // --- 4. SEGURIDAD: C.2 confia_policia ---
+                    var c2Checked = document.querySelector('input[name="seguridad[confia_policia]"]:checked');
+                    if (!c2Checked) {
+                        errorMessages.push('C.2 Confianza en policías');
+                        if (!firstInvalid) {
+                            var c2El = document.querySelector('input[name="seguridad[confia_policia]"]');
+                            if (c2El) { firstInvalid = c2El.closest('.propuesta-card') || c2El; markFieldError(c2El.closest('.propuesta-card')); }
+                        }
+                    }
+
+                    // --- 5. SEGURIDAD: C.3 horario_inseguro ---
+                    var c3Checked = document.querySelector('input[name="seguridad[horario_inseguro]"]:checked');
+                    if (!c3Checked) {
+                        errorMessages.push('C.3 Horario de inseguridad');
+                        if (!firstInvalid) {
+                            var c3El = document.querySelector('input[name="seguridad[horario_inseguro]"]');
+                            if (c3El) { firstInvalid = c3El.closest('.propuesta-card') || c3El; markFieldError(c3El.closest('.propuesta-card')); }
+                        }
+                    }
+
+                    // --- 6. C.4 Problemas de seguridad (17 preguntas) ---
+                    var c4Total = 17;
+                    var c4Missing = [];
+                    for (var ci = 0; ci < c4Total; ci++) {
+                        var fieldName = 'seguridad[problemas_seguridad][' + ci + ']';
+                        if (isMobile()) {
+                            var sel = document.querySelector('select[name="' + fieldName + '"]');
+                            if (sel && (!sel.value || sel.value === '')) {
+                                c4Missing.push(ci);
+                                if (!firstInvalid) { firstInvalid = sel; markFieldError(sel.closest('.mobile-question-card') || sel); }
+                            }
+                        } else {
+                            var checked = document.querySelector('input[name="' + fieldName + '"]:checked');
+                            if (!checked) {
+                                c4Missing.push(ci);
+                                if (!firstInvalid) {
+                                    var radioEl = document.querySelector('input[name="' + fieldName + '"]');
+                                    if (radioEl) { firstInvalid = radioEl.closest('tr') || radioEl; markFieldError(radioEl.closest('tr')); }
+                                }
+                            }
+                        }
+                    }
+                    if (c4Missing.length > 0) {
+                        errorMessages.push('C.4 Problemas de inseguridad (' + c4Missing.length + ' sin responder)');
+                    }
+
+                    // --- 7. C.22 Lugares seguros (8 lugares) ---
+                    var c22Total = 8;
+                    var c22Missing = [];
+                    for (var li = 0; li < c22Total; li++) {
+                        var lugarName = 'seguridad[lugares_seguros][' + li + ']';
+                        if (isMobile()) {
+                            var sel2 = document.querySelector('select[name="' + lugarName + '"]');
+                            if (sel2 && (!sel2.value || sel2.value === '')) {
+                                c22Missing.push(li);
+                                if (!firstInvalid) { firstInvalid = sel2; markFieldError(sel2.closest('.mobile-question-card') || sel2); }
+                            }
+                        } else {
+                            var checked2 = document.querySelector('input[name="' + lugarName + '"]:checked');
+                            if (!checked2) {
+                                c22Missing.push(li);
+                                if (!firstInvalid) {
+                                    var radioEl2 = document.querySelector('input[name="' + lugarName + '"]');
+                                    if (radioEl2) { firstInvalid = radioEl2.closest('tr') || radioEl2; markFieldError(radioEl2.closest('tr')); }
+                                }
+                            }
+                        }
+                    }
+                    if (c22Missing.length > 0) {
+                        errorMessages.push('C.22 Lugares seguros (' + c22Missing.length + ' sin responder)');
+                    }
+
+                    // --- 8. C.32-C.35 Escalas 1-10 ---
+                    var escalas = [
+                        { name: 'seguridad[emergencia_transporte]', label: 'C.32 Emergencia transporte' },
+                        { name: 'seguridad[caminar_noche]', label: 'C.33 Caminar de noche' },
+                        { name: 'seguridad[hijos_solos]', label: 'C.34 Hijos solos' },
+                        { name: 'seguridad[transporte_publico]', label: 'C.35 Transporte público noche' }
+                    ];
+                    escalas.forEach(function(esc) {
+                        var hiddenInput = document.querySelector('input[type="hidden"][name="' + esc.name + '"]');
+                        if (!hiddenInput || !hiddenInput.value || hiddenInput.value === '') {
+                            errorMessages.push(esc.label);
+                            if (!firstInvalid) {
+                                var container = hiddenInput ? hiddenInput.closest('.border-l-4') : null;
+                                if (container) { firstInvalid = container; markFieldError(container); }
+                            }
+                        }
+                    });
+
+                    // ============================
+                    // SI HAY ERRORES: mostrar snackbar + focus
+                    // ============================
+                    if (errorMessages.length > 0) {
+                        var msg;
+                        if (errorMessages.length <= 3) {
+                            msg = 'Faltan campos: ' + errorMessages.join(', ');
+                        } else {
+                            msg = 'Faltan ' + errorMessages.length + ' campos obligatorios por completar';
+                        }
+                        showSnackbar(msg, 5000);
+
+                        if (firstInvalid) {
+                            firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            // Intentar focus si es un input/select
+                            setTimeout(function() {
+                                if (firstInvalid.tagName === 'INPUT' || firstInvalid.tagName === 'SELECT') {
+                                    firstInvalid.focus();
+                                } else {
+                                    var focusable = firstInvalid.querySelector('input, select, button');
+                                    if (focusable) focusable.focus();
+                                }
+                            }, 500);
+                        }
+                        return;
+                    }
+
+                    // ============================
+                    // TODO OK: enviar formulario
+                    // ============================
                     this.isSubmitting = true;
 
                     setTimeout(() => {
@@ -1807,6 +2144,31 @@ Los resultados de este ejercicio se integrarán al proceso de planeación y se d
                 console.log('Esperando a que Google Maps API se cargue...');
             }
         }, 500);
+
+        // === SNACKBAR GLOBAL ===
+        function showSnackbar(message, duration) {
+            duration = duration || 4000;
+            const snackbar = document.getElementById('snackbar');
+            if (!snackbar) return;
+            snackbar.textContent = message;
+            snackbar.classList.add('show');
+            clearTimeout(snackbar._timeout);
+            snackbar._timeout = setTimeout(function() {
+                snackbar.classList.remove('show');
+            }, duration);
+        }
+
+        // === HELPER: Añadir error visual a un campo ===
+        function markFieldError(el) {
+            if (!el) return;
+            el.classList.add('field-error');
+            setTimeout(function() { el.classList.remove('field-error'); }, 2500);
+        }
+
+        // === HELPER: Comprobar si estamos en móvil ===
+        function isMobile() {
+            return window.innerWidth <= 768;
+        }
 
         // Funciones para el modal de emergencia
         function closeEmergencyModal(confirmed) {

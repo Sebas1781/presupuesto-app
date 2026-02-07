@@ -42,7 +42,7 @@
 
         <!-- Slogan -->
         <div class="mt-8">
-            <img src="{{ asset('images/slogan color.png') }}" alt="Presupuesto Participativo 2026" class="w-full max-w-sm mx-auto">
+            <img src="{{ asset('images/slogan-color.png') }}" alt="Presupuesto Participativo 2026" class="w-full max-w-sm mx-auto">
         </div>
     </div>
 </body>

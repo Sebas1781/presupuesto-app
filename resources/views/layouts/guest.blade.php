@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>Presupuesto 2026</title>
-        <link rel="icon" type="image/png" href="{{ asset('images/ayunto 2026 v.png') }}">
+        <link rel="icon" type="image/png" href="{{ asset('images/ayunto-2026-v.png') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -19,7 +19,7 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0" style="background-color: #f7f7f5;">
             <div>
                 <a href="/">
-                    <img src="{{ asset('images/ayunto 2026 v.png') }}" alt="Ayuntamiento 2026" class="w-48 h-auto" />
+                    <img src="{{ asset('images/ayunto-2026-v.png') }}" alt="Ayuntamiento 2026" class="w-48 h-auto" />
                 </a>
             </div>
 

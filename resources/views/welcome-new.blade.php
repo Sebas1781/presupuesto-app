@@ -130,6 +130,8 @@
 
         .logo-tecamac {
             height: 120px;
+            width: auto;
+            object-fit: contain;
             filter: brightness(0) invert(1);
             transition: all 0.3s ease;
         }
@@ -277,11 +279,32 @@
             }
 
             .logo-tecamac {
-                height: 90px;
+                height: 80px;
+                width: auto;
+                max-width: 90vw;
+                object-fit: contain;
             }
 
             .top-bar {
                 padding: 0.5rem 1rem;
+            }
+
+            .president-intro {
+                font-size: 1.2rem;
+            }
+
+            .cta-button {
+                font-size: 1.1rem;
+                padding: 1rem 2.5rem;
+            }
+
+            .slogan-image {
+                max-height: 120px;
+            }
+
+            .president-image {
+                max-height: 400px;
+            }
         }
 
         .float-delayed {
@@ -408,7 +431,7 @@
     <section class="hero-section">
         <!-- Logo de Tecámac Centrado -->
         <div class="logo-container fade-in">
-            <img src="{{ asset('images/AYUNTO 2026 H.png') }}" alt="Tecámac 2026" class="logo-tecamac">
+            <img src="{{ asset('images/ayunto-2026-h.png') }}" alt="Tecámac 2026" class="logo-tecamac">
         </div>
 
         <!-- Contenido Principal -->
@@ -422,7 +445,7 @@
                 </div>
 
                 <div class="fade-in fade-in-delay-2">
-                    <img src="{{ asset('images/VOLAR SLOGAN 2026 N.png') }}" alt="Aquí, la que manda es la gente" class="slogan-image">
+                    <img src="{{ asset('images/volar-slogan-2026-n.png') }}" alt="Aquí, la que manda es la gente" class="slogan-image">
                 </div>
 
                 <div class="fade-in fade-in-delay-3">
