@@ -26,6 +26,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('/obras-por-colonia/{colonia}', [DashboardController::class, 'getObrasPorColonia'])->name('obras-por-colonia');
     Route::get('/encuestas', [DashboardController::class, 'encuestas'])->name('encuestas.index');
     Route::get('/encuestas/{id}', [DashboardController::class, 'showEncuesta'])->name('encuestas.show');
+    Route::delete('/encuestas/{id}', [DashboardController::class, 'destroy'])->name('encuestas.destroy');
     Route::get('/export/encuestas', [ExportController::class, 'encuestas'])->name('export.encuestas');
     Route::get('/export/estadisticas-pdf', [ExportController::class, 'estadisticasPdf'])->name('export.estadisticas-pdf');
 });

@@ -7,6 +7,7 @@ use App\Models\Encuesta;
 use App\Models\Propuesta;
 use App\Models\Reporte;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -934,5 +935,35 @@ class DashboardController extends Controller
             ->values();
 
         return response()->json($obras);
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $encuesta = Encuesta::findOrFail($id);
+
+            // Eliminar archivos de propuestas asociadas
+            foreach ($encuesta->propuestas as $propuesta) {
+                if ($propuesta->fotografia) {
+                    Storage::disk('public')->delete($propuesta->fotografia);
+                }
+            }
+
+            // Eliminar archivos de reportes asociados
+            foreach ($encuesta->reportes as $reporte) {
+                if ($reporte->evidencia) {
+                    Storage::disk('public')->delete($reporte->evidencia);
+                }
+            }
+
+            // Eliminar la encuesta (esto también eliminará propuestas y reportes por cascade)
+            $encuesta->delete();
+
+            return redirect()->route('admin.encuestas.index')
+                ->with('success', 'Encuesta eliminada correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.encuestas.index')
+                ->with('error', 'Error al eliminar la encuesta: ' . $e->getMessage());
+        }
     }
 }

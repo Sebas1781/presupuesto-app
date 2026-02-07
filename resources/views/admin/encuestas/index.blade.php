@@ -12,6 +12,24 @@
 @stop
 
 @section('content')
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Filtros</h3>
@@ -117,9 +135,16 @@
                         </td>
                         <td>{{ $encuesta->created_at->format('d/m/Y H:i') }}</td>
                         <td>
-                            <a href="{{ route('admin.encuestas.show', $encuesta->id) }}" class="btn btn-sm btn-primary">
-                                <i class="fas fa-eye"></i> Ver
+                            <a href="{{ route('admin.encuestas.show', $encuesta->id) }}" class="btn btn-sm btn-primary" title="Ver detalles">
+                                <i class="fas fa-eye"></i>
                             </a>
+                            <form action="{{ route('admin.encuestas.destroy', $encuesta->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta encuesta? Esta acción no se puede deshacer.')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger" title="Eliminar encuesta">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                     @empty

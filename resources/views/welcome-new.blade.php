@@ -440,7 +440,7 @@
             <div class="content-text">
                 <div class="fade-in fade-in-delay-1">
                     <p class="president-intro">
-                        ¡La Presidenta Municipal, <span class="president-name">Rosi Wong</span>, te invita a definir juntos el presupuesto 2026!
+                        ¡La Presidenta Municipal, <span class="president-name">Rosi Wong</span>, le invita a definir juntos el presupuesto 2026!
                     </p>
                 </div>
 
