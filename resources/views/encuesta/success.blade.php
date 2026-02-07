@@ -19,13 +19,12 @@
 
         <!-- Mensaje de éxito -->
         <h1 class="text-2xl font-bold text-gray-900 mb-4">
-            ¡Encuesta Enviada Correctamente!
+            ¡Encuesta enviada correctamente!
         </h1>
 
         <p class="text-gray-600 mb-8">
-            Gracias por tu participación en el Presupuesto Participativo 2026.
-            Tu opinión es muy importante para nosotros y será considerada en
-            las decisiones sobre las obras públicas de tu comunidad.
+            ¡GRACIAS POR AYUDARNOS A CONTRUIR EL PRESUPUESTO 2026!
+            Tu opinión es muy importante para nosotros y será considerada.
         </p>
 
         <!-- Botones de acción -->
@@ -39,6 +38,11 @@
                class="block w-full bg-gray-200 text-gray-800 font-semibold py-3 px-6 rounded-lg hover:bg-gray-300 transition-colors">
                 Responder Otra Encuesta
             </a>
+        </div>
+
+        <!-- Slogan -->
+        <div class="mt-8">
+            <img src="{{ asset('images/slogan color.png') }}" alt="Presupuesto Participativo 2026" class="w-full max-w-sm mx-auto">
         </div>
     </div>
 </body>
