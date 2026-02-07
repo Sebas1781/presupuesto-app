@@ -12,7 +12,7 @@
     <!-- Estadísticas generales -->
     <div class="row">
         <div class="col-md-3">
-            <div class="small-box bg-info">
+            <div class="small-box" style="background-color: #235B4E; color: #fff;">
                 <div class="inner">
                     <h3>{{ $totalEncuestas }}</h3>
                     <p>Total Encuestas</p>
@@ -24,7 +24,7 @@
         </div>
 
         <div class="col-md-3">
-            <div class="small-box bg-success">
+            <div class="small-box" style="background-color: #10312B; color: #fff;">
                 <div class="inner">
                     <h3>{{ $totalPropuestas }}</h3>
                     <p>Total Propuestas</p>
@@ -36,7 +36,7 @@
         </div>
 
         <div class="col-md-3">
-            <div class="small-box bg-warning">
+            <div class="small-box" style="background-color: #BC955C; color: #fff;">
                 <div class="inner">
                     <h3>{{ $totalReportes }}</h3>
                     <p>Total Reportes</p>
@@ -48,7 +48,7 @@
         </div>
 
         <div class="col-md-3">
-            <div class="small-box bg-danger">
+            <div class="small-box" style="background-color: #9F2441; color: #fff;">
                 <div class="inner">
                     <h3>{{ $encuestasPorColonia->count() }}</h3>
                     <p>Colonias Participantes</p>
@@ -80,7 +80,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header bg-primary">
+                <div class="card-header" style="background-color: #235B4E; color: #fff;">
                     <h3 class="card-title text-white">
                         <i class="fas fa-shield-alt mr-2"></i>Estadísticas de Seguridad Pública
                     </h3>
@@ -139,7 +139,7 @@
                             <div class="row">
                                 @if($promediosSeguridad && $promediosSeguridad->avg_emergencia)
                                 <div class="col-12 mb-2">
-                                    <div class="small-box bg-danger">
+                                    <div class="small-box" style="background-color: #9F2441; color: #fff;">
                                         <div class="inner">
                                             <h4>{{ number_format($promediosSeguridad->avg_emergencia, 1) }}/10</h4>
                                             <p>Emergencia y Transporte</p>
@@ -151,7 +151,7 @@
                                 </div>
 
                                 <div class="col-12 mb-2">
-                                    <div class="small-box bg-warning">
+                                    <div class="small-box" style="background-color: #BC955C; color: #fff;">
                                         <div class="inner">
                                             <h4>{{ number_format($promediosSeguridad->avg_caminar, 1) }}/10</h4>
                                             <p>Caminar de Noche</p>
@@ -163,7 +163,7 @@
                                 </div>
 
                                 <div class="col-12 mb-2">
-                                    <div class="small-box bg-info">
+                                    <div class="small-box" style="background-color: #235B4E; color: #fff;">
                                         <div class="inner">
                                             <h4>{{ number_format($promediosSeguridad->avg_hijos, 1) }}/10</h4>
                                             <p>Hijos Caminando Solos</p>
@@ -175,7 +175,7 @@
                                 </div>
 
                                 <div class="col-12">
-                                    <div class="small-box bg-success">
+                                    <div class="small-box" style="background-color: #10312B; color: #fff;">
                                         <div class="inner">
                                             <h4>{{ number_format($promediosSeguridad->avg_transporte, 1) }}/10</h4>
                                             <p>Transporte Público</p>
@@ -205,7 +205,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header" style="background-color: #9D2449; color: white;">
+                <div class="card-header" style="background-color: #691C32; color: #fff;">
                     <h3 class="card-title text-white">
                         <i class="fas fa-chart-bar mr-2"></i>ANÁLISIS POR DISTRITO
                     </h3>
@@ -222,7 +222,7 @@
                         <!-- Distrito 20 Demográfico -->
                         <div class="col-md-6">
                             <div class="card">
-                                <div class="card-header" style="background-color: #4E232E; color: white;">
+                                <div class="card-header" style="background-color: #6F7271; color: #fff;">
                                     <h5 class="card-title text-white mb-0">Colonias del Distrito 20</h5>
                                     <small class="text-white-50">Género y Edad por Colonia</small>
                                 </div>

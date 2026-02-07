@@ -10,7 +10,7 @@
     <div class="row">
         <!-- Estadísticas generales -->
         <div class="col-md-3">
-            <div class="small-box bg-info">
+            <div class="small-box" style="background-color: #235B4E; color: #fff;">
                 <div class="inner">
                     <h3>{{ $totalEncuestas }}</h3>
                     <p>Total Encuestas</p>
@@ -25,7 +25,7 @@
         </div>
 
         <div class="col-md-3">
-            <div class="small-box bg-success">
+            <div class="small-box" style="background-color: #10312B; color: #fff;">
                 <div class="inner">
                     <h3>{{ $totalPropuestas }}</h3>
                     <p>Total Propuestas</p>
@@ -37,7 +37,7 @@
         </div>
 
         <div class="col-md-3">
-            <div class="small-box bg-warning">
+            <div class="small-box" style="background-color: #BC955C; color: #fff;">
                 <div class="inner">
                     <h3>{{ $totalReportes }}</h3>
                     <p>Total Reportes</p>
@@ -49,7 +49,7 @@
         </div>
 
         <div class="col-md-3">
-            <div class="small-box bg-secondary">
+            <div class="small-box" style="background-color: #98989A; color: #fff;">
                 <div class="inner">
                     <h3>{{ $encuestasPorColonia->count() }}</h3>
                     <p>Colonias Participantes</p>
@@ -65,7 +65,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header bg-primary">
+                <div class="card-header" style="background-color: #235B4E; color: #fff;">
                     <h3 class="card-title text-white">
                         <i class="fas fa-clock mr-2"></i>Encuestas Recientes
                     </h3>
@@ -116,7 +116,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header" style="background-color: #9D2449; color: white;">
+                <div class="card-header" style="background-color: #691C32; color: #fff;">
                     <h3 class="card-title text-white">
                         <i class="fas fa-chart-bar mr-2"></i>Participación por Colonia
                     </h3>
