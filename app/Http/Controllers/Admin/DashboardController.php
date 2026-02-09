@@ -113,17 +113,21 @@ class DashboardController extends Controller
             ->groupBy('colonias.nombre', 'encuestas.nivel_educativo')
             ->get();
 
-        // BLOQUE B: Análisis de prioridad de obras por distrito
-        $distrito20Obras = Encuesta::join('colonias', 'encuestas.colonia_id', '=', 'colonias.id')
-            ->join('obras_publicas', 'obras_publicas.colonia_id', '=', 'colonias.id')
-            ->where('colonias.distrito', 20)
-            ->whereNotNull('encuestas.obras_calificadas')
+        // Pre-cargar todas las obras en 1 sola query (evita N+1)
+        $allObras = \App\Models\ObraPublica::all()->keyBy('id');
+        $coloniaIdsDistrito20 = \App\Models\Colonia::where('distrito', 20)->pluck('id');
+        $coloniaIdsDistrito5 = \App\Models\Colonia::where('distrito', 5)->pluck('id');
+
+        // BLOQUE B: Análisis de prioridad de obras por distrito (optimizado)
+        $distrito20Obras = Encuesta::with('colonia')
+            ->whereIn('colonia_id', $coloniaIdsDistrito20)
+            ->whereNotNull('obras_calificadas')
             ->get()
-            ->flatMap(function($encuesta) {
+            ->flatMap(function($encuesta) use ($allObras) {
                 $obras = [];
                 if ($encuesta->obras_calificadas && is_array($encuesta->obras_calificadas)) {
                     foreach ($encuesta->obras_calificadas as $obraId => $prioridad) {
-                        $obra = \App\Models\ObraPublica::find($obraId);
+                        $obra = $allObras->get($obraId);
                         if ($obra) {
                             $obras[] = [
                                 'obra' => $obra->nombre,
@@ -145,16 +149,15 @@ class DashboardController extends Controller
             })
             ->values();
 
-        $distrito5Obras = Encuesta::join('colonias', 'encuestas.colonia_id', '=', 'colonias.id')
-            ->join('obras_publicas', 'obras_publicas.colonia_id', '=', 'colonias.id')
-            ->where('colonias.distrito', 5)
-            ->whereNotNull('encuestas.obras_calificadas')
+        $distrito5Obras = Encuesta::with('colonia')
+            ->whereIn('colonia_id', $coloniaIdsDistrito5)
+            ->whereNotNull('obras_calificadas')
             ->get()
-            ->flatMap(function($encuesta) {
+            ->flatMap(function($encuesta) use ($allObras) {
                 $obras = [];
                 if ($encuesta->obras_calificadas && is_array($encuesta->obras_calificadas)) {
                     foreach ($encuesta->obras_calificadas as $obraId => $prioridad) {
-                        $obra = \App\Models\ObraPublica::find($obraId);
+                        $obra = $allObras->get($obraId);
                         if ($obra) {
                             $obras[] = [
                                 'obra' => $obra->nombre,
@@ -296,17 +299,19 @@ class DashboardController extends Controller
             ->groupBy('colonias.nombre', 'encuestas.nivel_educativo')
             ->get();
 
-        // BLOQUE B: Análisis de prioridad de obras por distrito
-        $distrito20Obras = Encuesta::join('colonias', 'encuestas.colonia_id', '=', 'colonias.id')
-            ->join('obras_publicas', 'obras_publicas.colonia_id', '=', 'colonias.id')
-            ->where('colonias.distrito', '20')
-            ->whereNotNull('encuestas.obras_calificadas')
+        // Pre-cargar todas las obras en 1 sola query (evita N+1)
+        $allObras = \App\Models\ObraPublica::all()->keyBy('id');
+
+        // BLOQUE B: Análisis de prioridad de obras por distrito (optimizado)
+        $distrito20Obras = Encuesta::with('colonia')
+            ->whereIn('colonia_id', $coloniasDistrito20->pluck('id'))
+            ->whereNotNull('obras_calificadas')
             ->get()
-            ->flatMap(function($encuesta) {
+            ->flatMap(function($encuesta) use ($allObras) {
                 $obras = [];
                 if ($encuesta->obras_calificadas && is_array($encuesta->obras_calificadas)) {
                     foreach ($encuesta->obras_calificadas as $obraId => $prioridad) {
-                        $obra = \App\Models\ObraPublica::find($obraId);
+                        $obra = $allObras->get($obraId);
                         if ($obra) {
                             $obras[] = [
                                 'obra' => $obra->nombre,
@@ -328,16 +333,15 @@ class DashboardController extends Controller
             })
             ->values();
 
-        $distrito5Obras = Encuesta::join('colonias', 'encuestas.colonia_id', '=', 'colonias.id')
-            ->join('obras_publicas', 'obras_publicas.colonia_id', '=', 'colonias.id')
-            ->where('colonias.distrito', '5')
-            ->whereNotNull('encuestas.obras_calificadas')
+        $distrito5Obras = Encuesta::with('colonia')
+            ->whereIn('colonia_id', $coloniasDistrito5->pluck('id'))
+            ->whereNotNull('obras_calificadas')
             ->get()
-            ->flatMap(function($encuesta) {
+            ->flatMap(function($encuesta) use ($allObras) {
                 $obras = [];
                 if ($encuesta->obras_calificadas && is_array($encuesta->obras_calificadas)) {
                     foreach ($encuesta->obras_calificadas as $obraId => $prioridad) {
-                        $obra = \App\Models\ObraPublica::find($obraId);
+                        $obra = $allObras->get($obraId);
                         if ($obra) {
                             $obras[] = [
                                 'obra' => $obra->nombre,
@@ -405,14 +409,14 @@ class DashboardController extends Controller
 
         // ============ NUEVAS GRÁFICAS BLOQUE B ============
 
-        // Top Obras con Mayor Prioridad (general, todas las colonias)
+        // Top Obras con Mayor Prioridad (general, todas las colonias) - optimizado
         $topObrasGeneral = Encuesta::whereNotNull('obras_calificadas')
             ->get()
-            ->flatMap(function($encuesta) {
+            ->flatMap(function($encuesta) use ($allObras) {
                 $obras = [];
                 if ($encuesta->obras_calificadas && is_array($encuesta->obras_calificadas)) {
                     foreach ($encuesta->obras_calificadas as $obraId => $prioridad) {
-                        $obra = \App\Models\ObraPublica::find($obraId);
+                        $obra = $allObras->get($obraId);
                         if ($obra) {
                             $obras[] = [
                                 'obra' => $obra->nombre,
@@ -602,11 +606,12 @@ class DashboardController extends Controller
     {
         $encuesta = Encuesta::with(['colonia', 'propuestas', 'reportes'])->findOrFail($id);
 
-        // Obtener nombres de obras para las calificaciones
+        // Obtener nombres de obras para las calificaciones (optimizado)
+        $allObras = \App\Models\ObraPublica::all()->keyBy('id');
         $obrasCalificadasConNombres = [];
         if ($encuesta->obras_calificadas) {
             foreach ($encuesta->obras_calificadas as $obraId => $calificacion) {
-                $obra = \App\Models\ObraPublica::find($obraId);
+                $obra = $allObras->get($obraId);
                 $obrasCalificadasConNombres[] = [
                     'id' => $obraId,
                     'nombre' => $obra ? $obra->nombre : 'Obra no encontrada',
@@ -786,14 +791,15 @@ class DashboardController extends Controller
             GROUP BY c.nombre ORDER BY total DESC
         ");
 
-        // Top Obras con Mayor Prioridad (general)
+        // Top Obras con Mayor Prioridad (general) - optimizado
+        $allObras = \App\Models\ObraPublica::all()->keyBy('id');
         $topObrasGeneral = Encuesta::whereNotNull('obras_calificadas')
             ->get()
-            ->flatMap(function($encuesta) {
+            ->flatMap(function($encuesta) use ($allObras) {
                 $obras = [];
                 if ($encuesta->obras_calificadas && is_array($encuesta->obras_calificadas)) {
                     foreach ($encuesta->obras_calificadas as $obraId => $prioridad) {
-                        $obra = \App\Models\ObraPublica::find($obraId);
+                        $obra = $allObras->get($obraId);
                         if ($obra) {
                             $obras[] = ['obra' => $obra->nombre, 'prioridad' => $prioridad];
                         }
@@ -905,14 +911,15 @@ class DashboardController extends Controller
 
     public function getObrasPorColonia($coloniaId)
     {
+        $allObras = \App\Models\ObraPublica::all()->keyBy('id');
         $obras = Encuesta::where('colonia_id', $coloniaId)
             ->whereNotNull('obras_calificadas')
             ->get()
-            ->flatMap(function($encuesta) {
+            ->flatMap(function($encuesta) use ($allObras) {
                 $obras = [];
                 if ($encuesta->obras_calificadas && is_array($encuesta->obras_calificadas)) {
                     foreach ($encuesta->obras_calificadas as $obraId => $prioridad) {
-                        $obra = \App\Models\ObraPublica::find($obraId);
+                        $obra = $allObras->get($obraId);
                         if ($obra) {
                             $obras[] = [
                                 'obra' => $obra->nombre,
