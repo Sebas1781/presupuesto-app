@@ -439,7 +439,7 @@ class DashboardController extends Controller
         // Calcular promedio global y umbral mínimo de votos
         $promedioGlobal = $obrasData->avg('prioridad_promedio');
         $votosOrdenados = $obrasData->pluck('total_calificaciones')->sort()->values();
-        $minimoVotos = $votosOrdenados->count() > 0 
+        $minimoVotos = $votosOrdenados->count() > 0
             ? $votosOrdenados[floor($votosOrdenados->count() * 0.25)] // Percentil 25
             : 1;
 
@@ -451,10 +451,10 @@ class DashboardController extends Controller
             $v = $item['total_calificaciones'];
             $m = $promedioGlobal;
             $C = $minimoVotos;
-            
+
             // Fórmula del Score Bayesiano
             $score = ($C * $m + $R * $v) / ($C + $v);
-            
+
             return [
                 'obra' => $item['obra'],
                 'prioridad_promedio' => round($item['prioridad_promedio'], 1),
@@ -846,8 +846,8 @@ class DashboardController extends Controller
         // Calcular promedio global y umbral mínimo de votos
         $promedioGlobalExport = $obrasDataExport->avg('prioridad_promedio');
         $votosOrdenadosExport = $obrasDataExport->pluck('total_calificaciones')->sort()->values();
-        $minimoVotosExport = $votosOrdenadosExport->count() > 0 
-            ? $votosOrdenadosExport[floor($votosOrdenadosExport->count() * 0.25)] 
+        $minimoVotosExport = $votosOrdenadosExport->count() > 0
+            ? $votosOrdenadosExport[floor($votosOrdenadosExport->count() * 0.25)]
             : 1;
 
         // Aplicar Score Bayesiano
@@ -856,9 +856,9 @@ class DashboardController extends Controller
             $v = $item['total_calificaciones'];
             $m = $promedioGlobalExport;
             $C = $minimoVotosExport;
-            
+
             $score = ($C * $m + $R * $v) / ($C + $v);
-            
+
             return [
                 'obra' => $item['obra'],
                 'prioridad_promedio' => round($item['prioridad_promedio'], 1),

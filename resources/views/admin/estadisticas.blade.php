@@ -975,13 +975,13 @@
                 }]
             },
             options: {
-                responsive: true, 
-                maintainAspectRatio: false, 
+                responsive: true,
+                maintainAspectRatio: false,
                 indexAxis: 'y',
-                plugins: { 
-                    legend: { position: 'top' }, 
-                    title: { 
-                        display: true, 
+                plugins: {
+                    legend: { position: 'top' },
+                    title: {
+                        display: true,
                         text: 'Top 10 Obras Públicas con Mayor Prioridad'
                     },
                     tooltip: {
@@ -1000,9 +1000,9 @@
                     }
                 },
                 scales: {
-                    x: { 
-                        beginAtZero: true, 
-                        title: { display: true, text: 'Prioridad (1-5) / N° de Calificaciones' } 
+                    x: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Prioridad (1-5) / N° de Calificaciones' }
                     }
                 }
             }
