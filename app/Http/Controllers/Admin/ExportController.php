@@ -1050,7 +1050,8 @@ class ExportController extends Controller
         // Top Obras con Mayor Prioridad (general)
         if (isset($data['topObrasGeneral']) && !$data['topObrasGeneral']->isEmpty()) {
             $html .= '<div class="section">
-                <h4 class="section-title" style="color: #9D2449;">TOP 10 OBRAS CON MAYOR PRIORIDAD</h4>';
+                <h4 class="section-title" style="color: #9D2449;">TOP 10 OBRAS CON MAYOR PRIORIDAD</h4>
+                <p style="font-size: 10px; color: #666; margin-top: -8px; margin-bottom: 12px;">Ranking ponderado considerando promedio de calificación y número de respuestas</p>';
 
             $html .= '<div class="chart-container">
                 <div class="chart-title">Obras Públicas Mejor Calificadas (General)</div>
@@ -1060,21 +1061,23 @@ class ExportController extends Controller
                 $prioridad = floatval($obra['prioridad_promedio']);
                 $ancho = max(($prioridad / 5) * 200, 20);
                 $obraNombre = strlen($obra['obra']) > 40 ? substr($obra['obra'], 0, 40) . '...' : $obra['obra'];
+                $score = isset($obra['score_bayesiano']) ? $obra['score_bayesiano'] : $prioridad;
 
                 $html .= '<div class="bar-item" style="margin: 6px 0;">
                     <span class="bar-label" style="width: 200px; display: inline-block; font-size: 9px;">' . $obraNombre . ':</span>
                     <span class="bar-visual" style="width: ' . $ancho . 'px; height: 20px; background: #9D2449; display: inline-block; margin-right: 8px;"></span>
-                    <span class="bar-value" style="font-size: 9px;">' . number_format($prioridad, 1) . ' (' . $obra['total_calificaciones'] . ' cal.)</span>
+                    <span class="bar-value" style="font-size: 9px;">Promedio: ' . number_format($prioridad, 1) . ' | Calificaciones: ' . $obra['total_calificaciones'] . ' | Score: ' . number_format($score, 2) . '</span>
                 </div>';
             }
 
             $html .= '</div></div>';
 
             $html .= '<table class="data-table"><thead><tr>
-                <th>Obra Pública</th><th>Prioridad Promedio</th><th>Total Calificaciones</th>
+                <th>Obra Pública</th><th>Prioridad Promedio</th><th>Total Calificaciones</th><th>Score Ponderado</th>
                 </tr></thead><tbody>';
             foreach ($data['topObrasGeneral'] as $obra) {
-                $html .= '<tr><td>' . $obra['obra'] . '</td><td style="text-align:center;">' . number_format($obra['prioridad_promedio'], 1) . '</td><td style="text-align:center;">' . $obra['total_calificaciones'] . '</td></tr>';
+                $score = isset($obra['score_bayesiano']) ? number_format($obra['score_bayesiano'], 2) : '-';
+                $html .= '<tr><td>' . $obra['obra'] . '</td><td style="text-align:center;">' . number_format($obra['prioridad_promedio'], 1) . '</td><td style="text-align:center;">' . $obra['total_calificaciones'] . '</td><td style="text-align:center; font-weight: bold; color: #9D2449;">' . $score . '</td></tr>';
             }
             $html .= '</tbody></table></div>';
         }

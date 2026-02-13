@@ -415,7 +415,7 @@
                             <div class="card">
                                 <div class="card-header" style="background-color: #9D2449; color: white;">
                                     <h5 class="card-title text-white mb-0">Top 10 Obras con Mayor Prioridad</h5>
-                                    <small class="text-white-50">Promedio general de todas las colonias</small>
+                                    <small class="text-white-50">Ranking ponderado considerando promedio de calificación y número de respuestas</small>
                                 </div>
                                 <div class="card-body" style="height: 400px;">
                                     <canvas id="topObrasChart"></canvas>
@@ -951,7 +951,7 @@
 
     // ============ NUEVAS GRÁFICAS BLOQUE B ============
 
-    // Top 10 Obras con Mayor Prioridad
+    // Top 10 Obras con Mayor Prioridad (con Score Bayesiano)
     @if(!$topObrasGeneral->isEmpty())
     (function(){
         var ctxTop = document.getElementById('topObrasChart').getContext('2d');
@@ -971,17 +971,39 @@
                     data: topData.map(d => d.total_calificaciones),
                     backgroundColor: '#B3865D',
                     borderColor: '#56242A',
-                    borderWidth: 1,
-                    yAxisID: 'y1'
+                    borderWidth: 1
                 }]
             },
             options: {
-                responsive: true, maintainAspectRatio: false, indexAxis: 'y',
-                plugins: { legend: { position: 'top' }, title: { display: true, text: 'Top 10 Obras Públicas con Mayor Prioridad' } },
+                responsive: true, 
+                maintainAspectRatio: false, 
+                indexAxis: 'y',
+                plugins: { 
+                    legend: { position: 'top' }, 
+                    title: { 
+                        display: true, 
+                        text: 'Top 10 Obras Públicas con Mayor Prioridad'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            afterLabel: function(context) {
+                                const index = context.dataIndex;
+                                const obra = topData[index];
+                                if (context.datasetIndex === 0) {
+                                    return [
+                                        'Calificaciones: ' + obra.total_calificaciones,
+                                        'Score Ponderado: ' + obra.score_bayesiano
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                },
                 scales: {
-                    x: { beginAtZero: true, max: 5, title: { display: true, text: 'Prioridad (1-5)' } },
-                    x1: { display: false },
-                    y1: { display: false }
+                    x: { 
+                        beginAtZero: true, 
+                        title: { display: true, text: 'Prioridad (1-5) / N° de Calificaciones' } 
+                    }
                 }
             }
         });

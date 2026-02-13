@@ -409,8 +409,8 @@ class DashboardController extends Controller
 
         // ============ NUEVAS GRÁFICAS BLOQUE B ============
 
-        // Top Obras con Mayor Prioridad (general, todas las colonias) - optimizado
-        $topObrasGeneral = Encuesta::whereNotNull('obras_calificadas')
+        // Top Obras con Mayor Prioridad (general, todas las colonias) - optimizado con Score Bayesiano
+        $obrasData = Encuesta::whereNotNull('obras_calificadas')
             ->get()
             ->flatMap(function($encuesta) use ($allObras) {
                 $obras = [];
@@ -431,13 +431,40 @@ class DashboardController extends Controller
             ->map(function($group) {
                 return [
                     'obra' => $group->first()['obra'],
-                    'prioridad_promedio' => round($group->avg('prioridad'), 1),
+                    'prioridad_promedio' => $group->avg('prioridad'),
                     'total_calificaciones' => $group->count()
                 ];
-            })
-            ->sortByDesc('prioridad_promedio')
-            ->take(10)
-            ->values();
+            });
+
+        // Calcular promedio global y umbral mínimo de votos
+        $promedioGlobal = $obrasData->avg('prioridad_promedio');
+        $votosOrdenados = $obrasData->pluck('total_calificaciones')->sort()->values();
+        $minimoVotos = $votosOrdenados->count() > 0 
+            ? $votosOrdenados[floor($votosOrdenados->count() * 0.25)] // Percentil 25
+            : 1;
+
+        // Aplicar Score Bayesiano (Weighted Rating como IMDB)
+        // Score = (C × m + R × v) / (C + v)
+        // Donde: R=promedio obra, v=votos obra, m=promedio global, C=mínimo votos
+        $topObrasGeneral = $obrasData->map(function($item) use ($promedioGlobal, $minimoVotos) {
+            $R = $item['prioridad_promedio'];
+            $v = $item['total_calificaciones'];
+            $m = $promedioGlobal;
+            $C = $minimoVotos;
+            
+            // Fórmula del Score Bayesiano
+            $score = ($C * $m + $R * $v) / ($C + $v);
+            
+            return [
+                'obra' => $item['obra'],
+                'prioridad_promedio' => round($item['prioridad_promedio'], 1),
+                'total_calificaciones' => $item['total_calificaciones'],
+                'score_bayesiano' => round($score, 2)
+            ];
+        })
+        ->sortByDesc('score_bayesiano') // Ordenar por el score ponderado
+        ->take(10)
+        ->values();
 
         // Distribución de Reportes por Tipo
         $reportesPorTipo = Reporte::whereNotNull('tipo_reporte')
@@ -791,9 +818,9 @@ class DashboardController extends Controller
             GROUP BY c.nombre ORDER BY total DESC
         ");
 
-        // Top Obras con Mayor Prioridad (general) - optimizado
+        // Top Obras con Mayor Prioridad (general) - optimizado con Score Bayesiano
         $allObras = \App\Models\ObraPublica::all()->keyBy('id');
-        $topObrasGeneral = Encuesta::whereNotNull('obras_calificadas')
+        $obrasDataExport = Encuesta::whereNotNull('obras_calificadas')
             ->get()
             ->flatMap(function($encuesta) use ($allObras) {
                 $obras = [];
@@ -811,13 +838,37 @@ class DashboardController extends Controller
             ->map(function($group) {
                 return [
                     'obra' => $group->first()['obra'],
-                    'prioridad_promedio' => round($group->avg('prioridad'), 1),
+                    'prioridad_promedio' => $group->avg('prioridad'),
                     'total_calificaciones' => $group->count()
                 ];
-            })
-            ->sortByDesc('prioridad_promedio')
-            ->take(10)
-            ->values();
+            });
+
+        // Calcular promedio global y umbral mínimo de votos
+        $promedioGlobalExport = $obrasDataExport->avg('prioridad_promedio');
+        $votosOrdenadosExport = $obrasDataExport->pluck('total_calificaciones')->sort()->values();
+        $minimoVotosExport = $votosOrdenadosExport->count() > 0 
+            ? $votosOrdenadosExport[floor($votosOrdenadosExport->count() * 0.25)] 
+            : 1;
+
+        // Aplicar Score Bayesiano
+        $topObrasGeneral = $obrasDataExport->map(function($item) use ($promedioGlobalExport, $minimoVotosExport) {
+            $R = $item['prioridad_promedio'];
+            $v = $item['total_calificaciones'];
+            $m = $promedioGlobalExport;
+            $C = $minimoVotosExport;
+            
+            $score = ($C * $m + $R * $v) / ($C + $v);
+            
+            return [
+                'obra' => $item['obra'],
+                'prioridad_promedio' => round($item['prioridad_promedio'], 1),
+                'total_calificaciones' => $item['total_calificaciones'],
+                'score_bayesiano' => round($score, 2)
+            ];
+        })
+        ->sortByDesc('score_bayesiano')
+        ->take(10)
+        ->values();
 
         // ============ NUEVAS GRÁFICAS BLOQUE C ============
         $confianzaPoliciaGeneral = \DB::select("
