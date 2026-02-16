@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Presupuesto Participativo 2026 - Tecámac</title>
+    <title>¡Gracias por Participar! - Presupuesto Participativo 2026 - Tecámac</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -490,20 +490,26 @@
             <!-- Texto Principal -->
             <div class="content-text">
                 <div class="fade-in fade-in-delay-1">
-                    <p class="president-intro">
-                        ¡La Presidenta Municipal, <span class="president-name">Rosi Wong</span>, le invita a definir juntos el presupuesto 2026!
+                    <p class="president-intro" style="font-size: 1.8rem; font-weight: 600;">
+
+                        ¡Muchas Gracias por Participar!
                     </p>
                 </div>
 
                 <div class="fade-in fade-in-delay-2">
-                    <img src="{{ asset('images/volar-slogan-2026-n.png') }}" alt="Aquí, la que manda es la gente" class="slogan-image">
+                    <p class="president-intro" style="font-size: 1.2rem; margin-top: 1rem;">
+                        La Presidenta Municipal, <span class="president-name">Rosi Wong</span>, y todo el Gobierno de Tecámac agradecen su valiosa participación en el <strong>Presupuesto 2026</strong>.
+                    </p>
                 </div>
 
                 <div class="fade-in fade-in-delay-3">
-                    <a href="{{ route('encuesta.create') }}" class="cta-button">
-                        <i class="fas fa-vote-yea mr-3"></i>
-                        ¡Participe Ahora!
-                    </a>
+                    <p style="color: rgba(255,255,255,0.85); font-size: 1.1rem; line-height: 1.8; margin-top: 1.5rem;">
+                        Su voz ha sido escuchada. Juntos construiremos un mejor Tecámac.
+                    </p>
+                </div>
+
+                <div class="fade-in fade-in-delay-4">
+                    <img src="{{ asset('images/volar-slogan-2026-n.png') }}" alt="Nuestro Municipio es Mucha Pieza" class="slogan-image" style="margin-top: 1.5rem;">
                 </div>
             </div>
 
