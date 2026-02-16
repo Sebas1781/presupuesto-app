@@ -5,9 +5,14 @@
 @section('content_header')
     <div class="d-flex justify-content-between">
         <h1>Lista de Encuestas</h1>
-        <a href="{{ route('admin.export.encuestas', request()->query()) }}" class="btn btn-success">
-            <i class="fas fa-download"></i> Exportar a Excel
-        </a>
+        <div>
+            <a href="{{ route('admin.export.reportes-pdf', request()->query()) }}" class="btn btn-danger mr-2">
+                <i class="fas fa-file-pdf"></i> Exportar Reportes PDF
+            </a>
+            <a href="{{ route('admin.export.encuestas', request()->query()) }}" class="btn btn-success">
+                <i class="fas fa-download"></i> Exportar a Excel
+            </a>
+        </div>
     </div>
 @stop
 

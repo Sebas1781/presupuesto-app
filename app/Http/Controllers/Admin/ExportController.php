@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Encuesta;
+use App\Models\Reporte;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -1300,6 +1301,186 @@ class ExportController extends Controller
     <div style="text-align: center; margin-top: 30px; font-size: 10px; color: #666;">
         <p>Este reporte fue generado automáticamente por el Sistema de Presupuesto 2026</p>
         <p>Para visualizar las gráficas interactivas, visite el dashboard web en: <strong>admin/estadisticas</strong></p>
+    </div>
+</body>
+</html>';
+
+        return $html;
+    }
+
+    /**
+     * Exportar todos los reportes anónimos a PDF
+     */
+    public function reportesPdf(Request $request)
+    {
+        $query = Reporte::with(['encuesta.colonia']);
+
+        // Aplicar filtros si existen
+        if ($request->has('colonia_id') && $request->colonia_id) {
+            $query->whereHas('encuesta', function ($q) use ($request) {
+                $q->where('colonia_id', $request->colonia_id);
+            });
+        }
+
+        if ($request->has('fecha_desde') && $request->fecha_desde) {
+            $query->whereDate('created_at', '>=', $request->fecha_desde);
+        }
+
+        if ($request->has('fecha_hasta') && $request->fecha_hasta) {
+            $query->whereDate('created_at', '<=', $request->fecha_hasta);
+        }
+
+        $reportes = $query->orderBy('created_at', 'desc')->get();
+
+        $html = $this->generateReportesPdfHtml($reportes);
+
+        $pdf = Pdf::loadHTML($html)
+            ->setPaper('a4', 'portrait')
+            ->setOptions([
+                'isRemoteEnabled' => true,
+                'isHtml5ParserEnabled' => true,
+                'isPhpEnabled' => true,
+                'defaultFont' => 'Arial'
+            ]);
+
+        $filename = 'reportes_anonimos_' . date('Y-m-d_H-i-s') . '.pdf';
+
+        return $pdf->download($filename);
+    }
+
+    /**
+     * Generar HTML para el PDF de reportes anónimos
+     */
+    private function generateReportesPdfHtml($reportes)
+    {
+        $totalReportes = $reportes->count();
+        $tiposCount = $reportes->groupBy('tipo_reporte')->map->count();
+
+        $html = '
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Reportes Anónimos - Presupuesto 2026</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; font-size: 11px; color: #333; }
+        .header { text-align: center; margin-bottom: 25px; border-bottom: 3px solid #9D2449; padding-bottom: 15px; }
+        .header h1 { color: #9D2449; font-size: 22px; margin-bottom: 5px; }
+        .header p { color: #666; font-size: 12px; margin: 2px 0; }
+        .summary-box { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px; padding: 15px; margin-bottom: 20px; }
+        .summary-box h3 { color: #4E232E; margin-top: 0; font-size: 14px; }
+        .summary-grid { display: table; width: 100%; }
+        .summary-item { display: table-cell; text-align: center; padding: 8px; }
+        .summary-number { font-size: 20px; font-weight: bold; color: #9D2449; }
+        .summary-label { font-size: 10px; color: #666; }
+        .reporte-card { border: 1px solid #ddd; border-radius: 5px; margin-bottom: 15px; page-break-inside: avoid; }
+        .reporte-header { background: #4E232E; color: white; padding: 8px 12px; border-radius: 5px 5px 0 0; }
+        .reporte-header h4 { margin: 0; font-size: 12px; }
+        .reporte-body { padding: 12px; }
+        .reporte-meta { display: table; width: 100%; margin-bottom: 8px; }
+        .reporte-meta-item { display: table-cell; padding-right: 15px; }
+        .reporte-meta-label { font-weight: bold; color: #4E232E; font-size: 10px; }
+        .reporte-meta-value { font-size: 11px; }
+        .reporte-descripcion { background: #f8f9fa; padding: 10px; border-radius: 3px; margin-top: 8px; line-height: 1.5; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 10px; font-size: 10px; font-weight: bold; color: white; }
+        .badge-danger { background: #dc3545; }
+        .badge-warning { background: #ffc107; color: #333; }
+        .badge-info { background: #17a2b8; }
+        .badge-secondary { background: #6c757d; }
+        .footer { text-align: center; margin-top: 30px; font-size: 10px; color: #666; border-top: 1px solid #ddd; padding-top: 10px; }
+        .no-reportes { text-align: center; padding: 40px; color: #666; }
+        .tipo-summary { margin-top: 8px; }
+        .tipo-row { display: table; width: 100%; margin: 3px 0; }
+        .tipo-name { display: table-cell; width: 70%; }
+        .tipo-count { display: table-cell; width: 30%; text-align: right; font-weight: bold; color: #9D2449; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Reportes Anónimos</h1>
+        <p>Presupuesto Participativo 2026 - Municipio de Soledad de Graciano Sánchez</p>
+        <p>Fecha de generación: ' . date('d/m/Y H:i') . '</p>
+    </div>
+
+    <div class="summary-box">
+        <h3>Resumen General</h3>
+        <div class="summary-grid">
+            <div class="summary-item">
+                <div class="summary-number">' . $totalReportes . '</div>
+                <div class="summary-label">Total de Reportes</div>
+            </div>';
+
+        foreach ($tiposCount as $tipo => $count) {
+            $html .= '
+            <div class="summary-item">
+                <div class="summary-number">' . $count . '</div>
+                <div class="summary-label">' . e($tipo) . '</div>
+            </div>';
+        }
+
+        $html .= '
+        </div>
+    </div>';
+
+        if ($reportes->isEmpty()) {
+            $html .= '
+    <div class="no-reportes">
+        <p>No se encontraron reportes anónimos.</p>
+    </div>';
+        } else {
+            foreach ($reportes as $index => $reporte) {
+                $tipoClass = match($reporte->tipo_reporte) {
+                    'Inseguridad' => 'badge-danger',
+                    'Alumbrado Público' => 'badge-warning',
+                    'Baches' => 'badge-info',
+                    default => 'badge-secondary',
+                };
+
+                $coloniaNombre = $reporte->encuesta && $reporte->encuesta->colonia
+                    ? e($reporte->encuesta->colonia->nombre)
+                    : 'N/A';
+
+                $fecha = $reporte->created_at
+                    ? $reporte->created_at->format('d/m/Y H:i')
+                    : 'N/A';
+
+                $html .= '
+    <div class="reporte-card">
+        <div class="reporte-header">
+            <h4>Reporte #' . ($index + 1) . ' <span class="badge ' . $tipoClass . '">' . e($reporte->tipo_reporte) . '</span></h4>
+        </div>
+        <div class="reporte-body">
+            <div class="reporte-meta">
+                <div class="reporte-meta-item">
+                    <div class="reporte-meta-label">Colonia</div>
+                    <div class="reporte-meta-value">' . $coloniaNombre . '</div>
+                </div>
+                <div class="reporte-meta-item">
+                    <div class="reporte-meta-label">Ubicación</div>
+                    <div class="reporte-meta-value">' . ($reporte->ubicacion ? e($reporte->ubicacion) : 'No especificada') . '</div>
+                </div>
+                <div class="reporte-meta-item">
+                    <div class="reporte-meta-label">Fecha</div>
+                    <div class="reporte-meta-value">' . $fecha . '</div>
+                </div>
+                <div class="reporte-meta-item">
+                    <div class="reporte-meta-label">Encuesta ID</div>
+                    <div class="reporte-meta-value">#' . $reporte->encuesta_id . '</div>
+                </div>
+            </div>
+            <div class="reporte-descripcion">
+                <strong>Descripción:</strong><br>
+                ' . nl2br(e($reporte->descripcion)) . '
+            </div>
+        </div>
+    </div>';
+            }
+        }
+
+        $html .= '
+    <div class="footer">
+        <p>Este documento fue generado automáticamente por el Sistema de Presupuesto Participativo 2026</p>
+        <p>Total de reportes incluidos: ' . $totalReportes . '</p>
     </div>
 </body>
 </html>';

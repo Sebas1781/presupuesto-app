@@ -29,6 +29,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::delete('/encuestas/{id}', [DashboardController::class, 'destroy'])->name('encuestas.destroy');
     Route::get('/export/encuestas', [ExportController::class, 'encuestas'])->name('export.encuestas');
     Route::get('/export/estadisticas-pdf', [ExportController::class, 'estadisticasPdf'])->name('export.estadisticas-pdf');
+    Route::get('/export/reportes-pdf', [ExportController::class, 'reportesPdf'])->name('export.reportes-pdf');
 });
 
 Route::get('/dashboard', function () {
