@@ -1487,4 +1487,187 @@ class ExportController extends Controller
 
         return $html;
     }
+
+    /**
+     * Exportar todas las propuestas ciudadanas a PDF
+     */
+    public function propuestasPdf(Request $request)
+    {
+        $query = \App\Models\Propuesta::with(['encuesta.colonia']);
+
+        if ($request->has('colonia_id') && $request->colonia_id) {
+            $query->whereHas('encuesta', function ($q) use ($request) {
+                $q->where('colonia_id', $request->colonia_id);
+            });
+        }
+
+        if ($request->has('fecha_desde') && $request->fecha_desde) {
+            $query->whereDate('created_at', '>=', $request->fecha_desde);
+        }
+
+        if ($request->has('fecha_hasta') && $request->fecha_hasta) {
+            $query->whereDate('created_at', '<=', $request->fecha_hasta);
+        }
+
+        $propuestas = $query->orderBy('created_at', 'desc')->get();
+
+        $html = $this->generatePropuestasPdfHtml($propuestas);
+
+        $pdf = Pdf::loadHTML($html)
+            ->setPaper('a4', 'portrait')
+            ->setOptions([
+                'isRemoteEnabled' => true,
+                'isHtml5ParserEnabled' => true,
+                'isPhpEnabled' => true,
+                'defaultFont' => 'Arial'
+            ]);
+
+        $filename = 'propuestas_ciudadanas_' . date('Y-m-d_H-i-s') . '.pdf';
+
+        return $pdf->download($filename);
+    }
+
+    /**
+     * Generar HTML para el PDF de propuestas ciudadanas
+     */
+    private function generatePropuestasPdfHtml($propuestas)
+    {
+        $totalPropuestas = $propuestas->count();
+        $tiposCount = $propuestas->groupBy('tipo_propuesta')->map->count();
+
+        $html = '
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Propuestas Ciudadanas - Presupuesto 2026</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 15px 20px; font-size: 9px; color: #333; }
+        .header { text-align: center; margin-bottom: 12px; border-bottom: 3px solid #9D2449; padding-bottom: 8px; }
+        .header h1 { color: #9D2449; font-size: 18px; margin: 0 0 3px 0; }
+        .header p { color: #666; font-size: 9px; margin: 1px 0; border: none; }
+        .summary-box { background: #f8f9fa; border: 1px solid #dee2e6; padding: 8px 12px; margin-bottom: 12px; }
+        .summary-box h3 { color: #4E232E; margin: 0 0 6px 0; font-size: 11px; }
+        .summary-table { width: 100%; border-collapse: collapse; }
+        .summary-table td { text-align: center; padding: 4px; }
+        .summary-number { font-size: 16px; font-weight: bold; color: #9D2449; line-height: 1; }
+        .summary-label { font-size: 8px; color: #666; }
+        /* Tarjeta compacta */
+        .propuesta-card { border: 1px solid #ccc; margin-bottom: 8px; page-break-inside: avoid; }
+        .propuesta-header { background: #9D2449; color: white; padding: 4px 8px; }
+        .propuesta-header h4 { margin: 0; font-size: 10px; }
+        .propuesta-body { padding: 6px 8px; }
+        /* Meta en tabla 3 columnas */
+        .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 5px; }
+        .meta-table td { vertical-align: top; padding: 2px 4px 2px 0; width: 33%; }
+        .meta-label { font-weight: bold; color: #4E232E; font-size: 8px; text-transform: uppercase; }
+        .meta-value { font-size: 9px; }
+        .descripcion-box { background: #f8f9fa; border-left: 3px solid #9D2449; padding: 4px 6px; font-size: 9px; line-height: 1.4; margin-top: 4px; }
+        .foto-row { margin-top: 5px; font-size: 9px; }
+        .badge { display: inline; padding: 2px 6px; border-radius: 8px; font-size: 8px; font-weight: bold; color: white; }
+        .badge-alta { background: #dc3545; }
+        .badge-media { background: #e6a817; color: #333; }
+        .badge-baja { background: #28a745; }
+        .badge-secondary { background: #6c757d; }
+        .footer { text-align: center; margin-top: 20px; font-size: 8px; color: #888; border-top: 1px solid #ddd; padding-top: 6px; }
+        .no-propuestas { text-align: center; padding: 30px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Propuestas Ciudadanas</h1>
+        <p>Fecha de generación: ' . date('d/m/Y H:i') . ' &nbsp;|&nbsp; Total: ' . $totalPropuestas . ' propuestas</p>
+    </div>
+
+    <div class="summary-box">
+        <h3>Resumen por Tipo de Propuesta</h3>
+        <table class="summary-table">
+            <tr>
+                <td><div class="summary-number">' . $totalPropuestas . '</div><div class="summary-label">Total</div></td>';
+
+        foreach ($tiposCount as $tipo => $count) {
+            $html .= '<td><div class="summary-number">' . $count . '</div><div class="summary-label">' . e($tipo ?: 'Sin tipo') . '</div></td>';
+        }
+
+        $html .= '
+            </tr>
+        </table>
+    </div>';
+
+        if ($propuestas->isEmpty()) {
+            $html .= '<div class="no-propuestas"><p>No se encontraron propuestas ciudadanas.</p></div>';
+        } else {
+            foreach ($propuestas as $index => $propuesta) {
+                $prioridadClass = match(strtolower($propuesta->nivel_prioridad ?? '')) {
+                    'alta', 'urgente' => 'badge-alta',
+                    'media', 'normal' => 'badge-media',
+                    'baja' => 'badge-baja',
+                    default => 'badge-secondary',
+                };
+
+                $coloniaNombre = $propuesta->encuesta && $propuesta->encuesta->colonia
+                    ? e($propuesta->encuesta->colonia->nombre)
+                    : 'N/A';
+
+                $fecha = $propuesta->created_at
+                    ? $propuesta->created_at->format('d/m/Y H:i')
+                    : 'N/A';
+
+                // Fotografía en base64
+                $fotoHtml = '';
+                if ($propuesta->fotografia) {
+                    $path = storage_path('app/public/' . $propuesta->fotografia);
+                    if (file_exists($path)) {
+                        $mime = mime_content_type($path);
+                        $base64 = base64_encode(file_get_contents($path));
+                        $fotoHtml = '
+            <div class="foto-row">
+                <strong>Fotografía:</strong><br>
+                <img src="data:' . $mime . ';base64,' . $base64 . '" alt="Fotografía" style="max-width: 220px; max-height: 150px; margin-top: 3px; border: 1px solid #ddd;">
+            </div>';
+                    }
+                }
+
+                $html .= '
+    <div class="propuesta-card">
+        <div class="propuesta-header">
+            <h4>#' . ($index + 1) . ' &nbsp;
+                <span class="badge ' . $prioridadClass . '">' . e($propuesta->nivel_prioridad ?? 'Sin prioridad') . '</span>
+                &nbsp;&mdash;&nbsp; ' . e($propuesta->tipo_propuesta ?? 'Sin tipo') . '
+                &nbsp;&mdash;&nbsp; ' . $coloniaNombre . '
+            </h4>
+        </div>
+        <div class="propuesta-body">
+            <table class="meta-table">
+                <tr>
+                    <td>
+                        <div class="meta-label">Personas Beneficiadas</div>
+                        <div class="meta-value">' . e($propuesta->personas_beneficiadas ?? 'N/A') . '</div>
+                    </td>
+                    <td>
+                        <div class="meta-label">Ubicación</div>
+                        <div class="meta-value">' . ($propuesta->ubicacion ? e($propuesta->ubicacion) : 'No especificada') . '</div>
+                    </td>
+                    <td>
+                        <div class="meta-label">Fecha &nbsp;|&nbsp; Encuesta</div>
+                        <div class="meta-value">' . $fecha . ' &nbsp;| #' . $propuesta->encuesta_id . '</div>
+                    </td>
+                </tr>
+            </table>
+            <div class="descripcion-box">' . nl2br(e($propuesta->descripcion_breve ?? 'Sin descripción')) . '</div>'
+            . $fotoHtml . '
+        </div>
+    </div>';
+            }
+        }
+
+        $html .= '
+    <div class="footer">
+        <p>Generado automáticamente por el Sistema de Presupuesto Participativo 2026 &nbsp;&mdash;&nbsp; Total de propuestas: ' . $totalPropuestas . '</p>
+    </div>
+</body>
+</html>';
+
+        return $html;
+    }
 }

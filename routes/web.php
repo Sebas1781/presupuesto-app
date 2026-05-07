@@ -30,6 +30,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('/export/encuestas', [ExportController::class, 'encuestas'])->name('export.encuestas');
     Route::get('/export/estadisticas-pdf', [ExportController::class, 'estadisticasPdf'])->name('export.estadisticas-pdf');
     Route::get('/export/reportes-pdf', [ExportController::class, 'reportesPdf'])->name('export.reportes-pdf');
+    Route::get('/export/propuestas-pdf', [ExportController::class, 'propuestasPdf'])->name('export.propuestas-pdf');
 });
 
 Route::get('/dashboard', function () {

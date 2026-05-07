@@ -6,6 +6,9 @@
     <div class="d-flex justify-content-between">
         <h1>Lista de Encuestas</h1>
         <div>
+            <a href="{{ route('admin.export.propuestas-pdf', request()->query()) }}" class="btn btn-warning mr-2">
+                <i class="fas fa-file-pdf"></i> Exportar Propuestas PDF
+            </a>
             <a href="{{ route('admin.export.reportes-pdf', request()->query()) }}" class="btn btn-danger mr-2">
                 <i class="fas fa-file-pdf"></i> Exportar Reportes PDF
             </a>
